@@ -1,0 +1,66 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model superUser {
+  username String @id
+  password String
+  email    String @unique
+}
+
+model User {
+  id          String        @id @default(uuid())
+  name        String
+  email       String        @unique
+  password    String
+  dateJoined  DateTime      @default(now())
+  isAdmin     Boolean
+  Asssignment Asssignment[]
+  Record      Record[]
+  test        test[]
+}
+
+model Asssignment {
+  id               String             @id @default(uuid())
+  name             String
+  createdBy        User               @relation(fields: [owner], references: [id])
+  owner            String
+  Record           Record[]
+  AssignmentDetail AssignmentDetail[]
+  test             test[]
+}
+
+model AssignmentDetail {
+  id                String      @id @default(uuid())
+  assignment        Asssignment @relation(fields: [assignmentId], references: [id])
+  assignmentId      String
+  aopic             String
+  subTopics         String
+  difficultyLevel   String
+  numberOfQuestions Int
+}
+
+model test {
+  id        String      @id @default(uuid())
+  user      User        @relation(fields: [userId], references: [id])
+  userId    String
+  test      Asssignment @relation(fields: [testId], references: [id])
+  testId    String
+  questions Json
+}
+
+model Record {
+  id           String      @id @default(uuid())
+  user         User        @relation(fields: [userId], references: [id])
+  userId       String
+  assignment   Asssignment @relation(fields: [assignmentId], references: [id])
+  assignmentId String
+}
