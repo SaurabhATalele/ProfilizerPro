@@ -21,14 +21,22 @@ const Navbar = () => {
     >
       <div className="flex gap-1">
         <Image src={"/logo.svg"} width={15} height={15} />
+        <Link href={'/'}>
         <h3 className="font-bold text-primary-light dark:text-primary-dark ">
           ProfilizePro
         </h3>
+        </Link>
       </div>
       <ul className="flex gap-5 h-full items-center">
-        <li className="hover:border-b-primary-light hover:border-b-2 cursor-pointer h-1/2 active:border-b-primary-light">
-          Home
+      <li>
+          <Link
+            href={"/"}
+            className="text-black dark:text-primary-dark"
+          >
+            Home
+          </Link>
         </li>
+        
         <li className="hover:border-b-primary-light hover:border-b-2 cursor-pointer h-1/2 active:border-b-primary-light">
           About
         </li>
