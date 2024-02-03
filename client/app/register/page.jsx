@@ -1,3 +1,4 @@
+
 "use client";
 import Signup from "@/Components/Signup/Signup";
 import React from "react";
@@ -19,4 +20,4 @@ export default function page() {
   );
 }
 
-// export default page;
+

@@ -1,21 +1,24 @@
 "use client";
 import Login from "@/Components/Login/Login";
 import React from "react";
-import { useTheme } from "@/Context/ThemeContext";
+import { useTheme } from "@/Utils/ThemeContext";
 import Navbar from "@/Components/Navbar/Navbar";
+import { ToastContainer } from "react-toastify";
 
 export default function page() {
   const { darkMode } = useTheme();
 
   return (
-    <div className={`${darkMode ? "dark" : ""}`}>
-      <main
-        className={` flex p-10 max-h-screen max-w-screen flex-col items-center justify-between bg-white text-black  dark:bg-black dark:text-white`}
-      >
-        <Navbar />
-        <Login />
-      </main>
-    </div>
+    <>
+      <div className={`${darkMode ? "dark" : ""}`}>
+        <main
+          className={` flex p-10 max-h-screen max-w-screen flex-col items-center justify-between bg-white text-black  dark:bg-black dark:text-white`}
+        >
+          {/* <Navbar /> */}
+          <Login />
+        </main>
+      </div>
+    </>
   );
 }
 

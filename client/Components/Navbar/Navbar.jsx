@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useTheme } from "../../Context/ThemeContext";
+import { useTheme } from "../../Utils/ThemeContext";
 import { FaSun, FaMoon } from "react-icons/fa";
 import { getCookie } from "cookies-next";
 import Link from "next/link";
