@@ -3,7 +3,7 @@ module.exports = {
   darkMode: "class",
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./Components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
@@ -18,10 +18,10 @@ module.exports = {
           light: "#4A3AFF",
           dark: "#9188ff",
         },
-        background:{
-          light:"#ffffff",
-          dark:"#252525"
-        }
+        background: {
+          light: "#ffffff",
+          dark: "#252525",
+        },
       },
     },
   },
