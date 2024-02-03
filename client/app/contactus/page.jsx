@@ -1,6 +1,6 @@
 
 "use client";
-import Contactus from "@/Components/ContactUs/Contactus";
+import Contactus from "@/Components/Contactus/Contactus";
 import React from "react";
 import { useTheme } from "@/Utils/ThemeContext";
 import Navbar from "@/Components/Navbar/Navbar2";
