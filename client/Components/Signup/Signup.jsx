@@ -1,8 +1,17 @@
 import React from "react";
 import Link from "next/link";
-const Login = () => {
+import Image from "next/image";
+const Signup = () => {
   return (
-    <div className="w-3/4 h-screen  grid place-content-center">
+    <div className="w-3/4 h-screen flex justify-center items-center gap-20">
+        <Image
+          src={"/SignupImages/Signup.png"}
+          width={300}
+          height={450}
+          alt="Login"
+          
+        />
+      
       <div className="relative p-5 w-80 h-96 shadow-md rounded-md dark:shadow-none dark:backdrop-blur-md dark:bg-[#33333342] shadow-gray-400 flex flex-col items-center justify-around   ">
         <h2 className="font-bold text-[1.5rem]">Lets Sign you up</h2>
         <p className="text-center">
@@ -46,4 +55,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;
