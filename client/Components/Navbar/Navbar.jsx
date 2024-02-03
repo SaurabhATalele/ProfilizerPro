@@ -49,6 +49,14 @@ const Navbar = () => {
           </Link>
         </li>
         <li>
+          <Link
+            href={"/contactus"}
+            className="text-primary-light dark:text-primary-dark"
+          >
+            ContactUs
+          </Link>
+        </li>
+        <li>
           <button onClick={toggleDarkMode}>
             {!darkMode && <FaSun />}
             {darkMode && <FaMoon />}
