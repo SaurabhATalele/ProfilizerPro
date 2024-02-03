@@ -31,7 +31,7 @@ const Navbar = () => {
       <li>
           <Link
             href={"/"}
-            className="text-black dark:text-primary-dark"
+            className="text-black"
           >
             Home
           </Link>
