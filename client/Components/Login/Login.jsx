@@ -6,6 +6,7 @@ import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 
 import Toast from "@/Utils/Toast";
+import Image from "next/image";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,7 +29,7 @@ const Login = () => {
   return (
     <>
       <ToastContainer />
-      <div className="w-3/4 h-screen  grid place-content-center">
+      <div className="w-3/4 h-screen flex justify-center items-center gap-20">
         <div className="relative p-5 w-80 h-96 shadow-md rounded-md dark:shadow-none dark:backdrop-blur-md dark:bg-[#33333342] shadow-gray-400 flex flex-col items-center justify-around   ">
           <h2 className="font-bold text-[1.5rem]">Lets Sign you in</h2>
           <p className="text-center">
@@ -67,6 +68,13 @@ const Login = () => {
             </Link>
           </p>
         </div>
+        <Image
+          src={"/LoginImages/LoginImage.png"}
+          width={300}
+          height={450}
+          alt="Login"
+          
+        />
       </div>
     </>
   );
