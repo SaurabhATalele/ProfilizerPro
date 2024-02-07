@@ -14,7 +14,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post("http://localhost:3000/user/login", {
+      const res = await axios.post("/api/v1/users/login", {
         email,
         password,
       });
@@ -73,7 +73,6 @@ const Login = () => {
           width={300}
           height={450}
           alt="Login"
-          
         />
       </div>
     </>
