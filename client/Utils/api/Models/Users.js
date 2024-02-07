@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { SECRET_KEY } from "@/Utils/constants";
 // import dotenv from 'dotenv'
 // const mongoose = require('mongoose');
 // const Schema = mongoose.Schema;
@@ -10,8 +11,7 @@ import jwt from "jsonwebtoken";
 // const dotenv = require('dotenv');
 // dotenv.config();
 
-const secret = process.env.NEXT_PUBLIC_SECRET_KEY;
-console.log(secret);
+const secret = SECRET_KEY;
 // defining the schema for the user model
 const User = new Schema({
   name: {

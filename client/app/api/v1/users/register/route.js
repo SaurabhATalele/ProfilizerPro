@@ -7,5 +7,7 @@ export async function POST(req, res) {
     const body = await req.json();
     const response = registerUser(body);
     return response;
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 }

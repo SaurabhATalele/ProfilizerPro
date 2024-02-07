@@ -4,6 +4,7 @@ import Link from "next/link";
 import axios from "axios";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import { BASE_URL } from "@/Utils/constants";
 
 import Toast from "@/Utils/Toast";
 import Image from "next/image";
@@ -14,7 +15,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post("/api/v1/users/login", {
+      const res = await axios.post(`${BASE_URL}/api/v1/users/login`, {
         email,
         password,
       });
@@ -22,6 +23,7 @@ const Login = () => {
       console.log(res);
       Toast("success", "Login Success...");
     } catch (error) {
+      console.log(error);
       Toast("error", error.response.data.message);
     }
   };
