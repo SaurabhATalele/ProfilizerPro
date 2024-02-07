@@ -20,16 +20,22 @@ const Login = () => {
       //   email,
       //   password,
       // });
-      await login({
+      const res = await login({
         email,
         password,
-      })
+      });
 
       console.log(res);
-      Toast("success", "Login Success...");
+
+      if (res.status === 200) Toast("success", "Login Success...");
+      else if (res.status === 404) {
+        Toast("error", "User Not Found");
+      } else if (res.status === 403) {
+        Toast("error", "Incorrect Password");
+      }
     } catch (error) {
       console.log(error);
-      Toast("error", error.response.data.message);
+      Toast("error", error.message);
     }
   };
 

@@ -19,5 +19,5 @@ export const login = async (data) => {
 
   const response = await fetch(`${LOGIN_API}`, requestOptions);
   const resposeData = await response.json();
-  return resposeData;
+  return response;
 };
