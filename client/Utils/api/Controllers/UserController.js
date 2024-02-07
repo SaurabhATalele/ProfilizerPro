@@ -20,6 +20,7 @@ const registerUser = async (body) => {
 
 const loginUser = async (body) => {
   try {
+    console.log("Getting here")
     const email = body?.email;
     const password = body?.password;
     const data = await User.findOne({ email });

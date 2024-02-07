@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(req, res) {
   try {
+    connectdb();
     const body = await req.json();
     const response = await loginUser(body);
     return response;
