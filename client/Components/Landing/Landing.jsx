@@ -148,17 +148,28 @@ const Landing = () => {
               Tests
             </Link>
           </div>
+          
         </div>
         <div className="flex flex-col gap-5">
-          <button className="bg-primary-light text-white px-3 py-1  rounded-md">
-            Register
-          </button>
-          <button className="border px-2 py-1  border-primary-light  rounded-md dark:text-primary-dark dark:border-primary-dark   text-primary-light">
-            Login
-          </button>
-          <button className="border px-2 py-1  border-primary-light  rounded-md dark:text-primary-dark dark:border-primary-dark   text-primary-light">
-            Admin
-          </button>
+        <Link
+              href={"/register"}
+              className="bg-primary-light text-white px-3 py-1  rounded-md"
+            >
+              Register
+            </Link>
+            <Link
+              href={"/login"}
+              className="border px-2 py-1 flex justify-center border-primary-light  rounded-md dark:text-primary-dark dark:border-primary-dark   text-primary-light"
+            >
+              Login
+            </Link>
+
+            <Link
+              href={"/login"}
+              className="border px-2 py-1 flex justify-center border-primary-light  rounded-md dark:text-primary-dark dark:border-primary-dark   text-primary-light"
+            >
+              Admin
+            </Link>
         </div>
       </footer>
       <p className="text-sm text-left ">
