@@ -28,9 +28,16 @@ const Navbar = () => {
         </Link>
       </div>
       <ul className="flex gap-5 h-full items-center"> 
-        <li className="hover:border-b-primary-light text-primary-light dark:text-primary-dark hover:border-b-2 cursor-pointer h-1/2 active:border-b-primary-light">
-          About
+
+      <li>
+          <Link
+            href={"/aboutus"}
+            className="hover:border-b-primary-light text-primary-light dark:text-primary-dark hover:border-b-2 cursor-pointer h-1/2 active:border-b-primary-light"
+          >
+            About
+          </Link>
         </li>
+      
         <li>
           <Link
             href={"/login"}
