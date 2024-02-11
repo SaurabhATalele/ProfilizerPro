@@ -4,6 +4,8 @@ import Link from "next/link";
 import axios from "axios";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import { BASE_URL } from "@/Utils/constants";
+import { login } from "@/Utils/Apicalls/Login";
 
 import Toast from "@/Utils/Toast";
 import Image from "next/image";
@@ -14,15 +16,26 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post("http://localhost:3000/user/login", {
+      // const res = await axios.post(`${BASE_URL}/api/v1/users/login`, {
+      //   email,
+      //   password,
+      // });
+      const res = await login({
         email,
         password,
       });
 
       console.log(res);
-      Toast("success", "Login Success...");
+
+      if (res.status === 200) Toast("success", "Login Success...");
+      else if (res.status === 404) {
+        Toast("error", "User Not Found");
+      } else if (res.status === 403) {
+        Toast("error", "Incorrect Password");
+      }
     } catch (error) {
-      Toast("error", error.response.data.message);
+      console.log(error);
+      Toast("error", error.message);
     }
   };
 
@@ -73,7 +86,6 @@ const Login = () => {
           width={300}
           height={450}
           alt="Login"
-          
         />
       </div>
     </>

@@ -20,38 +20,44 @@ const Navbar = () => {
      items-center px-5 w-3/4 border rounded-xl  border-[#c3c3c354] h-14"
     >
       <div className="flex gap-1">
-        <Image src={"/logo.svg"} width={15} height={15} />
+        <Image src={"/logo.svg"} width={15} height={15} alt="logo"/>
         <Link href={'/'}>
         <h3 className="font-bold text-primary-light dark:text-primary-dark ">
           ProfilizePro
         </h3>
         </Link>
       </div>
-      <ul className="flex gap-5 h-full items-center">
+      <ul className="flex gap-5 h-full items-center"> 
+
       <li>
           <Link
-            href={"/"}
-            className="text-black"
+            href={"/aboutus"}
+            className="hover:border-b-primary-light text-primary-light dark:text-primary-dark hover:border-b-2 cursor-pointer h-1/2 active:border-b-primary-light"
           >
-            Home
+            About
           </Link>
         </li>
-        
-        <li className="hover:border-b-primary-light hover:border-b-2 cursor-pointer h-1/2 active:border-b-primary-light">
-          About
-        </li>
+      
         <li>
           <Link
             href={"/login"}
-            className="text-primary-light dark:text-primary-dark"
+            className="hover:border-b-primary-light text-primary-light dark:text-primary-dark hover:border-b-2 cursor-pointer h-1/2 active:border-b-primary-light"
           >
             Login
           </Link>
         </li>
         <li>
           <Link
+            href={"/register"}
+            className="hover:border-b-primary-light text-primary-light dark:text-primary-dark hover:border-b-2 cursor-pointer h-1/2 active:border-b-primary-light"
+          >
+            SignUp
+          </Link>
+        </li>
+        <li>
+          <Link
             href={"/contactus"}
-            className="text-primary-light dark:text-primary-dark"
+            className="hover:border-b-primary-light text-primary-light dark:text-primary-dark hover:border-b-2 cursor-pointer h-1/2 active:border-b-primary-light"
           >
             ContactUs
           </Link>
