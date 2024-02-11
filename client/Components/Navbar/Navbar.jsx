@@ -20,7 +20,7 @@ const Navbar = () => {
      items-center px-5 w-3/4 border rounded-xl  border-[#c3c3c354] h-14"
     >
       <div className="flex gap-1">
-        <Image src={"/logo.svg"} width={15} height={15} />
+        <Image src={"/logo.svg"} width={15} height={15} alt="logo"/>
         <Link href={'/'}>
         <h3 className="font-bold text-primary-light dark:text-primary-dark ">
           ProfilizePro

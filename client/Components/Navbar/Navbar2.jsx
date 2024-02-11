@@ -14,12 +14,12 @@ const Navbar2 = () => {
      items-center px-5 w-screen  rounded-xl  h-14"
     >
       <Link href={"/"} className="flex gap-1">
-        <Image src={"/logo.svg"} width={15} height={15} />
+        <Image src={"/logo.svg"} width={15} height={15} alt="logo" />
         <h3 className="font-bold text-primary-light dark:text-primary-dark ">
           ProfilizePro
         </h3>
       </Link>
-      <div className="flex gap-3">
+      <div className="flex gap-5">
         <Link href={"/"} className="flex gap-1">
           <FaHome />
         </Link>
