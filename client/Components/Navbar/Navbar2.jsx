@@ -1,6 +1,6 @@
 import { useTheme } from "../../Utils/ThemeContext";
 import React from "react";
-import { FaSun, FaMoon } from "react-icons/fa";
+import { FaSun, FaMoon, FaHome } from "react-icons/fa";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -14,16 +14,21 @@ const Navbar2 = () => {
      items-center px-5 w-screen  rounded-xl  h-14"
     >
       <Link href={"/"} className="flex gap-1">
-        <Image src={"/logo.svg"} width={15} height={15} />
+        <Image src={"/logo.svg"} width={15} height={15} alt="logo" />
         <h3 className="font-bold text-primary-light dark:text-primary-dark ">
           ProfilizePro
         </h3>
       </Link>
+      <div className="flex gap-5">
+        <Link href={"/"} className="flex gap-1">
+          <FaHome />
+        </Link>
 
-      <button onClick={toggleDarkMode}>
-        {!darkMode && <FaSun />}
-        {darkMode && <FaMoon />}
-      </button>
+        <button onClick={toggleDarkMode}>
+          {!darkMode && <FaSun />}
+          {darkMode && <FaMoon />}
+        </button>
+      </div>
     </div>
   );
 };
