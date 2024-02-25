@@ -3,7 +3,7 @@ import connectdb from "@/Utils/api/db/connectDB";
 import {
   createAssignment,
   getAssignments,
-} from "@/Utils/api/Controllers/assignmentController.js";
+} from "@/Utils/api/Controllers/AssignmentController.js";
 
 export async function GET(req, res) {
   try {

@@ -16,10 +16,22 @@ const schema = new Schema({
     type: String,
     required: true,
   },
-  topics: {
-    type: [String],
-    required: true,
-  },
+  topics: [
+    {
+      name: {
+        type: [String],
+        required: true,
+      },
+      minQuestions: {
+        type: Number,
+        required: true,
+      },
+      maxQuestions: {
+        type: Number,
+        required: true,
+      },
+    },
+  ],
 
   attemptedBy: {
     type: [

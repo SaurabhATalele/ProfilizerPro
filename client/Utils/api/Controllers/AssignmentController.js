@@ -83,6 +83,7 @@ const updateScore = async (req, res) => {
 const getAssignments = async (req, res) => {
   try {
     const assignments = await Assignment.find();
+    console.log("we have", assignments);
     return NextResponse.json({ data: assignments }, { status: 200 });
     res.status(200).json({ assignments });
   } catch (error) {
