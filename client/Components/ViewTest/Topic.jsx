@@ -1,32 +1,38 @@
 import { useState } from "react";
 
-const topic = ({ name, minQuestions, maxQuestions,setSelectedTopics }) => {
+const topic = ({ name, minQuestions, maxQuestions, setSelectedTopics }) => {
   const [isSelected, setIsSelected] = useState(false);
-  const [questions,setQuestions] = useState(0);
+  const [questions, setQuestions] = useState(0);
 
   const handleSelected = (e) => {
     setIsSelected(e.target.checked);
-    if (!isSelected) {
+    if (!e.target.checked) {
       setSelectedTopics((prev) => {
         delete prev[name];
         return prev;
-      })
+      });
+    } else {
+      setSelectedTopics((prev) => {
+        prev[name] = questions;
+        return prev;
+      });
+    }
+  };
 
-    }
-    else{
-        setSelectedTopics((prev) => {
-            prev[name] = questions;
-            return prev;
-        })
-    }
-  }
+  const handleNumberChange = (e) => {
+    setQuestions(e.target.id);
+    setSelectedTopics((prev) => {
+      prev[name] = e.target.id;
+      return prev;
+    });
+  };
 
   return (
     <li className="flex flex-col gap-1">
       <div className="flex gap-3 items-center">
         <input
           type="checkbox"
-          name="tech1"
+          name={name}
           id="tech 1"
           className="h-4 w-4 "
           onChange={handleSelected}
@@ -40,13 +46,19 @@ const topic = ({ name, minQuestions, maxQuestions,setSelectedTopics }) => {
           {Array.from(
             { length: maxQuestions - minQuestions + 1 },
             (_, i) => i + (maxQuestions - minQuestions) + 1,
-          ).map((i) => (
-            <>
-              <input type="radio" name="tech1" id={i} className="h-4 w-4" onChange={()=>setQuestions(i)} />
+          ).map((i, index) => (
+            <div key={index}>
+              <input
+                type="radio"
+                name={name}
+                id={i}
+                className="h-4 w-4"
+                onChange={handleNumberChange}
+              />
               <label htmlFor="tech1-1" className="text-sm">
                 {i}
               </label>
-            </>
+            </div>
           ))}
         </div>
       )}

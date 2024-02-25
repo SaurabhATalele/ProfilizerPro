@@ -24,6 +24,10 @@ const ViewTest = ({ test }) => {
     fetchTopics();
   }, []);
 
+  useEffect(() => {
+    console.log(selectedTopics);
+  }, [selectedTopics]);
+
   return (
     <div className="pt-24 w-3/4 flex justify-between ">
       {topics && (
@@ -58,11 +62,14 @@ const ViewTest = ({ test }) => {
                   />
                 ))}
             </ul>
-            <Link href={`/test/${test}/attempt`}>
-              <button className="bg-blue-500 text-white p-2 rounded-md absolute bottom-0 ">
-                Start Test
-              </button>
-            </Link>
+            {/* <Link href={`/test/${test}/attempt`}> */}
+            <button
+              className="bg-blue-500 text-white p-2 rounded-md absolute bottom-0 "
+              onClick={() => console.log(selectedTopics)}
+            >
+              Start Test
+            </button>
+            {/* </Link> */}
           </div>
         </>
       )}
