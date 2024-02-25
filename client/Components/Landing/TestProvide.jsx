@@ -46,10 +46,14 @@ const card = (tests) => {
               className="w-24 h-24"
             />
             <p className="font-bold text-lg ">{test.name}</p>
-            <p className="text-sm text-gray-500 h-40 truncate w-full">{test.description}</p>
-            <button className="bg-primary-light text-white p-2 rounded-md text-sm">
-              Attempt
-            </button>
+            <p className="text-sm text-gray-500 h-40 truncate w-full">
+              {test.description}
+            </p>
+            <Link href={`/test/${test._id}`}>
+              <button className="bg-primary-light text-white p-2 rounded-md text-sm">
+                Attempt
+              </button>
+            </Link>
           </div>
         ))}
       {/* <div className="flex flex-col items-center w-80 gap-4 rounded-md shadow-md p-4">

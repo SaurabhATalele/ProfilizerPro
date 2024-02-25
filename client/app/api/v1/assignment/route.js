@@ -11,7 +11,7 @@ export async function GET(req, res) {
     const data = await getAssignments();
     return data;
   } catch (error) {
-    console.log("Jbsbc", error);
+
     return NextResponse.json({ message: error });
   }
 }

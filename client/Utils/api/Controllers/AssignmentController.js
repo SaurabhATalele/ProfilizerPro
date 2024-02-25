@@ -48,7 +48,7 @@ const sendMail = async (req, res) => {
       { _id: assignment, organization: user.organization },
       {
         $push: { AssignedTo: userDetails },
-      }
+      },
     );
     if (!assigned) {
       console.log(assigned);
@@ -83,13 +83,23 @@ const updateScore = async (req, res) => {
 const getAssignments = async (req, res) => {
   try {
     const assignments = await Assignment.find();
-    console.log("we have", assignments);
     return NextResponse.json({ data: assignments }, { status: 200 });
     res.status(200).json({ assignments });
   } catch (error) {
     return NextResponse.json({ message: error.message }, { status: 404 });
 
     res.status(404).json({ message: error.message });
+  }
+};
+
+// get the assignment by id
+const getAssignmentById = async (body) => {
+  const { id } = body;
+  try {
+    const assignment = await Assignment.findById(id);
+    return NextResponse.json({ data: assignment }, { status: 200 });
+  } catch (error) {
+    return NextResponse.json({ message: error.message }, { status: 404 });
   }
 };
 
@@ -151,5 +161,6 @@ module.exports = {
   deleteAssignment,
   sendMail,
   updateScore,
+  getAssignmentById,
   transporter,
 };
