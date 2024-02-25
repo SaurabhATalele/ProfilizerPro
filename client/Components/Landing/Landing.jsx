@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import TestProvide from "./TestProvide";
 
 const Landing = () => {
   return (
@@ -112,6 +113,9 @@ const Landing = () => {
         </div>
       </div>
 
+      {/* tests provided  */}
+    <TestProvide/>
+
       {/* footer  */}
       <footer className="w-3/4 flex justify-between p-5 border-t-2 dark:border-gray-50 dark:border-t-[1px]">
         <div className="flex gap-5">
@@ -148,28 +152,27 @@ const Landing = () => {
               Tests
             </Link>
           </div>
-          
         </div>
         <div className="flex flex-col gap-5">
-        <Link
-              href={"/register"}
-              className="bg-primary-light text-white px-3 py-1  rounded-md"
-            >
-              Register
-            </Link>
-            <Link
-              href={"/login"}
-              className="border px-2 py-1 flex justify-center border-primary-light  rounded-md dark:text-primary-dark dark:border-primary-dark   text-primary-light"
-            >
-              Login
-            </Link>
+          <Link
+            href={"/register"}
+            className="bg-primary-light text-white px-3 py-1  rounded-md"
+          >
+            Register
+          </Link>
+          <Link
+            href={"/login"}
+            className="border px-2 py-1 flex justify-center border-primary-light  rounded-md dark:text-primary-dark dark:border-primary-dark   text-primary-light"
+          >
+            Login
+          </Link>
 
-            <Link
-              href={"/login"}
-              className="border px-2 py-1 flex justify-center border-primary-light  rounded-md dark:text-primary-dark dark:border-primary-dark   text-primary-light"
-            >
-              Admin
-            </Link>
+          <Link
+            href={"/login"}
+            className="border px-2 py-1 flex justify-center border-primary-light  rounded-md dark:text-primary-dark dark:border-primary-dark   text-primary-light"
+          >
+            Admin
+          </Link>
         </div>
       </footer>
       <p className="text-sm text-left ">

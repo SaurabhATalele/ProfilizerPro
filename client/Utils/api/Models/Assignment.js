@@ -7,21 +7,21 @@ const schema = new Schema({
     required: true,
     minLength: 3,
   },
-  organization: {
-    type: Schema.Types.ObjectId,
-    ref: "Organization",
+  description: {
+    type: String,
+    required: false,
+    minLength: 3,
+  },
+  icon: {
+    type: String,
     required: true,
   },
-  questions: {
-    type: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Question",
-      },
-    ],
+  topics: {
+    type: [String],
     required: true,
   },
-  AssignedTo: {
+
+  attemptedBy: {
     type: [
       {
         email: {
@@ -29,18 +29,6 @@ const schema = new Schema({
           validate: function (v) {
             return /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/.test(v);
           },
-        },
-        assignedOn: {
-          type: Date,
-          default: Date.now,
-        },
-        deadline: {
-          type: Date,
-          required: true,
-        },
-        attempted: {
-          type: Boolean,
-          default: false,
         },
         score: {
           type: Number,

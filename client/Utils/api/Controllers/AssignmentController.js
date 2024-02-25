@@ -1,5 +1,6 @@
 import Assignment from "../Models/Assignment.js";
 import nodeMailer from "nodemailer";
+import { NextResponse } from "next/server.js";
 
 // create a transporter object using the default gmail setup for nodemailer
 const transporter = nodeMailer.createTransport({
@@ -82,8 +83,11 @@ const updateScore = async (req, res) => {
 const getAssignments = async (req, res) => {
   try {
     const assignments = await Assignment.find();
+    return NextResponse.json({ data: assignments }, { status: 200 });
     res.status(200).json({ assignments });
   } catch (error) {
+    return NextResponse.json({ message: error.message }, { status: 404 });
+
     res.status(404).json({ message: error.message });
   }
 };
@@ -100,13 +104,15 @@ const getAssignmentsByOrg = async (req, res) => {
 };
 
 // create a new assignment
-const createAssignment = async (req, res) => {
-  const assignment = req.body;
+const createAssignment = async (body) => {
+  const assignment = body;
   const newAssignment = new Assignment(assignment);
   try {
     await newAssignment.save();
+    return NextResponse.json({ newAssignment }, { status: 201 });
     res.status(201).json({ newAssignment });
   } catch (error) {
+    return NextResponse.json({ message: error.message }, { status: 409 });
     res.status(409).json({ message: error.message });
   }
 };
