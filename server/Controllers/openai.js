@@ -26,4 +26,4 @@ async function getGPT3Response(prompt) {
   }
 }
 
-module.exports = getGPT3Response;
+export default getGPT3Response;
