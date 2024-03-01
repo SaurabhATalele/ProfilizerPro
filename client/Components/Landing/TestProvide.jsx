@@ -46,7 +46,7 @@ const card = (tests) => {
               className="w-24 h-24"
             />
             <p className="font-bold text-lg ">{test.name}</p>
-            <p className="text-sm text-gray-500 h-40 truncate w-full">
+            <p className="text-sm text-gray-500 line-clamp-3 text-justify w-full">
               {test.description}
             </p>
             <Link href={`/test/${test._id}`}>
