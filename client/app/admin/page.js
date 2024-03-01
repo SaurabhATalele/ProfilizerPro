@@ -1,5 +1,5 @@
 import React from "react";
-import AddTest from "../../Components/Admin/AddTest";
+import AddTest from "../../Components/Admin/Tests/AddTest";
 import AdminNavbar from "../../Components/Navbar/Admin";
 
 const page = () => {
