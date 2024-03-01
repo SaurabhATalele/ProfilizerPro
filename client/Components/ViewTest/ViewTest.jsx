@@ -2,22 +2,31 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import Topic from "./Topic";
 
 const ViewTest = ({ test }) => {
   const [topics, setTopics] = useState([]);
   const [subtopics, setSubtopics] = useState([]);
-  const selectedTopics = useState([]);
+  const [selectedTopics, setSelectedTopics] = useState({});
   useEffect(() => {
     const fetchTopics = async () => {
-      const res = await fetch(`/api/v1/assignment`);
+      const res = await fetch(`/api/v1/assignment/fetch`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: test }),
+      });
       const data = await res.json();
-      setTopics(data.data[0]);
-      setSubtopics(data.data[0].topics);
+      setTopics(data.data);
+      setSubtopics(data.data.topics);
     };
     fetchTopics();
   }, []);
 
-  
+  useEffect(() => {
+    console.log(selectedTopics);
+  }, [selectedTopics]);
 
   return (
     <div className="pt-24 w-3/4 flex justify-between ">
@@ -44,46 +53,23 @@ const ViewTest = ({ test }) => {
             <ul className="flex flex-col gap-5">
               {subtopics &&
                 subtopics.map((topic) => (
-                  <li className="flex flex-col gap-1">
-                    <div className="flex gap-3 items-center">
-                      <input
-                        type="checkbox"
-                        name="tech1"
-                        id="tech 1"
-                        className="h-4 w-4 "
-                       
-                      />
-                      <label htmlFor="tech1" className="text-md font-semibold">
-                        {topic.name}
-                      </label>
-                    </div>
-                    <div className="flex gap-3 items-center radio-grp">
-                      {Array.from(
-                        { length: topic.maxQuestions - topic.minQuestions + 1 },
-                        (_, i) =>
-                          i + (topic.maxQuestions - topic.minQuestions) + 1
-                      ).map((i) => (
-                        <>
-                          <input
-                            type="radio"
-                            name="tech1"
-                            id={i}
-                            className="h-4 w-4"
-                          />
-                          <label htmlFor="tech1-1" className="text-sm">
-                            {i}
-                          </label>
-                        </>
-                      ))}
-                    </div>
-                  </li>
+                  <Topic
+                    key={topic._id}
+                    name={topic.name}
+                    minQuestions={topic.minQuestions}
+                    maxQuestions={topic.maxQuestions}
+                    setSelectedTopics={setSelectedTopics}
+                  />
                 ))}
             </ul>
-            <Link href={`/test/${test}/attempt`}>
-              <button className="bg-blue-500 text-white p-2 rounded-md absolute bottom-0 ">
-                Start Test
-              </button>
-            </Link>
+            {/* <Link href={`/test/${test}/attempt`}> */}
+            <button
+              className="bg-blue-500 text-white p-2 rounded-md absolute bottom-0 "
+              onClick={() => console.log(selectedTopics)}
+            >
+              Start Test
+            </button>
+            {/* </Link> */}
           </div>
         </>
       )}
