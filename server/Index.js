@@ -1,17 +1,20 @@
 import express from "express";
 import dotenv from "dotenv";
 import getGPT3Response from "./Controllers/openai.js";
+import cors from "cors";
 dotenv.config();
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 app.get("/", (req, res) => {
   res.status(200).json({ message: "Ok" });
 });
 
 app.post("/chat", async (req, res) => {
   const { prompt } = req.body;
-  const response = await getGPT3Response(prompt);
+  const response = await getGPT3Response("python");
+  // console.log(response);
   var x = response.replace("\n", "");
   x = x.replaceAll("'", `"`);
 
