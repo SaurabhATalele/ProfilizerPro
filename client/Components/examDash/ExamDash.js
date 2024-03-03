@@ -5,40 +5,32 @@ import axios from "axios";
 
 function ExamDash() {
   const [ques, setQues] = useState([]);
-  const [active, setActive] = useState(0);
-  const [data, setData] = useState([]);
-  function createArray(n, data) {
-    let newArray = [];
-    for (let i = 1; i <= n; i++) {
-      newArray.push({ num: i, status: "unattempted" });
-    }
-    return newArray;
-  }
+  const [currentQuestion, setCurrentQuestion] = useState(0);
 
   useEffect(() => {
-    const generateTest = async () => {
-      console.log("in generate");
-      const res = await axios.post("http://localhost:3000/chat", {
-        prompt: "python",
-      });
-      setData(res);
-      console.log(res);
+    const getQuestions = async () => {
+      try {
+        const res = await axios.post("http://localhost:3000/chat/", {
+          prompt:
+            "I have given you a json which will contain the  name of the topic and number of questions required on that topic (they are specified in the json) In python. give me a array of json of questions, options and answers on the topics. the json is :  {  'questions': { 'Data types': 3, 'basics': 4  }}. I want tehe answer only in {\n    'Data types': [\n        {\n            'question': 'What is the data type of 5?',\n            'options': ['Integer', 'String', 'Boolean', 'Float'],\n            'answer': 'Integer'\n        },\n        {\n            'question': 'Which data type is used to represent True or False?',\n            'options': ['String', 'Boolean', 'Integer', 'Float'],\n            'answer': 'Boolean'\n        },\n        # Add more questions for 'Data types' topic if needed\n    ],\n    'basics': [\n        {\n            'question': 'What is the result of 2 + 3?',\n            'options': ['4', '6', '5', '7'],\n            'answer': '5'\n        },\n        {\n            'question': 'Which data type is used to store text?',\n            'options': ['String', 'Integer', 'Boolean', 'Array'],\n            'answer': 'String'\n        } this format. I want nothong apart form the json object",
+        });
+        console.log(res.data);
+        const valuesArray = Object.values(res.data.response).flatMap(
+          (category) => category.map((question) => question),
+        );
+
+        for (let i = 0; i < valuesArray.length; i++) {
+          valuesArray[i].number = i + 1;
+        }
+
+        console.log(valuesArray);
+        setQues(valuesArray);
+      } catch (error) {
+        console.log(error);
+      }
     };
-
-    console.log("inside useffect");
-    generateTest();
-    console.log(data);
-    // let n = resp.length; // You can set the value of n to any number you want
-    setQues(createArray(4, ""));
+    getQuestions();
   }, []);
-
-  // useEffect(() => {
-  //   if (!ques.length) return;
-  //   const temp = [...ques];
-  //   console.log(temp);
-  //   temp[active].status = "attempted";
-  // }, [active]);
-
   return (
     <>
       <div className="flex w-screen h-screen  justify-evenly">
@@ -47,9 +39,9 @@ function ExamDash() {
             {ques.map((ele) => {
               return (
                 <Button
-                  num={ele.num}
-                  status={ele.status}
-                  setActive={setActive}
+                  num={ele.number}
+                  setCurrent={setCurrentQuestion}
+                  status="marked"
                 />
               );
             })}
@@ -64,77 +56,34 @@ function ExamDash() {
           <div className=" flex gap-8 ">
             <div className="w-1/2 ">
               <h2 className=" text-xl text-slate-700 font-semibold">
-                Question number: {active + 1}
+                Question number: {currentQuestion + 1}
               </h2>
               <p className="  text-xl ">
-                The "function" and " var" are known as :
+                {ques && ques[currentQuestion]?.question}
               </p>
             </div>
             <div className=" flex  gap-5 flex-col w-1/2  ml-16 ">
-              <div class="flex items-center me-4  ">
-                <input
-                  checked
-                  id="purple-radio"
-                  type="radio"
-                  value=""
-                  name="colored-radio"
-                  className=" w-11 h-5"
-                />
-                <label
-                  for="purple-radio"
-                  class="ms-2 text-xl font-normal text-gray-900 dark:text-gray-300"
-                >
-                  Keywords
-                </label>
-              </div>
-              <div class="flex items-center me-4">
-                <input
-                  checked
-                  id="purple-radio"
-                  type="radio"
-                  value=""
-                  name="colored-radio"
-                  className=" w-11 h-5"
-                />
-                <label
-                  for="purple-radio"
-                  class="ms-2 text-xl font-normal text-gray-900 dark:text-gray-300"
-                >
-                  Data types
-                </label>
-              </div>
-              <div class="flex items-center me-4">
-                <input
-                  checked
-                  id="purple-radio"
-                  type="radio"
-                  value=""
-                  name="colored-radio"
-                  className=" w-11 h-5"
-                />
-                <label
-                  for="purple-radio"
-                  class="ms-2 text-xl font-normal text-gray-900 dark:text-gray-300"
-                >
-                  Declaration statements
-                </label>
-              </div>
-              <div class="flex items-center me-4">
-                <input
-                  checked
-                  id="purple-radio"
-                  type="radio"
-                  value=""
-                  name="colored-radio"
-                  className=" w-11 h-5"
-                />
-                <label
-                  for="purple-radio"
-                  class="ms-2 text-xl font-normal text-gray-900 dark:text-gray-300"
-                >
-                  Prototypes
-                </label>
-              </div>
+              {ques[currentQuestion]?.options &&
+                ques[currentQuestion]?.options.map((item) => {
+                  return (
+                    <div class="flex items-center me-4  ">
+                      <input
+                        checked
+                        id="purple-radio"
+                        type="radio"
+                        value=""
+                        name="colored-radio"
+                        className=" w-11 h-5"
+                      />
+                      <label
+                        for="purple-radio"
+                        class="ms-2 text-xl font-normal text-gray-900 dark:text-gray-300"
+                      >
+                        {item}
+                      </label>
+                    </div>
+                  );
+                })}
             </div>
           </div>
           <div className=" flex gap-9 justify-center items-center p-10">
