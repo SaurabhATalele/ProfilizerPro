@@ -1,13 +1,21 @@
+"use client";
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import TopicContext from "../../Utils/TestContext";
+import { useEffect, useState, useContext } from "react";
 import Topic from "./Topic";
 
+const isEmptyObject = (obj) => {
+  return Object.keys(obj).length === 0;
+};
+
 const ViewTest = ({ test }) => {
-  const [topics, setTopics] = useState([]);
+  const [topic, setTopic] = useState([]);
   const [subtopics, setSubtopics] = useState([]);
   const [selectedTopics, setSelectedTopics] = useState({});
+  const [topicState, setTopicState] = useState(false);
+  const { topics, setTopics } = useContext(TopicContext);
   useEffect(() => {
     const fetchTopics = async () => {
       const res = await fetch(`/api/v1/assignment/fetch`, {
@@ -18,7 +26,7 @@ const ViewTest = ({ test }) => {
         body: JSON.stringify({ id: test }),
       });
       const data = await res.json();
-      setTopics(data.data);
+      setTopic(data.data);
       setSubtopics(data.data.topics);
     };
     fetchTopics();
@@ -26,11 +34,12 @@ const ViewTest = ({ test }) => {
 
   useEffect(() => {
     console.log(selectedTopics);
+    setTopicState(!isEmptyObject(selectedTopics));
   }, [selectedTopics]);
 
   return (
     <div className="pt-24 w-3/4 flex justify-between ">
-      {topics && (
+      {topic && (
         <>
           <div className="m-3 w-1/2 border-r border-r-gray-400 min-h-[50vh]">
             <div className="flex flex-col gap-10 items-center">
@@ -41,9 +50,9 @@ const ViewTest = ({ test }) => {
                   alt="Tehnology Icon"
                   src={topics.icon}
                 />
-                <h1 className="text-2xl font-bold">{topics.name}</h1>
+                <h1 className="text-2xl font-bold">{topic.name}</h1>
               </div>
-              <p className="text-lg p-10 text-justify">{topics.description} </p>
+              <p className="text-lg p-10 text-justify">{topic.description} </p>
             </div>
           </div>
           <div className="m-3 w-1/2  flex flex-col gap-3 relative overflow-auto">
@@ -62,14 +71,19 @@ const ViewTest = ({ test }) => {
                   />
                 ))}
             </ul>
-            {/* <Link href={`/test/${test}/attempt`}> */}
-            <button
-              className="bg-blue-500 text-white p-2 rounded-md absolute bottom-0 "
-              onClick={() => console.log(selectedTopics)}
-            >
-              Start Test
-            </button>
-            {/* </Link> */}
+            {topicState && (
+              <Link href={`/test/attempt/${test}`}>
+                <button
+                  className="bg-blue-500 text-white p-2 rounded-md absolute bottom-0 disabled:bg-gray-400"
+                 
+                  onClick={() =>
+                    setTopics({ topic: topic.name, subtopics: selectedTopics })
+                  }
+                >
+                  Start Test
+                </button>
+              </Link>
+            )}
           </div>
         </>
       )}
