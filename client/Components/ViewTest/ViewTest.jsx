@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,6 +9,7 @@ const ViewTest = ({ test }) => {
   const [topics, setTopics] = useState([]);
   const [subtopics, setSubtopics] = useState([]);
   const [selectedTopics, setSelectedTopics] = useState({});
+
   useEffect(() => {
     const fetchTopics = async () => {
       const res = await fetch(`/api/v1/assignment/fetch`, {
@@ -18,8 +20,9 @@ const ViewTest = ({ test }) => {
         body: JSON.stringify({ id: test }),
       });
       const data = await res.json();
+      console.log(data.data);
       setTopics(data.data);
-      setSubtopics(data.data.topics);
+      setSubtopics(data.data?.topics);
     };
     fetchTopics();
   }, []);
@@ -27,6 +30,12 @@ const ViewTest = ({ test }) => {
   useEffect(() => {
     console.log(selectedTopics);
   }, [selectedTopics]);
+
+  const handleButtonClick = () => {
+    // Serialize the JSON data and pass it as a query parameter
+    const serializedData = encodeURIComponent(JSON.stringify(selectedTopics));
+    router.push(`/destinationPage?name=${test}&data=${serializedData}`);
+  };
 
   return (
     <div className="pt-24 w-3/4 flex justify-between ">
@@ -62,14 +71,18 @@ const ViewTest = ({ test }) => {
                   />
                 ))}
             </ul>
-            {/* <Link href={`/test/${test}/attempt`}> */}
-            <button
-              className="bg-blue-500 text-white p-2 rounded-md absolute bottom-0 "
-              onClick={() => console.log(selectedTopics)}
+            <Link
+              href={{
+                pathname: "/resetpass",
+              }}
             >
-              Start Test
-            </button>
-            {/* </Link> */}
+              <button
+                className="bg-blue-500 text-white p-2 rounded-md absolute bottom-0 "
+                onClick={() => console.log(selectedTopics)}
+              >
+                Start Test
+              </button>
+            </Link>
           </div>
         </>
       )}

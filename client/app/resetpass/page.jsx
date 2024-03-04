@@ -12,6 +12,7 @@ const page = () => {
     <>
       {/* <Navbar2 />
       <ResetPass /> */}
+     
       <ExamDash />
     </>
   );
