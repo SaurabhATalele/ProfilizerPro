@@ -13,13 +13,12 @@ app.get("/", (req, res) => {
 
 app.post("/chat", async (req, res) => {
   const { prompt } = req.body;
-  const response = await getGPT3Response(prompt);
-  const pro = `${response} convert this to json. And in the output I want nothing apart from the json.`;
-  var resp = await getGPT3Response(pro);
+  var resp = await getGPT3Response(prompt);
 
   console.log("response genearted Successfuly...");
   resp = resp.replaceAll("```json", "");
   resp = resp.replaceAll("```", "");
+  resp = resp.replaceAll("'", `"`);
   console.log(resp);
 
   // var x = response.replace("\n", "");

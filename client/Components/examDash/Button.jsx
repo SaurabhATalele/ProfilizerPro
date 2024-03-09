@@ -1,7 +1,7 @@
 import React from "react";
 
 function Button({ num, status, current, setCurrent }) {
-  console.log(num, status, current);
+  // console.log(num, status, current);
 
   return (
     <>
