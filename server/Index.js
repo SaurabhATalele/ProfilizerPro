@@ -19,7 +19,6 @@ app.post("/chat", async (req, res) => {
   resp = resp.replaceAll("```json", "");
   resp = resp.replaceAll("```", "");
   resp = resp.replaceAll("'", `"`);
-  console.log(resp);
 
   // var x = response.replace("\n", "");
   // let dummy = `{"question": "Is the "None" value a data type in Python?"}`;

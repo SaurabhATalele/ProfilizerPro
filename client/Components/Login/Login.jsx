@@ -1,40 +1,44 @@
 "use client";
-import React from "react";
 import Link from "next/link";
-import axios from "axios";
-import { useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import { BASE_URL } from "@/Utils/constants";
-import { login } from "@/Utils/Apicalls/Login";
-
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { ToastContainer } from "react-toastify";
 import Toast from "@/Utils/Toast";
+import { login } from "@/Utils/Apicalls/Login";
 import Image from "next/image";
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
+
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      router.push("/");
+    }
+  }, []);
+
   const handleLogin = async (e) => {
     e.preventDefault();
 
     try {
-      // const res = await axios.post(`${BASE_URL}/api/v1/users/login`, {
-      //   email,
-      //   password,
-      // });
       const res = await login({
         email,
         password,
       });
 
-      console.log(res);
-
-      if (res.status === 200) Toast("success", "Login Success...");
-      else if (res.status === 404) {
+      if (res.status === 200) {
+        const data = await res.json();
+        console.log(data);
+        localStorage.setItem("token", data.token);
+        Toast("success", "Login Success...");
+        router.push("/");
+      } else if (res.status === 404) {
         Toast("error", "User Not Found");
       } else if (res.status === 403) {
         Toast("error", "Incorrect Password");
       }
     } catch (error) {
-      console.log(error);
       Toast("error", error.message);
     }
   };

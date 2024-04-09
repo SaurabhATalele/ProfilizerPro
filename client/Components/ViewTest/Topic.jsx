@@ -42,12 +42,12 @@ const topic = ({ name, minQuestions, maxQuestions, setSelectedTopics }) => {
         </label>
       </div>
       {isSelected && (
-        <div className="flex gap-3 items-center radio-grp">
+        <div className="flex gap-4 items-center radio-grp">
           {Array.from(
             { length: maxQuestions - minQuestions + 1 },
             (_, i) => i + (maxQuestions - minQuestions) + 1,
           ).map((i, index) => (
-            <div key={index}>
+            <div key={index} className="flex items-center gap-1">
               <input
                 type="radio"
                 name={name}

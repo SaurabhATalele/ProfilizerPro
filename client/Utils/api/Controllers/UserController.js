@@ -1,26 +1,35 @@
 import User from "../Models/Users.js";
 import { transporter } from "./AssignmentController.js";
 import { NextResponse } from "next/server.js";
+import { headers } from "next/headers";
 
 const registerUser = async (body) => {
   try {
-    const { email, password, name } = body;
-    const user = await new User({ email, password, name });
+    const { email, password, username } = body;
+    const isuser = await User.findOne({ email });
+    if (isuser) {
+      return NextResponse.json(
+        { message: "User Already Exists" },
+        { status: 400 },
+      );
+    }
+    const user = await new User({ email, password, username });
     await user.save();
     return NextResponse.json(
       { message: "User Registered Successfully" },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error) {
     console.log(error);
     const message = error._message;
+
     return NextResponse.json({ message: message }, { status: 400 });
   }
 };
 
 const loginUser = async (body) => {
   try {
-    console.log("Getting here")
+    console.log("Getting here");
     const email = body?.email;
     const password = body?.password;
     const data = await User.findOne({ email });
@@ -32,10 +41,11 @@ const loginUser = async (body) => {
     if (!isValid) {
       return NextResponse.json(
         { message: "Incorrect Password" },
-        { status: 403 }
+        { status: 403 },
       );
     }
     const token = await data.GenerateToken();
+    console.log("token", token);
     return NextResponse.json({ token }, { status: 200 });
   } catch (error) {
     console.log(error);
@@ -76,4 +86,21 @@ function generateOTP() {
   }
   return OTP;
 }
-module.exports = { registerUser, loginUser, sendEmail };
+
+const verifyUser = async (req, res) => {
+  try {
+    const headersList = headers();
+    console.log(headersList.get("authorization"));
+    const type = headersList.get("authorization").split(" ")[0];
+    const token = headersList.get("authorization").split(" ")[1];
+    if (type !== "Bearer") {
+      return NextResponse.json({ message: "Invalid Token" }, { status: 400 });
+    }
+    const data = await User.ValidateToken(token);
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+module.exports = { registerUser, loginUser, sendEmail, verifyUser };

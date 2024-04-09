@@ -50,24 +50,25 @@ const ViewTest = ({ test }) => {
   };
 
   return (
-    <div className="pt-24 w-3/4 flex justify-between ">
+    <div className="pt-24 w-3/4 flex justify-between flex-col ">
       {topic && (
-        <>
-          <div className="m-3 w-1/2 border-r border-r-gray-400 min-h-[50vh]">
+        <div className="flex">
+          <div className="m-3 w-1/2 border-r border-r-gray-200 min-h-[50vh]">
             <div className="flex flex-col gap-10 items-center">
-              <div className="w-full flex items-center justify-start">
+              <div className="w-full flex items-center justify-start gap-5">
                 <Image
                   width={150}
                   height={150}
                   alt="Tehnology Icon"
-                  src={topics.icon}
+                  className="rounded-full border object-contain"
+                  src={topic.icon}
                 />
                 <h1 className="text-2xl font-bold">{topic.name}</h1>
               </div>
               <p className="text-lg p-10 text-justify">{topic.description} </p>
             </div>
           </div>
-          <div className="m-3 w-1/2  flex flex-col gap-3 relative overflow-auto">
+          <div className="m-3 w-1/2 overflow-y-auto flex flex-col gap-3 relative overflow-auto">
             <h2 className="text-xl font-semibold">
               Select topics of your choice
             </h2>
@@ -85,16 +86,16 @@ const ViewTest = ({ test }) => {
             </ul>
 
             {/* <Link href={`/test/attempt/${test}`}> */}
-            <button
-              className="bg-blue-500 text-white p-2 rounded-md absolute bottom-0 disabled:bg-gray-400"
-              onClick={() => handleButtonClick()}
-            >
-              Start Test
-            </button>
             {/* </Link> */}
           </div>
-        </>
+        </div>
       )}
+      <button
+        className="bg-blue-500 text-white p-2 rounded-md  disabled:bg-gray-400"
+        onClick={() => handleButtonClick()}
+      >
+        Start Test
+      </button>
     </div>
   );
 };

@@ -4,6 +4,8 @@ import Modal from "./Modal";
 
 const AddTest = () => {
   const [tests, setTests] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     const getTests = async () => {
@@ -17,11 +19,15 @@ const AddTest = () => {
       }
     };
     getTests();
-  }, []);
+  }, [refresh]);
 
   return (
     <div className="w-full xl:w-3/4">
-      <Modal />
+      <Modal
+        refresh={setRefresh}
+        openModal={openModal}
+        setOpenModal={setOpenModal}
+      />
       <h1 className="py-5 text-lg font-bold">All tests</h1>
       <ul className="w-2/3 divide-y divide-gray-200 dark:divide-gray-700">
         {tests &&
@@ -41,14 +47,14 @@ const AddTest = () => {
                   </p>
                 </div>
                 <div class="inline-flex gap-2 items-center text-base font-semibold text-gray-900 dark:text-white">
-                  <button className="hover:bg-violet-500 px-2 py-1 text-primary-light rounded-md text-sm font-light">
+                  {/* <button className="hover:bg-violet-500 px-2 py-1 text-primary-light rounded-md text-sm font-light">
                     <img
                       width="24"
                       height="24"
                       src="https://img.icons8.com/fluency-systems-regular/48/252525/pen-squared.png"
                       alt="pen-squared"
                     />
-                  </button>
+                  </button> */}
                   <button className="text-sm font-light">
                     <img
                       width="24"

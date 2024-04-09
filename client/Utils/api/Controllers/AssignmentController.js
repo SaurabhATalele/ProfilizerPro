@@ -63,19 +63,19 @@ const sendMail = async (req, res) => {
 };
 
 // update the assignment score into the model
-const updateScore = async (req, res) => {
-  const { id } = req.params;
-  const { score, email } = req.body;
+const updateScore = async (body) => {
+  const { id, email, score, total, answers } = body;
   try {
     const assignment = await Assignment.findById(id);
-    const user = assignment.AssignedTo.find((user) => user.email === email);
-
-    user.score = score;
-    user.attempted = true;
+    assignment.attemptedBy.push({ email, score, total, answers });
     await assignment.save();
-    res.status(200).json({ assignment: "Hello" });
+    return NextResponse.json(
+      { message: "Attempted by inserted successfully." },
+      { status: 200 },
+    );
   } catch (error) {
     console.log(error);
+    res.status(500).json({ message: "Something went wrong" });
   }
 };
 

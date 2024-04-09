@@ -2,13 +2,36 @@
 
 import { Button, Modal } from "flowbite-react";
 import { useState } from "react";
-const AddTest = () => {
-  const [openModal, setOpenModal] = useState(false);
+const AddTest = ({ refesh, openModal, setOpenModal }) => {
+  // const [openModal, setOpenModal] = useState(false);
   const [topics, setTopics] = useState([]);
   const [testName, setTestName] = useState("");
   const [description, setDescription] = useState("");
   const [icon, setIcon] = useState("");
   const [topic, setTopic] = useState("");
+
+  const handleAddTest = async () => {
+    const data = {
+      name: testName,
+      description,
+      icon,
+      topics,
+    };
+    try {
+      const res = await fetch("/api/v1/assignment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      const result = await res.json();
+      console.log(result);
+      setReferesh(!refresh);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="relative flex  justify-center">
@@ -36,6 +59,8 @@ const AddTest = () => {
               <input
                 type="text"
                 id="name"
+                value={testName}
+                onChange={(e) => setTestName(e.target.value)}
                 className="px-2 py-1 rounded-md border dark:bg-gray-800"
               />
             </div>
@@ -46,6 +71,8 @@ const AddTest = () => {
               <textarea
                 type="text"
                 id="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
                 className="px-2 py-1 rounded-md border dark:bg-gray-800"
               />
             </div>
@@ -56,6 +83,8 @@ const AddTest = () => {
               <input
                 type="text"
                 id="icon"
+                value={icon}
+                onChange={(e) => setIcon(e.target.value)}
                 className="px-2 py-1 rounded-md border dark:bg-gray-800"
               />
             </div>
@@ -75,7 +104,7 @@ const AddTest = () => {
               <button
                 className={`p-1 bg-primary-light text-white w-fit rounded-md disabled:bg-slate-400`}
                 onClick={() => {
-                  setTopics([...topics, topic]);
+                  setTopics([...topics, { name: topic }]);
                   setTopic("");
                   console.log(topics);
                 }}
@@ -95,7 +124,7 @@ const AddTest = () => {
                       key={topic}
                       className="flex gap-2 bg-violet-200  p-2 text-sm rounded-md"
                     >
-                      {topic}
+                      {topic.name}
                       <button
                         className="text-gray-500"
                         onClick={() => {
@@ -115,7 +144,10 @@ const AddTest = () => {
         </Modal.Body>
         <Modal.Footer>
           <Button
-            onClick={() => setOpenModal(false)}
+            onClick={() => {
+              handleAddTest();
+              setOpenModal(false);
+            }}
             className="bg-primary-light dark:bg-primary-dark px-2 py-1 text-white rounded-md mr-2"
           >
             Create Test

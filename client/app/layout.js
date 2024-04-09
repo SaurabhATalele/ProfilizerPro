@@ -3,6 +3,7 @@ import "./globals.css";
 import { ThemeProvider } from "../Utils/ThemeContext";
 import "react-toastify/dist/ReactToastify.css";
 import { TopicProvider } from "../Utils/TestContext";
+import { UserProvider } from "../Utils/UserContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,9 +16,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <ThemeProvider>
-        <TopicProvider>
-          <body className={`${inter.className} `}>{children}</body>
-        </TopicProvider>
+        <UserProvider>
+          <TopicProvider>
+            <body className={`${inter.className} `}>{children}</body>
+          </TopicProvider>
+        </UserProvider>
       </ThemeProvider>
     </html>
   );

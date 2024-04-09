@@ -1,8 +1,10 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Button from "@/Components/examDash/Button";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import Loader from "@/Components/Loader/Loader";
+import TopicContext from "@/Utils/TestContext";
 
 function ExamDash() {
   const [topic, setTopic] = useState("Python");
@@ -10,22 +12,23 @@ function ExamDash() {
   const [ques, setQues] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [loading, setLoading] = useState(false);
+  const { topics, setTopics } = useContext(TopicContext);
+  const [answers, setAnswers] = useState({});
+  const [score, setScore] = useState(0);
+  const router = useRouter();
 
-  useEffect(() => {
-    // const { name, topics } = getQueryParams(window.location.search);
-    // setTopic(name);
-    // setQuestions(topics);
-    // console.log(topics);
-    // console.log(name);
-  }, []);
+  const testId = window.location.pathname.split("/")[3];
 
+  let count = 1;
   useEffect(() => {
     const getQuestions = async () => {
       try {
         setLoading(true);
+        const subtopics = JSON.stringify(topics.subtopics);
+        const prompt = `I have given you a json which will contain the  name of the topic and number of questions required on that topic (they are specified in the json) In ${topics.topic}. the json is :  {  'questions': ${subtopics}}. give me a array of json of questions, options and answers on the topics.  I want tehe answer only in {'topic':['question','options':[option1,option2,optionn],'answer']} this format. I want nothing apart form the json object. The number of questions should taken from the questions json. also do not include doublequotes in the output instead use singlequotes. also provide a json only in this output`;
+        console.log(prompt);
         const res = await axios.post("http://localhost:3000/chat/", {
-          prompt:
-            "I have given you a json which will contain the  name of the topic and number of questions required on that topic (they are specified in the json) In python. the json is :  {  'questions': { 'Data types': 7, 'basics': 8  }}. give me a array of json of questions, options and answers on the topics.  I want tehe answer only in {'topic':['question','options':[option1,option2,optionn],'answer']} this format. I want nothing apart form the json object. The number of questions should taken from the questions json. also do not include doublequotes in the output instead use singlequotes. also provide a json only in this output",
+          prompt,
         });
         console.log(res.data);
         const valuesArray = Object.values(res.data.response).flatMap(
@@ -46,17 +49,38 @@ function ExamDash() {
         setLoading(false);
       }
     };
-    getQuestions();
+    if (count === 1) {
+      getQuestions();
+      count++;
+    }
 
-    // write a callback function to update the status of the question
+    // write a cleanup function
+    return () => {
+      setQues([]);
+      setAnswers({});
+    };
   }, []);
+
+  const submitTest = async () => {
+    console.log(score);
+    console.log(answers);
+    const res = await axios.put("/api/v1/assignment", {
+      answers,
+      id: testId,
+      total: ques.length,
+      score,
+      email: "saurabhatalele@gmail.com",
+    });
+    console.log(res.data);
+    router.push("/success");
+  };
   return (
     <>
       {loading ? (
         <Loader />
       ) : (
         <div className="flex w-screen h-screen  justify-evenly">
-          <div className=" flex flex-col  mt-28  text-center justify-between  w-1/3 p-5">
+          <div className=" flex flex-col   text-center justify-between  w-1/3 p-5 border-r">
             <div className=" h-auto grid  grid-cols-6 gap-8 ">
               {ques.map((ele) => {
                 return (
@@ -69,14 +93,17 @@ function ExamDash() {
               })}
             </div>
             <div className="p-10">
-              <button className=" w-28 h-10 bg-green-400 rounded-md ">
+              <button
+                onClick={submitTest}
+                className=" w-28 h-10 bg-green-400 rounded-md text-white "
+              >
                 Submit
               </button>
             </div>
           </div>
-          <div className="flex flex-col  mt-28  text-center justify-between w-2/3 ">
-            <div className=" flex gap-8 ">
-              <div className="w-1/2 ">
+          <div className="flex flex-col  border-r p-5  text-center justify-between w-2/3 ">
+            <div className=" flex gap-8 h-full ">
+              <div className="w-1/2 border-r h-full p-5 ">
                 <h2 className=" text-xl text-slate-700 font-semibold">
                   Question number: {currentQuestion + 1}
                 </h2>
@@ -84,28 +111,42 @@ function ExamDash() {
                   {ques && ques[currentQuestion]?.question}
                 </p>
               </div>
-              <div className=" flex  gap-5 flex-col w-1/2  ml-16 ">
+              <div
+                className=" flex  gap-5 flex-col w-1/2  ml-16 "
+                radioGroup="options"
+              >
                 {ques[currentQuestion]?.options &&
                   ques[currentQuestion]?.options.map((item) => {
                     return (
-                      <div class="flex items-center me-4  ">
+                      <div class="flex items-center justify-start me-4  ">
                         <input
                           id="purple-radio"
                           type="radio"
-                          value=""
+                          value={item}
                           name="colored-radio"
-                          className=" w-11 h-5"
+                          className=" w-11 h-5 text-left"
                           onChange={() => {
+                            setAnswers((prev) => {
+                              prev[currentQuestion] = item;
+                              return prev;
+                            });
+
+                            if (item === ques[currentQuestion].answer) {
+                              console.log("correct");
+                              setScore((prev) => prev + 1);
+                            } else {
+                              console.log("incorrect");
+                            }
+
                             setQues((prev) => {
                               prev[currentQuestion].status = "attempted";
                               return prev;
                             });
-                            console.log(ques);
                           }}
                         />
                         <label
                           for="purple-radio"
-                          class="ms-2 text-xl font-normal text-gray-900 dark:text-gray-300"
+                          class="ms-2 text-xl text-left font-normal text-gray-900 dark:text-gray-300 w-80"
                         >
                           {item}
                         </label>
@@ -124,10 +165,10 @@ function ExamDash() {
               <button
                 onClick={() => {
                   setCurrentQuestion(currentQuestion + 1);
-                  setQues((prev) => {
-                    prev[currentQuestion].status = "attempted";
-                    return prev;
-                  });
+                  // setQues((prev) => {
+                  //   prev[currentQuestion].status = "attempted";
+                  //   return prev;
+                  // });
                 }}
                 className="  bg-primary-light w-24 h-10 p-2 rounded-md text-white text-center"
               >
