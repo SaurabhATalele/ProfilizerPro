@@ -1,4 +1,4 @@
-import { LOGIN_API, REGISTER_API } from "../constants";
+import { LOGIN_API, REGISTER_API, VERIFY_USER } from "../constants";
 
 export const login = async (data) => {
   const myHeaders = new Headers();
@@ -40,6 +40,23 @@ export const register = async (data) => {
   // console.log("sending from login.js");
 
   const response = await fetch(`${REGISTER_API}`, requestOptions);
-  const resposeData = await response.json();
+  return response;
+};
+
+export const logout = async () => {
+  localStorage.removeItem("token");
+};
+
+export const getUser = async () => {
+  const myHeaders = new Headers();
+  myHeaders.append("Authorization", `Bearer ${localStorage.getItem("token")}`);
+
+  const requestOptions = {
+    method: "GET",
+    headers: myHeaders,
+    redirect: "follow",
+  };
+
+  const response = await fetch(`${VERIFY_USER}`, requestOptions);
   return response;
 };

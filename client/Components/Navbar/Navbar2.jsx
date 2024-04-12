@@ -1,3 +1,4 @@
+"use client";
 import { useTheme } from "../../Utils/ThemeContext";
 import React from "react";
 import { FaSun, FaMoon, FaHome } from "react-icons/fa";

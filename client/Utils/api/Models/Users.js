@@ -13,32 +13,27 @@ import { SECRET_KEY } from "@/Utils/constants";
 
 const secret = SECRET_KEY;
 // defining the schema for the user model
-const User = new Schema({
-  name: {
-    type: String,
-    required: true,
-    minLength: 3,
-  },
-  email: {
-    type: String,
-    required: true,
-    validator: function (v) {
-      return /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/.test(v);
+const User = new Schema(
+  {
+    username: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: true,
     },
   },
-  password: {
-    type: String,
-    required: true,
-    minLength: 8,
+  {
+    timestamps: true,
   },
-  organization: {
-    type: String,
-  },
-  dateJoined: {
-    type: Date,
-    default: Date.now,
-  },
-});
+);
 
 // before saving the details of the user, we will encrypt the password of the user using bcryptjs
 User.pre("save", async function (next) {
@@ -66,9 +61,8 @@ User.methods.GenerateToken = async function () {
   try {
     const userId = this._id;
     const email = this.email;
-    const organization = this.organization;
-    const user = { userId, email, organization };
-    console.log(organization);
+    const username = this.username;
+    const user = { userId, email, username };
     return await jwt.sign(user, secret);
   } catch (err) {
     console.log(err);
@@ -76,8 +70,9 @@ User.methods.GenerateToken = async function () {
 };
 
 // to validate the token sent by the user with our system
-User.methods.ValidateToken = async function (token) {
+User.statics.ValidateToken = async function (token) {
   try {
+    console.log(token);
     return await jwt.verify(token, secret);
   } catch (error) {
     return false;
