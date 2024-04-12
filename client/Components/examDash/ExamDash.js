@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import Button from "@/Components/examDash/Button";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import Loader from "@/Components/Loader/Loader";
 import TopicContext from "@/Utils/TestContext";
 
@@ -16,8 +16,11 @@ function ExamDash() {
   const [answers, setAnswers] = useState({});
   const [score, setScore] = useState(0);
   const router = useRouter();
+  const pathname = usePathname();
 
-  const testId = window.location.pathname.split("/")[3];
+  const path = pathname.split("/");
+
+  const testId = path[2];
 
   let count = 1;
   useEffect(() => {

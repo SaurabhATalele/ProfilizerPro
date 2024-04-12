@@ -10,9 +10,14 @@ import Link from "next/link";
 import { getAttemptedTests } from "@/Utils/Apicalls/GetAttemptedTests";
 import DashBoardView from "./DashBoardView";
 import TestsAttempted from "./TestsAttempted";
+import { usePathname } from "next/navigation";
 
 function Dashboard() {
   const [active, setActive] = useState(0);
+  const pathname = usePathname();
+
+  const path = pathname.split("/");
+  console.log(path);
 
   const [data, setData] = useState([]);
 
