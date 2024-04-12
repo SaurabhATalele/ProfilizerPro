@@ -48,34 +48,56 @@ const schema = new Schema({
           type: Number,
           required: false,
         },
-        total:{
+        total: {
           type: Number,
           required: false,
         },
-      }
-        
-      ],
-      required: false,
-    },
-  });
-  
-  module.exports = mongoose.models.Assignment || model("Assignment", schema);
-  
-  // answers: {
-  //   type: [
-  //     {
-  //       question: {
-  //         type: String,
-  //         required: true,
-  //       },
-  //       answer: {
-  //         type: String,
-  //         required: true,
-  //       },
-  //       yourAnswer: {
-  //         type: String,
-  //         required: true,}
-  //     },
+        questions: {
+          type: [
+            {
+              question: {
+                type: String,
+                required: true,
+              },
+              answer: {
+                type: String,
+                required: true,
+              },
+              yourAnswer: {
+                type: String,
+                required: true,
+              },
+            },
+          ],
+        },
+        date: {
+          type: Date,
+          required: true,
+          default: Date.now,
+        },
+      },
+    ],
+    required: false,
+  },
+});
+
+module.exports = mongoose.models.Assignment || model("Assignment", schema);
+
+// answers: {
+//   type: [
+//     {
+//       question: {
+//         type: String,
+//         required: true,
+//       },
+//       answer: {
+//         type: String,
+//         required: true,
+//       },
+//       yourAnswer: {
+//         type: String,
+//         required: true,}
+//     },
 //     ],
 //     required: false,
 

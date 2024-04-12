@@ -62,10 +62,20 @@ function ExamDash() {
   }, []);
 
   const submitTest = async () => {
-    console.log(score);
-    console.log(answers);
+    let questionsAndAnswers = [];
+    for (let i = 0; i < ques.length; i++) {
+      questionsAndAnswers.push({
+        question: ques[i].question,
+        answer: ques[i].answer,
+        yourAnswer: answers[i],
+      });
+      if (answers[i] === ques[i].answer) {
+        setScore((prev) => prev + 1);
+      }
+    }
+    console.log(questionsAndAnswers);
     const res = await axios.put("/api/v1/assignment", {
-      answers,
+      questions: questionsAndAnswers,
       id: testId,
       total: ques.length,
       score,
@@ -138,6 +148,11 @@ function ExamDash() {
                               console.log("incorrect");
                             }
 
+                            setAnswers((prev) => {
+                              prev[currentQuestion] = item;
+                              return prev;
+                            });
+
                             setQues((prev) => {
                               prev[currentQuestion].status = "attempted";
                               return prev;
@@ -164,11 +179,11 @@ function ExamDash() {
               </button>
               <button
                 onClick={() => {
-                  setCurrentQuestion(currentQuestion + 1);
-                  // setQues((prev) => {
-                  //   prev[currentQuestion].status = "attempted";
-                  //   return prev;
-                  // });
+                  setCurrentQuestion(
+                    currentQuestion === ques.length - 1
+                      ? 0
+                      : currentQuestion + 1,
+                  );
                 }}
                 className="  bg-primary-light w-24 h-10 p-2 rounded-md text-white text-center"
               >

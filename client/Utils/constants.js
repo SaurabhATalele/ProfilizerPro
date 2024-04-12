@@ -4,3 +4,5 @@ export const SECRET_KEY = process.env.SECRET_KEY;
 export const LOGIN_API = process.env.NEXT_PUBLIC_LOGIN_API
 export const REGISTER_API = process.env.NEXT_PUBLIC_REGISTER_API
 export const VERIFY_USER = process.env.NEXT_PUBLIC_VERIFY_USER
+export const GET_ATTEMPTED_TEST = process.env.NEXT_PUBLIC_GET_ATTEMPTED_TEST
+

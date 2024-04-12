@@ -1,7 +1,10 @@
 import Assignment from "../Models/Assignment.js";
 import nodeMailer from "nodemailer";
 import { NextResponse } from "next/server.js";
-
+import jwt from "jsonwebtoken";
+import { SECRET_KEY } from "../../constants.js";
+import { headers } from "next/headers";
+import connectDB from "../db/connectDB.js";
 // create a transporter object using the default gmail setup for nodemailer
 const transporter = nodeMailer.createTransport({
   host: "smtp.gmail.com",
@@ -64,10 +67,10 @@ const sendMail = async (req, res) => {
 
 // update the assignment score into the model
 const updateScore = async (body) => {
-  const { id, email, score, total, answers } = body;
+  const { id, email, score, total, questions } = body;
   try {
     const assignment = await Assignment.findById(id);
-    assignment.attemptedBy.push({ email, score, total, answers });
+    assignment.attemptedBy.push({ email, score, total, questions });
     await assignment.save();
     return NextResponse.json(
       { message: "Attempted by inserted successfully." },
@@ -80,12 +83,39 @@ const updateScore = async (body) => {
 };
 
 // get all the assignments
-const getAssignments = async (req, res) => {
+const getAttemptedAssignments = async (req) => {
   try {
-    const assignments = await Assignment.find();
-    return NextResponse.json({ data: assignments }, { status: 200 });
-    res.status(200).json({ assignments });
+    let user;
+    const headersList = headers();
+    const token = headersList.get("authorization").split(" ")[0];
+    if (!token) {
+      return NextResponse.json({ message: "Access denied" }, { status: 401 });
+    }
+    try {
+      console.log(token);
+      user = jwt.verify(token, SECRET_KEY);
+    } catch (error) {
+      return NextResponse.json({ message: "Invalid token" }, { status: 400 });
+    }
+    await connectDB();
+    const assignments = await Assignment.find({
+      attemptedBy: {
+        $elemMatch: {
+          email: user.email,
+        },
+      },
+    });
+    const resp = assignments.map((assignment) => {
+      const attempts = assignment.attemptedBy.filter(
+        (attempt) => attempt.email === user.email,
+      );
+      const assignmentName = assignment.name;
+      return { assignmentName, attempts };
+    });
+
+    return resp;
   } catch (error) {
+    console.log(error);
     return NextResponse.json({ message: error.message }, { status: 404 });
 
     res.status(404).json({ message: error.message });
@@ -104,12 +134,14 @@ const getAssignmentById = async (body) => {
 };
 
 // get all the assignments by organization id
-const getAssignmentsByOrg = async (req, res) => {
-  const { id } = req.params;
+const getAssignments = async (req, res) => {
   try {
-    const assignment = await Assignment.findById({ organization: id });
-    res.status(200).json({ assignment });
+    connectDB();
+    const assignments = await Assignment.find();
+
+    return NextResponse.json({ data: assignments }, { status: 200 });
   } catch (error) {
+    console.log(error);
     res.status(404).json({ message: error.message });
   }
 };
@@ -155,8 +187,8 @@ const AssignToCandidate = async (req, res) => {
 
 // export the functions
 module.exports = {
+  getAttemptedAssignments,
   getAssignments,
-  getAssignmentsByOrg,
   createAssignment,
   deleteAssignment,
   sendMail,

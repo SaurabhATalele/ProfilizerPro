@@ -10,7 +10,8 @@ const TestProvide = () => {
   const getTests = async () => {
     try {
       const res = await axios.get("/api/v1/assignment");
-      setTests(res.data.data.slice(0,3));
+      console.log(res.data.data);
+      setTests(res.data.data.slice(0, 3));
     } catch (error) {
       console.log(error);
     }
