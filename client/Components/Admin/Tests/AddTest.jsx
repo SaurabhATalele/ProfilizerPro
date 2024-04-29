@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Modal from "./Modal";
+import DeleteTest from "./DeleteTest";
 
 const AddTest = () => {
   const [tests, setTests] = useState([]);
@@ -22,6 +23,7 @@ const AddTest = () => {
   return (
     <div className="w-full xl:w-3/4">
       <Modal />
+
       <h1 className="py-5 text-lg font-bold">All tests</h1>
       <ul className="w-2/3 divide-y divide-gray-200 dark:divide-gray-700">
         {tests &&
@@ -49,13 +51,8 @@ const AddTest = () => {
                       alt="pen-squared"
                     />
                   </button>
-                  <button className="text-sm font-light">
-                    <img
-                      width="24"
-                      height="24"
-                      src="https://img.icons8.com/fluency-systems-regular/48/ff0000/filled-trash.png"
-                      alt="filled-trash"
-                    />
+                  <button className=" ">
+                    <DeleteTest />
                   </button>
                 </div>
               </div>
