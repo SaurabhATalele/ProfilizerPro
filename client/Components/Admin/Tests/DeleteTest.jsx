@@ -33,8 +33,7 @@ export default function DeleteTest() {
                 Are you sure you want to delete this Test?
               </h3>
               <div className="flex justify-center gap-4">
-                <Button
-                  className=" bg-red-700"
+                <Button                  className=" bg-red-700"
                   onClick={() => setOpenDeleteBox(false)}
                 >
                   {"Yes, I'm sure"}
