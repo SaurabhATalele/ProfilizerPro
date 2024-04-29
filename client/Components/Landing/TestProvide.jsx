@@ -21,10 +21,13 @@ const TestProvide = () => {
     console.log(tests);
   }, []);
   return (
-    <div className="w-3/4  bg-white  rounded-md flex flex-col items-center px-10 py-5 gap-10">
+    <div className="w-3/4  bg-white dark:bg-black rounded-md flex flex-col items-center px-10 py-5 gap-10">
       <div className="w-full flex justify-between items-end">
         <h1 className="text-[1.5rem] font-bold">Tests We provide </h1>
-        <Link href={"/"} className="font-light text-primary-light text-sm">
+        <Link
+          href={"/all-tests"}
+          className="font-light text-primary-light text-sm"
+        >
           Explore More
         </Link>
       </div>
@@ -38,7 +41,7 @@ const card = (tests) => {
     <div className="w-full grid grid-cols-3 gap-3 justify-around items-center">
       {tests &&
         tests.map((test) => (
-          <div className="h-80 flex flex-col flex-grow-0 items-center gap-4 rounded-md shadow-md p-4">
+          <div className="h-80 flex flex-col flex-grow-0 items-center gap-4 rounded-md shadow-md p-4 dark:shadow-gray-500 ">
             <Image
               src={test.icon}
               width={120}

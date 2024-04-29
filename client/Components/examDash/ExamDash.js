@@ -20,7 +20,7 @@ function ExamDash() {
 
   const path = pathname.split("/");
 
-  const testId = path[2];
+  const testId = path[3];
 
   let count = 1;
   useEffect(() => {
@@ -29,9 +29,8 @@ function ExamDash() {
         setLoading(true);
         const subtopics = JSON.stringify(topics.subtopics);
         const prompt = `I have given you a json which will contain the  name of the topic and number of questions required on that topic (they are specified in the json) In ${topics.topic}. the json is :  {  'questions': ${subtopics}}. give me a array of json of questions, options and answers on the topics.  I want tehe answer only in {'topic':['question','options':[option1,option2,optionn],'answer']} this format. I want nothing apart form the json object. The number of questions should taken from the questions json. also do not include doublequotes in the output instead use singlequotes. also provide a json only in this output`;
-        console.log(prompt);
         const res = await axios.post("http://localhost:3000/chat/", {
-          prompt,
+          prompt: { topic: topics.topic, questions: subtopics },
         });
         console.log(res.data);
         const valuesArray = Object.values(res.data.response).flatMap(
@@ -76,7 +75,7 @@ function ExamDash() {
         setScore((prev) => prev + 1);
       }
     }
-    console.log(questionsAndAnswers);
+    console.log(questionsAndAnswers, testId);
     const res = await axios.put("/api/v1/assignment", {
       questions: questionsAndAnswers,
       id: testId,

@@ -71,6 +71,9 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)}
               className="p-2 bg-transparent border rounded-md text-sm w-full my-2 "
             />
+            <Link href={"/password-recovery"} className="text-primary-light text-[12px]">
+              Forgot Password?
+            </Link>
             <input
               type="submit"
               value="Login"

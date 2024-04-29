@@ -48,6 +48,10 @@ const schema = new Schema({
           type: Number,
           required: false,
         },
+        correct: {
+          type: Number,
+          required: false,
+        },
         total: {
           type: Number,
           required: false,

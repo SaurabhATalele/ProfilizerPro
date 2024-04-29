@@ -2,16 +2,16 @@
 
 import { Button, Modal } from "flowbite-react";
 import { useState } from "react";
-const AddTest = ({ data, refesh, openModal, setOpenModal }) => {
+const EditTest = ({ data, refesh, openModal, setOpenModal }) => {
   // const [openModal, setOpenModal] = useState(false);
-  const [isEdit, setIsEdit] = useState(false);
   const [topics, setTopics] = useState(data.topics || []);
   const [testName, setTestName] = useState(data.name || "");
   const [description, setDescription] = useState(data.description || "");
   const [icon, setIcon] = useState(data.icon || "");
   const [topic, setTopic] = useState("");
+ 
 
-  const handleAddTest = async () => {
+  const handleEditTest = async () => {
     const data = {
       name: testName,
       description,
@@ -34,13 +34,9 @@ const AddTest = ({ data, refesh, openModal, setOpenModal }) => {
   };
 
   return (
-    <div className="relative flex  justify-center">
-      <Button
-        onClick={() => setOpenModal(true)}
-        className="bg-primary-light darK:bg-primary-dark p-2 absolute right-2"
-      >
-        Add Test
-      </Button>
+    <div className="relative flex w-full justify-center">
+      
+       
       <Modal
         show={openModal}
         dismissible
@@ -49,6 +45,7 @@ const AddTest = ({ data, refesh, openModal, setOpenModal }) => {
       >
         <Modal.Header>
           <div className="text-primary-light">Add a New Test</div>
+          
         </Modal.Header>
         <Modal.Body>
           <div className="space-y-6 ">
@@ -144,7 +141,7 @@ const AddTest = ({ data, refesh, openModal, setOpenModal }) => {
         <Modal.Footer>
           <Button
             onClick={() => {
-              handleAddTest();
+              handleEditTest();
               setOpenModal(false);
             }}
             className="bg-primary-light dark:bg-primary-dark px-2 py-1 text-white rounded-md mr-2"
@@ -157,4 +154,4 @@ const AddTest = ({ data, refesh, openModal, setOpenModal }) => {
   );
 };
 
-export default AddTest;
+export default EditTest;

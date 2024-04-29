@@ -17,7 +17,6 @@ function Dashboard() {
   const pathname = usePathname();
 
   const path = pathname.split("/");
-  console.log(path);
 
   const [data, setData] = useState([]);
 
@@ -32,7 +31,6 @@ function Dashboard() {
 
   const getTests = async () => {
     const data = await getAttemptedTests();
-    console.log(data);
     setData(data);
   };
 
@@ -63,7 +61,9 @@ function Dashboard() {
               onClick={() => setActive(2)}
               className={` px-3 py-2  text-md flex gap-2 items-center ${active === 2 ? "bg-white text-primary-light" : "text-white"}`}
             >
-              <MdOutlineBallot className="text-xl" /> <span>All Tests </span>
+              <Link href={"/alltests"} className="flex gap-2 items-center">
+                <MdOutlineBallot className="text-xl" /> <span>All Tests </span>
+              </Link>
             </li>
           </ul>
 

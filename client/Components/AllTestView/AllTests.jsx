@@ -18,7 +18,6 @@ const AllTests = () => {
   };
   useEffect(() => {
     getTests();
-    console.log(tests);
   }, []);
   return (
     <div className='w-3/4 py-24 flex flex-col gap-5'>

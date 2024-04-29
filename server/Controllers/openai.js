@@ -20,15 +20,19 @@ async function getGPT3Response(prompt) {
     'answer': '5'},{'question': 'Which data type is used to store text?',
     'options': ['String', 'Integer', 'Boolean', 'Array'],'answer': 'String'} 
     this format. I want nothong apart form the json object and there should be 4 options to every question`;
-
+  const d =
+    `create challenging and non googleable questions on following data (provided as {topicname:no of quesstions}) having questions covered on the topics having medium difficulty in mcq pattern ans also provide the answers for the same. The questions ahould not be repeated in any way ans there should be no gramatical mistakes in the question. There should be accurate answers and no repetation in options. the output should be in json format. The format should be topic:[{question,options,answer}]. There should be exactly 4 options to each question. The topics are in ${prompt.topic}. The topics and no of questions are ${prompt.questions}`;
   try {
     let response = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [
         { role: "system", content: "You are a helpful assistant." },
-        { role: "user", content: prompt },
+        { role: "user", content: d },
       ],
     });
+
+    console.log(response.choices[0].message.content);
+    return response.choices[0].message.content;
 
     let prompt2 = `give me the json data and no other information is required. The data is ${response.choices[0].message.content}`;
 

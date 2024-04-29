@@ -2,6 +2,7 @@
 import React from "react";
 import Lottie from "react-lottie";
 import animationData from "./animations/animationSuccess";
+import Link from "next/link";
 
 const SuccessScreen = () => {
   const defaultOptions = {
@@ -38,13 +39,20 @@ const SuccessScreen = () => {
             </div>
           </div>
           <div className="flex flex-wrap -mx-3 mb-6">
-            <div className="w-full px-3">
+            <div className="flex w-full px-3 gap-5">
               <button
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                 type="button"
               >
                 Submit Review
               </button>
+              <Link
+                href="/"
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                type="button"
+              >
+                Home
+              </Link>
             </div>
           </div>
         </form>

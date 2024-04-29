@@ -2,6 +2,8 @@
 import { useTheme } from "../../Utils/ThemeContext";
 import React from "react";
 import { FaSun, FaMoon, FaHome } from "react-icons/fa";
+import { MdOutlineWbSunny } from "react-icons/md";
+
 import Link from "next/link";
 import Image from "next/image";
 
@@ -26,7 +28,7 @@ const Navbar2 = () => {
         </Link>
 
         <button onClick={toggleDarkMode}>
-          {!darkMode && <FaSun />}
+          {!darkMode && <MdOutlineWbSunny />}
           {darkMode && <FaMoon />}
         </button>
       </div>

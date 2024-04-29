@@ -1,3 +1,4 @@
+import Modal from "./TestAttemptedModal/Modal";
 import React from "react";
 
 const TestsAttempted = ({ data }) => {
@@ -36,18 +37,11 @@ const TestsAttempted = ({ data }) => {
                       >
                         {test.assignmentName}
                       </th>
-                      <td class="px-6 py-4">{item.score}</td>
+                      <td class="px-6 py-4">{item.correct}</td>
                       <td class="px-6 py-4">{item.total}</td>
-                      <td class="px-6 py-4">
-                        {((item.score / item.total) * 100).toFixed(2)}%
-                      </td>
+                      <td class="px-6 py-4">{item.score}%</td>
                       <td class="px-6 py-4 text-right">
-                        <a
-                          href="#"
-                          class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                        >
-                          View
-                        </a>
+                        <Modal data={item} />
                       </td>
                     </tr>
                   );

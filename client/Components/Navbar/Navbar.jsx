@@ -6,7 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { getUser } from "@/Utils/Apicalls/User";
 import { UserContext } from "@/Utils/UserContext";
-import { GoSun } from "react-icons/go";
+import { MdOutlineWbSunny } from "react-icons/md";
 
 const Navbar = () => {
   const { darkMode, toggleDarkMode } = useTheme();
@@ -91,7 +91,7 @@ const Navbar = () => {
             href={"/contactus"}
             className="hover:border-b-primary-light text-primary-light dark:text-primary-dark hover:border-b-2 cursor-pointer h-1/2 active:border-b-primary-light"
           >
-            ContactUs
+            Contact Us
           </Link>
         </li>
 
@@ -99,7 +99,7 @@ const Navbar = () => {
           <>
             <li>
               <Link
-                href={"/dashboard"}
+                href={user.isAdmin ? "/admin" : "/dashboard"}
                 className="hover:border-b-primary-light underline text-primary-light dark:text-primary-dark hover:border-b-2 cursor-pointer h-1/2 active:border-b-primary-light"
               >
                 Dashboard
@@ -110,7 +110,7 @@ const Navbar = () => {
         )}
         <li>
           <button onClick={toggleDarkMode}>
-            {!darkMode && <GoSun className="text-xl" />}
+            {!darkMode && <MdOutlineWbSunny className="text-xl" />}
             {darkMode && <FaMoon />}
           </button>
         </li>

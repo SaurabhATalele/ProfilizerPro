@@ -34,20 +34,81 @@ const DashBoardView = ({ data }) => {
     PointElement,
   );
 
+  const scalesTotal = {
+    y: {
+      beginAtZero: true,
+      title: {
+        display: true,
+        text: "No of Tests", // Replace with your label
+      },
+
+      ticks: {
+        stepSize: 1, // This ensures a minimum gap of 1
+      },
+    },
+    x: {
+      grid: {
+        display: false,
+      },
+      title: {
+        display: true,
+        text: "Month", // Replace with your label
+      },
+    },
+  };
+
+  const scalesPerf = {
+    y: {
+      beginAtZero: true,
+      title: {
+        display: true,
+        text: "Marks obtained (%)", // Replace with your label
+      },
+
+      ticks: {
+        stepSize: 1, // This ensures a minimum gap of 1
+      },
+    },
+    x: {
+      grid: {
+        display: false,
+      },
+      title: {
+        display: true,
+        text: "Date", // Replace with your label
+      },
+    },
+  };
+
+  const optionstotal = {
+    maintainAspectRatio: true,
+    plugins: {
+      legend: false,
+    },
+    scales: scalesTotal,
+  };
+
+  const optionsPerf = {
+    maintainAspectRatio: true,
+    plugins: {
+      legend: false,
+    },
+    scales: scalesPerf,
+  };
   var state = {
     labels: [
-      "JANUARY",
-      "FEBRUARY",
-      "MARCH",
-      "APRIL",
+      "JAN",
+      "FEB",
+      "MAR",
+      "APR",
       "MAY",
       "JUNE",
       "JULY",
-      "AUGUST",
-      "SEPTEMBER",
-      "OCTOBER",
-      "NOVEMBER",
-      "DECEMBER",
+      "AUG",
+      "SEP",
+      "OCT",
+      "NOV",
+      "DEC",
     ],
     // datasets  stored in an array of objects
     datasets: [
@@ -99,13 +160,36 @@ const DashBoardView = ({ data }) => {
       // Format the date in "dd/mm/yyyy" format
       const formattedDate = `${day}/${month}/${year}`;
       labels.push(formattedDate);
-      const perc = (ele.score / ele.total) * 100;
+      const perc = ele.score;
       scores.push(perc);
     });
     const d = {
       testname: testname,
       labels,
-      datasets: [{ data: scores }],
+      datasets: [
+        {
+          data: scores,
+          label: "Score",
+          borderColor: "purple",
+          borderWidth: 1,
+          pointBorderWidth: 0,
+          pointRadius: 5,
+          backgroundColor: [
+            "red",
+            "green",
+            "pink",
+            "orange",
+            "yellow",
+            "lime",
+            "blue",
+            "purple",
+            "brown",
+            "black",
+            "grey",
+            "white",
+          ],
+        },
+      ],
     };
 
     if (count === 0) {
@@ -117,28 +201,20 @@ const DashBoardView = ({ data }) => {
 
   if (data.data)
     Object.entries(data.data).forEach(([key, value]) => {
-      value.attempts.map((ele) => {
-        const date = new Date(ele.date);
-        const monthNumber = date.getUTCMonth();
-        state.datasets[0].data[monthNumber] += 1;
-      });
+      if (value.assignmentName === active)
+        value.attempts.map((ele) => {
+          const date = new Date(ele.date);
+          const monthNumber = date.getUTCMonth();
+          state.datasets[0].data[monthNumber] += 1;
+        });
       getState2(value.assignmentName, value.attempts);
     });
 
   return (
-    <div className=" w-5/6 p-5 flex flex-col h-screen justify-between">
-      <div className="  flex text-center  align-middle justify-between flex-row m-10 h-1/2 ">
-        <div className=" w-1/2  h-auto p-5 shadow-md ">
-          <Bar data={state} />
-          <label htmlFor="Tests Attempted">
-            Total Tests Attempted (Monthwise)
-          </label>
-        </div>
-        <div className=" w-96 h-72 shadow-md ">
-          {state && <Pie data={state} />}
-        </div>
-      </div>
-      <div className=" flex gap-3 ">
+    <div className=" w-5/6 p-5 flex flex-col h-screen">
+      <h1 className="text-xl font-bold">Welcome to ProfilizerPro Dashboard</h1>
+      <p>Here you can see your performance in the tests you have attempted</p>
+      <div className=" flex gap-3 my-10">
         {data.data &&
           Object.entries(data.data).map(([key, value]) => {
             return (
@@ -157,8 +233,21 @@ const DashBoardView = ({ data }) => {
             );
           })}
       </div>
-      {state2[act] && <Line data={state2[act]} />}
-      <p className="text-center p-5">Tests performance</p>
+      <div className="  flex text-center  align-middle justify-between flex-row m-10 gap-4 ">
+        <div className="flex flex-col w-1/2  h-auto p-5 shadow-md rounded-lg gap-3 ">
+          <Bar data={state} options={optionstotal} />
+          <label htmlFor="Tests Attempted">
+            Total Tests Attempted (Monthwise)
+          </label>
+        </div>
+        {/* <div className=" w-96 h-72 shadow-md ">
+          {state && <Pie data={state} />}
+        </div> */}
+        <div className="w-1/2 h-auto shadow-md p-2 rounded-lg">
+          {state2[act] && <Line data={state2[act]} options={optionsPerf} />}
+          <p className="text-center p-5">Tests performance</p>
+        </div>
+      </div>
     </div>
   );
 };

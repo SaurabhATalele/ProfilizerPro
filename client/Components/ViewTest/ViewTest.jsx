@@ -6,6 +6,7 @@ import TopicContext from "../../Utils/TestContext";
 import { useEffect, useState, useContext } from "react";
 import Topic from "./Topic";
 import { redirect, useRouter } from "next/navigation";
+import { getUser } from "@/Utils/Apicalls/User";
 
 const isEmptyObject = (obj) => {
   return Object.keys(obj).length === 0;
@@ -13,6 +14,7 @@ const isEmptyObject = (obj) => {
 
 const ViewTest = ({ test }) => {
   const [topic, setTopic] = useState([]);
+  const [user, setUser] = useState({});
   const [subtopics, setSubtopics] = useState([]);
   const [selectedTopics, setSelectedTopics] = useState({});
   const [topicState, setTopicState] = useState(false);
@@ -31,6 +33,26 @@ const ViewTest = ({ test }) => {
       setTopic(data.data);
       setSubtopics(data.data.topics);
     };
+
+    const getUserHandler = async () => {
+      const resp = await getUser();
+      const user = await resp.json();
+      console.log(user);
+      if (user === false) {
+        localStorage.removeItem("token");
+        return;
+      }
+      if (user.username) {
+        setUser(user);
+      }
+    };
+
+    const cookie = localStorage.getItem("token");
+    if (cookie) {
+      getUserHandler();
+    } else {
+      router.push("/login");
+    }
     fetchTopics();
   }, []);
 
