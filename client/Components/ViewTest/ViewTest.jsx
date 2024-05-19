@@ -72,52 +72,56 @@ const ViewTest = ({ test }) => {
   };
 
   return (
-    <div className="pt-24 w-3/4 flex justify-between flex-col ">
+    <div className="pt-24 w-3/4 flex justify-center flex-col">
       {topic && (
-        <div className="flex">
-          <div className="m-3 w-1/2 border-r border-r-gray-200 min-h-[50vh]">
-            <div className="flex flex-col gap-10 items-center">
-              <div className="w-full flex items-center justify-start gap-5">
-                <Image
-                  width={150}
-                  height={150}
-                  alt="Tehnology Icon"
-                  className="rounded-full border object-contain"
-                  src={topic.icon}
-                />
-                <h1 className="text-2xl font-bold">{topic.name}</h1>
-              </div>
-              <p className="text-lg p-10 text-justify">{topic.description} </p>
-            </div>
-          </div>
-          <div className="m-3 w-1/2 overflow-y-auto flex flex-col gap-3 relative overflow-auto">
-            <h2 className="text-xl font-semibold">
-              Select topics of your choice
-            </h2>
-            <ul className="flex flex-col gap-5">
-              {subtopics &&
-                subtopics.map((topic) => (
-                  <Topic
-                    key={topic._id}
-                    name={topic.name}
-                    minQuestions={topic.minQuestions}
-                    maxQuestions={topic.maxQuestions}
-                    setSelectedTopics={setSelectedTopics}
-                  />
-                ))}
-            </ul>
+        <div className="flex justify-center gap-5">
+          <div class="w-full h-fit gap-5 p-5 max-w-lg bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <div class="flex flex-col items-center pb-10">
+              <Image
+                width={150}
+                height={150}
+                alt="Tehnology Icon"
+                className="w-24 h-24 mb-3 rounded-full shadow-lg"
+                src={topic.icon}
+              />
 
-            {/* <Link href={`/test/attempt/${test}`}> */}
-            {/* </Link> */}
+              <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">
+                {topic.name}
+              </h5>
+              <span class="text-sm text-gray-500 dark:text-gray-400">
+                {topic.description}
+              </span>
+            </div>
+
+            <div className="m-3 overflow-y-auto flex flex-col gap-3 relative overflow-auto">
+              <h2 className="text-xl font-semibold">
+                Select topics of your choice
+              </h2>
+              <ul className="flex flex-col gap-5">
+                {subtopics &&
+                  subtopics.map((topic) => (
+                    <Topic
+                      key={topic._id}
+                      name={topic.name}
+                      minQuestions={topic.minQuestions}
+                      maxQuestions={topic.maxQuestions}
+                      setSelectedTopics={setSelectedTopics}
+                    />
+                  ))}
+              </ul>
+
+              {/* <Link href={`/test/attempt/${test}`}> */}
+              {/* </Link> */}
+            </div>
+            <button
+              className="my-5 bg-primary-light w-fit px-4 py-2 mx-auto text-white text-sm p-2 rounded-md  disabled:bg-gray-400"
+              onClick={() => handleButtonClick()}
+            >
+              Start Test
+            </button>
           </div>
         </div>
       )}
-      <button
-        className="bg-blue-500 text-white p-2 rounded-md  disabled:bg-gray-400"
-        onClick={() => handleButtonClick()}
-      >
-        Start Test
-      </button>
     </div>
   );
 };

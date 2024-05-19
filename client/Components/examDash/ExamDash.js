@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, Suspense } from "react";
 import Button from "@/Components/examDash/Button";
 import axios from "axios";
 import { useRouter, usePathname } from "next/navigation";
@@ -11,7 +11,7 @@ function ExamDash() {
   const [questions, setQuestions] = useState({});
   const [ques, setQues] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const { topics, setTopics } = useContext(TopicContext);
   const [answers, setAnswers] = useState({});
   const [score, setScore] = useState(0);
@@ -88,113 +88,115 @@ function ExamDash() {
   };
   return (
     <>
-      {loading ? (
-        <Loader />
-      ) : (
-        <div className="flex w-screen h-screen  justify-evenly">
-          <div className=" flex flex-col   text-center justify-between  w-1/3 p-5 border-r">
-            <div className=" h-auto grid  grid-cols-6 gap-8 ">
-              {ques.map((ele) => {
-                return (
-                  <Button
-                    num={ele.number}
-                    setCurrent={setCurrentQuestion}
-                    status={ques[ele.number - 1].status}
-                  />
-                );
-              })}
-            </div>
-            <div className="p-10">
-              <button
-                onClick={submitTest}
-                className=" w-28 h-10 bg-green-400 rounded-md text-white "
-              >
-                Submit
-              </button>
-            </div>
-          </div>
-          <div className="flex flex-col  border-r p-5  text-center justify-between w-2/3 ">
-            <div className=" flex gap-8 h-full ">
-              <div className="w-1/2 border-r h-full p-5 ">
-                <h2 className=" text-xl text-slate-700 font-semibold">
-                  Question number: {currentQuestion + 1}
-                </h2>
-                <p className="  text-xl ">
-                  {ques && ques[currentQuestion]?.question}
-                </p>
-              </div>
-              <div
-                className=" flex  gap-5 flex-col w-1/2  ml-16 "
-                radioGroup="options"
-              >
-                {ques[currentQuestion]?.options &&
-                  ques[currentQuestion]?.options.map((item) => {
-                    return (
-                      <div class="flex items-center justify-start me-4  ">
-                        <input
-                          id="purple-radio"
-                          type="radio"
-                          value={item}
-                          name="colored-radio"
-                          className=" w-11 h-5 text-left"
-                          onChange={() => {
-                            setAnswers((prev) => {
-                              prev[currentQuestion] = item;
-                              return prev;
-                            });
-
-                            if (item === ques[currentQuestion].answer) {
-                              console.log("correct");
-                              setScore((prev) => prev + 1);
-                            } else {
-                              console.log("incorrect");
-                            }
-
-                            setAnswers((prev) => {
-                              prev[currentQuestion] = item;
-                              return prev;
-                            });
-
-                            setQues((prev) => {
-                              prev[currentQuestion].status = "attempted";
-                              return prev;
-                            });
-                          }}
-                        />
-                        <label
-                          for="purple-radio"
-                          class="ms-2 text-xl text-left font-normal text-gray-900 dark:text-gray-300 w-80"
-                        >
-                          {item}
-                        </label>
-                      </div>
-                    );
-                  })}
-              </div>
-            </div>
-            <div className=" flex gap-9 justify-center items-center p-10">
-              <button
-                onClick={() => setCurrentQuestion(currentQuestion - 1)}
-                className="  bg-primary-light w-24 h-10 p-2 rounded-md text-white text-center"
-              >
-                Prev
-              </button>
-              <button
-                onClick={() => {
-                  setCurrentQuestion(
-                    currentQuestion === ques.length - 1
-                      ? 0
-                      : currentQuestion + 1,
+      <Suspense fallback={<Loader />}>
+        {loading ? (
+          <Loader />
+        ) : (
+          <div className="flex w-screen h-screen  justify-evenly">
+            <div className=" flex flex-col   text-center justify-between  w-1/3 p-5 border-r">
+              <div className=" h-auto grid  grid-cols-6 gap-8 ">
+                {ques.map((ele) => {
+                  return (
+                    <Button
+                      num={ele.number}
+                      setCurrent={setCurrentQuestion}
+                      status={ques[ele.number - 1].status}
+                    />
                   );
-                }}
-                className="  bg-primary-light w-24 h-10 p-2 rounded-md text-white text-center"
-              >
-                Next
-              </button>
+                })}
+              </div>
+              <div className="p-10">
+                <button
+                  onClick={submitTest}
+                  className=" w-28 h-10 bg-green-400 rounded-md text-white "
+                >
+                  Submit
+                </button>
+              </div>
+            </div>
+            <div className="flex flex-col  border-r p-5  text-center justify-between w-2/3 ">
+              <div className=" flex gap-8 h-full ">
+                <div className="w-1/2 border-r h-full p-5 ">
+                  <h2 className=" text-xl text-slate-700 font-semibold">
+                    Question number: {currentQuestion + 1}
+                  </h2>
+                  <p className="  text-xl ">
+                    {ques && ques[currentQuestion]?.question}
+                  </p>
+                </div>
+                <div
+                  className=" flex  gap-5 flex-col w-1/2  ml-16 "
+                  radioGroup="options"
+                >
+                  {ques[currentQuestion]?.options &&
+                    ques[currentQuestion]?.options.map((item) => {
+                      return (
+                        <div class="flex items-center justify-start me-4  ">
+                          <input
+                            id="purple-radio"
+                            type="radio"
+                            value={item}
+                            name="colored-radio"
+                            className=" w-11 h-5 text-left"
+                            onChange={() => {
+                              setAnswers((prev) => {
+                                prev[currentQuestion] = item;
+                                return prev;
+                              });
+
+                              if (item === ques[currentQuestion].answer) {
+                                console.log("correct");
+                                setScore((prev) => prev + 1);
+                              } else {
+                                console.log("incorrect");
+                              }
+
+                              setAnswers((prev) => {
+                                prev[currentQuestion] = item;
+                                return prev;
+                              });
+
+                              setQues((prev) => {
+                                prev[currentQuestion].status = "attempted";
+                                return prev;
+                              });
+                            }}
+                          />
+                          <label
+                            for="purple-radio"
+                            class="ms-2 text-xl text-left font-normal text-gray-900 dark:text-gray-300 w-80"
+                          >
+                            {item}
+                          </label>
+                        </div>
+                      );
+                    })}
+                </div>
+              </div>
+              <div className=" flex gap-9 justify-center items-center p-10">
+                <button
+                  onClick={() => setCurrentQuestion(currentQuestion - 1)}
+                  className="  bg-primary-light w-24 h-10 p-2 rounded-md text-white text-center"
+                >
+                  Prev
+                </button>
+                <button
+                  onClick={() => {
+                    setCurrentQuestion(
+                      currentQuestion === ques.length - 1
+                        ? 0
+                        : currentQuestion + 1,
+                    );
+                  }}
+                  className="  bg-primary-light w-24 h-10 p-2 rounded-md text-white text-center"
+                >
+                  Next
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </Suspense>
     </>
   );
 }

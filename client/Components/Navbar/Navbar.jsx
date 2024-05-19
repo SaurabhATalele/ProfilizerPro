@@ -1,11 +1,10 @@
 "use client";
-import React, { useEffect, useState, useContext } from "react";
+import React, { useState, useLayoutEffect } from "react";
 import { useTheme } from "../../Utils/ThemeContext";
 import { FaSun, FaMoon } from "react-icons/fa";
 import Link from "next/link";
 import Image from "next/image";
 import { getUser } from "@/Utils/Apicalls/User";
-import { UserContext } from "@/Utils/UserContext";
 import { MdOutlineWbSunny } from "react-icons/md";
 
 const Navbar = () => {
@@ -14,7 +13,8 @@ const Navbar = () => {
   const [user, setUser] = useState({});
   // const { user, setUser } = useContext(UserContext);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    console.log("useLayoutEffect");
     const getUserHandler = async () => {
       const resp = await getUser();
       const user = await resp.json();
@@ -36,7 +36,7 @@ const Navbar = () => {
   }, []);
   return (
     <div
-      className=" fixed flex justify-between bg-[#ffffff27] 
+      className="fixed flex justify-between bg-[#ffffff27] 
     dark:bg-[#00000027] dark:border-[#3c3c3c52] backdrop-blur-md
      items-center px-5 w-3/4 border rounded-xl  border-[#c3c3c354] h-14"
     >

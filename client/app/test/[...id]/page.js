@@ -9,7 +9,7 @@ const page = () => {
   const id = pathname.split("/").filter((x) => x);
   const test = id[id.length - 1];
   return (
-    <div className="w-full flex justify-center">
+    <div className="w-full flex justify-center p-10">
       <Navbar />
       <ViewTest test={test} />
     </div>

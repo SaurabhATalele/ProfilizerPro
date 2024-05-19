@@ -28,7 +28,7 @@ const topic = ({ name, minQuestions, maxQuestions, setSelectedTopics }) => {
   };
 
   return (
-    <li className="flex flex-col gap-1">
+    <li className="flex flex-col gap-1 w-full">
       <div className="flex gap-3 items-center">
         <input
           type="checkbox"

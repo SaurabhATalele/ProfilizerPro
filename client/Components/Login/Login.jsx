@@ -6,7 +6,6 @@ import { ToastContainer } from "react-toastify";
 import Toast from "@/Utils/Toast";
 import { login } from "@/Utils/Apicalls/Login";
 import Image from "next/image";
-
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,6 +29,7 @@ const Login = () => {
       if (res.status === 200) {
         const data = await res.json();
         console.log(data);
+        
         localStorage.setItem("token", data.token);
         Toast("success", "Login Success...");
         router.push("/");
@@ -71,7 +71,10 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)}
               className="p-2 bg-transparent border rounded-md text-sm w-full my-2 "
             />
-            <Link href={"/password-recovery"} className="text-primary-light text-[12px]">
+            <Link
+              href={"/password-recovery"}
+              className="text-primary-light text-[12px]"
+            >
               Forgot Password?
             </Link>
             <input

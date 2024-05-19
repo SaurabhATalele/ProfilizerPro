@@ -199,7 +199,7 @@ const DashBoardView = ({ data }) => {
     state2[testname] = d;
   };
 
-  if (data.data)
+  if (data?.data)
     Object.entries(data.data).forEach(([key, value]) => {
       if (value.assignmentName === active)
         value.attempts.map((ele) => {
@@ -215,7 +215,7 @@ const DashBoardView = ({ data }) => {
       <h1 className="text-xl font-bold">Welcome to ProfilizerPro Dashboard</h1>
       <p>Here you can see your performance in the tests you have attempted</p>
       <div className=" flex gap-3 my-10">
-        {data.data &&
+        {/* {data.data &&
           Object.entries(data.data).map(([key, value]) => {
             return (
               <div className="flex gap-3">
@@ -231,23 +231,41 @@ const DashBoardView = ({ data }) => {
                 </button>
               </div>
             );
-          })}
+          })} */}
+        <select
+          name="testname"
+          id="tesname"
+          className="border w-fit px-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          onChange={(e) => setAct(e.target.value)}
+        >
+          <option value="testname">Select Name</option>
+          {data?.data &&
+            Object.entries(data?.data).map(([key, value]) => (
+              <option key={key} value={value.assignmentName}>
+                {value.assignmentName}
+              </option>
+            ))}
+        </select>
       </div>
-      <div className="  flex text-center  align-middle justify-between flex-row m-10 gap-4 ">
-        <div className="flex flex-col w-1/2  h-auto p-5 shadow-md rounded-lg gap-3 ">
-          <Bar data={state} options={optionstotal} />
-          <label htmlFor="Tests Attempted">
-            Total Tests Attempted (Monthwise)
-          </label>
-        </div>
-        {/* <div className=" w-96 h-72 shadow-md ">
+      {data?.data ? (
+        <div className="  flex text-center  align-middle justify-between flex-row m-10 gap-4 ">
+          <div className="flex flex-col w-1/2  h-auto p-5 shadow-md rounded-lg gap-3 ">
+            <Bar data={state} options={optionstotal} />
+            <label htmlFor="Tests Attempted">
+              Total Tests Attempted (Monthwise)
+            </label>
+          </div>
+          {/* <div className=" w-96 h-72 shadow-md ">
           {state && <Pie data={state} />}
         </div> */}
-        <div className="w-1/2 h-auto shadow-md p-2 rounded-lg">
-          {state2[act] && <Line data={state2[act]} options={optionsPerf} />}
-          <p className="text-center p-5">Tests performance</p>
+          <div className="w-1/2 h-auto shadow-md p-2 rounded-lg">
+            {state2[act] && <Line data={state2[act]} options={optionsPerf} />}
+            <p className="text-center p-5">Tests performance</p>
+          </div>
         </div>
-      </div>
+      ) : (
+        "No tests attempted yet!"
+      )}
     </div>
   );
 };

@@ -1,0 +1,111 @@
+:root {
+  --size: 20px;
+  --rotation: 0deg;
+  --border-radius: 10px;
+  --color: #e97e03;
+}
+
+.container {
+  animation: rotate-circles 3s infinite;
+
+  & .circle {
+    position: absolute;
+    translate: -50% -50%;
+    filter: drop-shadow(3px 3px 5px rgb(0 0 0 / 0.5));
+    transition:
+      background 1s ease-in-out,
+      border-radius 1s ease-in-out,
+      rotate 1s ease-in-out,
+      width 1s ease-in-out,
+      height 1s ease-in-out;
+
+    &:nth-child(1) {
+      z-index: 8;
+      transition-delay: 50ms;
+      width: calc(1 * var(--size));
+      height: calc(1 * var(--size));
+      rotate: calc(7.5 * var(--rotation));
+      border-radius: calc(1 * var(--border-radius));
+      background: color-mix(in srgb, var(--color), white 35%);
+    }
+
+    &:nth-child(2) {
+      z-index: 7;
+      transition-delay: 100ms;
+      width: calc(2 * var(--size));
+      height: calc(2 * var(--size));
+      rotate: calc(7 * var(--rotation));
+      border-radius: calc(2 * var(--border-radius));
+      background: color-mix(in srgb, var(--color), white 30%);
+    }
+
+    &:nth-child(3) {
+      z-index: 6;
+      transition-delay: 150ms;
+      width: calc(3 * var(--size));
+      height: calc(3 * var(--size));
+      rotate: calc(6.5 * var(--rotation));
+      border-radius: calc(3 * var(--border-radius));
+      background: color-mix(in srgb, var(--color), white 25%);
+    }
+
+    &:nth-child(4) {
+      z-index: 5;
+      transition-delay: 200ms;
+      width: calc(4 * var(--size));
+      height: calc(4 * var(--size));
+      rotate: calc(6 * var(--rotation));
+      border-radius: calc(4 * var(--border-radius));
+      background: color-mix(in srgb, var(--color), white 20%);
+    }
+
+    &:nth-child(5) {
+      z-index: 4;
+      transition-delay: 250ms;
+      width: calc(5 * var(--size));
+      height: calc(5 * var(--size));
+      rotate: calc(5.5 * var(--rotation));
+      border-radius: calc(5 * var(--border-radius));
+      background: color-mix(in srgb, var(--color), white 15%);
+    }
+
+    &:nth-child(6) {
+      z-index: 3;
+      transition-delay: 300ms;
+      width: calc(6 * var(--size));
+      height: calc(6 * var(--size));
+      rotate: calc(5 * var(--rotation));
+      border-radius: calc(6 * var(--border-radius));
+      background: color-mix(in srgb, var(--color), white 10%);
+    }
+
+    &:nth-child(7) {
+      z-index: 2;
+      transition-delay: 350ms;
+      width: calc(7 * var(--size));
+      height: calc(7 * var(--size));
+      rotate: calc(4.5 * var(--rotation));
+      border-radius: calc(7 * var(--border-radius));
+      background: color-mix(in srgb, var(--color), white 5%);
+    }
+
+    &:nth-child(8) {
+      z-index: 1;
+      transition-delay: 400ms;
+      background: var(--color);
+      width: calc(8 * var(--size));
+      height: calc(8 * var(--size));
+      rotate: calc(4 * var(--rotation));
+      border-radius: calc(8 * var(--border-radius));
+    }
+  }
+}
+
+@keyframes rotate-circles {
+  50% {
+    --rotation: 12deg;
+    --border-radius: 3px;
+    --color: #541388;
+    --size: 40px;
+  }
+}

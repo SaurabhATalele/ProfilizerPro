@@ -10,28 +10,20 @@ import Link from "next/link";
 import { getAttemptedTests } from "@/Utils/Apicalls/GetAttemptedTests";
 import DashBoardView from "./DashBoardView";
 import TestsAttempted from "./TestsAttempted";
-import { usePathname } from "next/navigation";
 
 function Dashboard() {
   const [active, setActive] = useState(0);
-  const pathname = usePathname();
 
-  const path = pathname.split("/");
-
-  const [data, setData] = useState([]);
-
-  let count = 0;
+  const [data, setData] = useState(null);
 
   useEffect(() => {
-    if (count == 0) {
-      getTests();
-      count++;
-    }
+    getTests();
   }, []);
 
   const getTests = async () => {
     const data = await getAttemptedTests();
-    setData(data);
+    console.log("dashboard", data);
+    if (data?.data.length > 0) setData(data);
   };
 
   return (
@@ -61,7 +53,7 @@ function Dashboard() {
               onClick={() => setActive(2)}
               className={` px-3 py-2  text-md flex gap-2 items-center ${active === 2 ? "bg-white text-primary-light" : "text-white"}`}
             >
-              <Link href={"/alltests"} className="flex gap-2 items-center">
+              <Link href={"/all-tests"} className="flex gap-2 items-center">
                 <MdOutlineBallot className="text-xl" /> <span>All Tests </span>
               </Link>
             </li>

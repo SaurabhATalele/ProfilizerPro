@@ -10,7 +10,6 @@ import { updateAssignment } from "@/Utils/Apicalls/UpdateAssignment";
 
 export async function GET(req, res) {
   try {
-    connectdb();
     const data = await getAssignments();
     return data;
   } catch (error) {
@@ -20,7 +19,6 @@ export async function GET(req, res) {
 
 export async function POST(req, res) {
   try {
-    connectdb();
     const body = await req.json();
     const data = await createAssignment(body);
     return data;
@@ -32,7 +30,6 @@ export async function POST(req, res) {
 
 export async function PATCH(req, res) {
   try {
-    connectdb();
     const body = await req.json();
     const data = await updateAssignment(body);
     return NextResponse.json({ message: data.message }, { status: data.status });
@@ -43,18 +40,17 @@ export async function PATCH(req, res) {
 
 export async function PUT(req, res) {
   try {
-    connectdb();
     const body = await req.json();
     const data = await updateScore(body);
     return data;
   } catch (error) {
+    console.log(error)
     return NextResponse.json({ message: error });
   }
 }
 
 export async function DELETE(req, res) {
   try {
-    connectdb();
     const body = await req.json();
     const data = await deleteAssignment(body);
     return NextResponse.json({ message: data });

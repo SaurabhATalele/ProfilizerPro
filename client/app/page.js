@@ -5,7 +5,7 @@ import Landing from "@/Components/Landing/Landing";
 
 export default function Home() {
   const { darkMode } = useTheme();
-  
+
   return (
     <div className={`${darkMode ? "dark" : ""}`}>
       <main

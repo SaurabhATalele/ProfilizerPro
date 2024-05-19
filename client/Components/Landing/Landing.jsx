@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import TestProvide from "./TestProvide";
+import FooterComponent from "@/Components/Footer/FooterComponent";
 
 const Landing = () => {
   return (
@@ -76,7 +77,7 @@ const Landing = () => {
       </div>
 
       {/* Assessments provided  */}
-      <div className="w-3/4 h-96 bg-primary-light text-white rounded-md flex flex-col items-center px-10 py-5 gap-10">
+      <div className="w-3/4 h-96 bg-primary-light text-white shadow-md rounded-md flex flex-col items-center px-10 py-5 gap-10">
         <h1 className="text-[1.5rem] font-bold">Assessments We provide</h1>
         <div className="w-full flex justify-around items-center">
           <div className="flex flex-col items-center gap-4">
@@ -114,10 +115,10 @@ const Landing = () => {
       </div>
 
       {/* tests provided  */}
-    <TestProvide/>
+      <TestProvide />
 
       {/* footer  */}
-      <footer className="w-3/4 flex justify-between p-5 border-t-2 dark:border-gray-50 dark:border-t-[1px]">
+      {/* <footer className="w-3/4 flex justify-between p-5 border-t-2 dark:border-gray-50 dark:border-t-[1px]">
         <div className="flex gap-5">
           <Image
             src={"/LandingImage/footer.png"}
@@ -174,7 +175,9 @@ const Landing = () => {
             Admin
           </Link>
         </div>
-      </footer>
+      </footer> */}
+
+      {/* <FooterComponent /> */}
       <p className="text-sm text-left ">
         &#169; ProfilizerPro all rights reserved
       </p>

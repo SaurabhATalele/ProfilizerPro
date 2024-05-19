@@ -1,7 +1,7 @@
 import User from "../Models/Users.js";
 import { transporter } from "./AssignmentController.js";
 import { NextResponse } from "next/server.js";
-import { headers } from "next/headers";
+import { headers, cookies } from "next/headers";
 import bcrypt from "bcryptjs";
 
 const registerUser = async (body) => {
@@ -46,7 +46,7 @@ const loginUser = async (body) => {
       );
     }
     const token = await data.GenerateToken();
-    console.log("token", token);
+    cookies().set("token", token);
     return NextResponse.json({ token }, { status: 200 });
   } catch (error) {
     console.log(error);
@@ -116,7 +116,7 @@ const verifyUser = async (req, res) => {
     let token = headersList.get("authorization").split(" ")[1];
 
     if (type !== "Bearer") {
-        return NextResponse.json({ message: "Invalid Token" }, { status: 400 });
+      return NextResponse.json({ message: "Invalid Token" }, { status: 400 });
     }
     const data = await User.ValidateToken(token);
     return data;

@@ -2,7 +2,7 @@
 
 import { Button, Modal } from "flowbite-react";
 import { useState } from "react";
-const AddTest = ({ data, refesh, openModal, setOpenModal }) => {
+const AddTest = ({ data, refesh, setRefresh, openModal, setOpenModal }) => {
   // const [openModal, setOpenModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [topics, setTopics] = useState(data.topics || []);
@@ -18,6 +18,7 @@ const AddTest = ({ data, refesh, openModal, setOpenModal }) => {
       icon,
       topics,
     };
+    console.log(data);
     try {
       const res = await fetch("/api/v1/assignment", {
         method: "POST",
@@ -27,7 +28,7 @@ const AddTest = ({ data, refesh, openModal, setOpenModal }) => {
         body: JSON.stringify(data),
       });
       const result = await res.json();
-      setReferesh(!refresh);
+      // setRefresh(!refresh);
     } catch (error) {
       console.log(error);
     }

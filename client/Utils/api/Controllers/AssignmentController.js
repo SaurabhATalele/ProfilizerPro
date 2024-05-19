@@ -171,12 +171,14 @@ const getAssignments = async (req, res) => {
 // create a new assignment
 const createAssignment = async (body) => {
   const assignment = body;
+  console.log(assignment);
   const newAssignment = new Assignment(assignment);
   try {
     await newAssignment.save();
     return NextResponse.json({ newAssignment }, { status: 201 });
     res.status(201).json({ newAssignment });
   } catch (error) {
+    console.log(error);
     return NextResponse.json({ message: error.message }, { status: 409 });
     res.status(409).json({ message: error.message });
   }

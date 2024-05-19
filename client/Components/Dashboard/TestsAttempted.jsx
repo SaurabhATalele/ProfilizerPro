@@ -4,6 +4,9 @@ import React from "react";
 const TestsAttempted = ({ data }) => {
   return (
     <div className={" w-5/6 p-5 flex flex-col h-screen justify-between"}>
+      {
+        data?.data ? (
+
       <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -50,6 +53,8 @@ const TestsAttempted = ({ data }) => {
           </tbody>
         </table>
       </div>
+       ) : "No tests attempted yet!"
+      }
     </div>
   );
 };

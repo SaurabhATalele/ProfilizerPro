@@ -6,7 +6,6 @@ import { getTopNCandidates } from "@/Utils/api/Controllers/AssignmentController.
 export async function POST(req, res) {
   try {
     const body = await req.json();
-    connectdb();
     const data = await getTopNCandidates(body);
     return NextResponse.json({ data });
   } catch (error) {

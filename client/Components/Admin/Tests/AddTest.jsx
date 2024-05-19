@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import Modal from "./Modal";
 import EditModal from "./EditModal";
 import { updateAssignment } from "@/Utils/Apicalls/UpdateAssignment";
+import DeleteTest from "./DeleteTest";
+import { ToastContainer } from "react-toastify";
 
 const AddTest = () => {
   const [tests, setTests] = useState([]);
@@ -26,33 +28,17 @@ const AddTest = () => {
     getTests();
   }, [refresh]);
 
-  const handleDelete = async (id) => {
-    if (!confirm("Are you sure you want to delete this test?")) {
-      return;
-    }
-    try {
-      const res = await fetch(`/api/v1/assignment/`, {
-        method: "DELETE",
-        body: JSON.stringify({ id }),
-      });
-      const data = await res.json();
-      alert(data.message);
-      setRefresh(!refresh);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
     <div className="w-full xl:w-3/4">
+      <ToastContainer />
       <Modal
+      setRefresh={setRefresh}
         refresh={setRefresh}
         openModal={openModal}
         data={modalData}
         setOpenModal={setOpenModal}
       />
       <h1 className="py-5 text-lg font-bold">All tests</h1>
-      
 
       <div class="relative overflow-x-auto shadow-md sm:rounded-lg w-3/4">
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -91,7 +77,7 @@ const AddTest = () => {
                     </th>
 
                     <td class="px-6 py-4 text-right flex justify-center">
-                      <div className="flex items-center group relative ">
+                      {/* <div className="flex items-center group relative ">
                         <button
                           className="text-xl font-light"
                           onClick={() => {
@@ -104,15 +90,15 @@ const AddTest = () => {
                             height="30"
                             src="https://img.icons8.com/fluency-systems-regular/48/pen-squared.png"
                             alt="filled-trash"
-                            className="w-12"
+                            className="w-6"
                           />
                           <p className="absolute -left-10 top-0 hidden group-hover:block px-2 py-1 bg-white text-sm font-light rounded-md border">
                             Edit
                           </p>
                         </button>
-                      </div>
+                      </div> */}
                       <div className="flex items-center group relative">
-                        <button
+                        {/* <button
                           className="text-sm font-light"
                           onClick={() => {
                             handleDelete(test._id);
@@ -127,7 +113,13 @@ const AddTest = () => {
                           <p className="absolute left-8 top-0 hidden group-hover:block px-2 py-1 bg-white text-sm font-light rounded-md border  text-red-400">
                             Delete
                           </p>
-                        </button>
+                        </button> */}
+
+                        <DeleteTest
+                          id={test._id}
+                          refresh={refresh}
+                          setRefresh={setRefresh}
+                        />
                       </div>
                     </td>
                   </tr>

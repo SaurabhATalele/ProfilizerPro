@@ -53,7 +53,10 @@ const options = {
       },
 
       ticks: {
-        stepSize: 1, // This ensures a minimum gap of 1
+        stepSize: 1,
+        // This ensures a minimum gap of 1
+        suggestedMin: 0,
+        max: 10,
       },
     },
     x: {
@@ -309,27 +312,32 @@ const StatsPage = () => {
         </div>
 
         {testData && testData.length > 0 ? (
-        <div className="relative overflow-x-auto shadow-md sm:rounded-lg my-5">
-          <table className="w-full  text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-              <tr className="bg-primary-light text-white">
-                <th className="px-6 py-3">Rank</th>
-                <th className="px-6 py-3">Candidate Name</th>
-                <th className="px-6 py-3"> Email</th>
-                <th className="px-6 py-3">Score</th>
-              </tr>
-            </thead>
-            <tbody>
-              {testData.map((data, index) => (
-                <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                  <td className="px-6 py-4">{index + 1}</td>
-                  <td className="px-6 py-4">{data.name}</td>
-                  <td className="px-6 py-4">{data._id}</td>
-                  <td className="px-6 py-4">{data.averageScore}</td>
+          <div className="relative overflow-x-auto shadow-md sm:rounded-lg my-5">
+            <table className="w-full  text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+              <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr className="bg-primary-light text-white">
+                  <th className="px-6 py-3">Rank</th>
+                  <th className="px-6 py-3">Candidate Name</th>
+                  <th className="px-6 py-3"> Email</th>
+                  <th className="px-6 py-3">Score</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {testData.map((data, index) => (
+                  <tr
+                    key={index}
+                    className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                  >
+                    <td className="px-6 py-4">{index + 1}</td>
+                    <td className="px-6 py-4">{data.name}</td>
+                    <td className="px-6 py-4">{data._id}</td>
+                    <td className="px-6 py-4">
+                      {Number(data.averageScore).toFixed(2)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         ) : (
           <p>No data found</p>
