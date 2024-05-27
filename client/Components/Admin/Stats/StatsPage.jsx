@@ -314,7 +314,7 @@ const StatsPage = () => {
         {testData && testData.length > 0 ? (
           <div className="relative overflow-x-auto shadow-md sm:rounded-lg my-5">
             <table className="w-full  text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-              <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr className="bg-primary-light text-white">
                   <th className="px-6 py-3">Rank</th>
                   <th className="px-6 py-3">Candidate Name</th>
