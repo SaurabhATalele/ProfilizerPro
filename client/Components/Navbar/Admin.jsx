@@ -36,18 +36,11 @@ const Navbar = () => {
             Home
           </Link>
         </li>
-        <li>
-          <Link
-            href={"/aboutus"}
-            className="hover:border-b-primary-light text-primary-light dark:text-primary-dark hover:border-b-2 cursor-pointer h-1/2 active:border-b-primary-light"
-          >
-            Add Test
-          </Link>
-        </li>
+        
 
         <li>
           <Link
-            href={"/login"}
+            href={"/logout"}
             className="hover:border-b-primary-light text-primary-light dark:text-primary-dark hover:border-b-2 cursor-pointer h-1/2 active:border-b-primary-light"
           >
             Logout
@@ -59,7 +52,7 @@ const Navbar = () => {
             href={"/contactus"}
             className="hover:border-b-primary-light text-primary-light dark:text-primary-dark hover:border-b-2 cursor-pointer h-1/2 active:border-b-primary-light"
           >
-            ContactUs
+            Contact Us
           </Link>
         </li>
         <li>

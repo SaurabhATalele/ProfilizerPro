@@ -16,9 +16,9 @@ app.post("/chat", async (req, res) => {
   var resp = await getGPT3Response(prompt);
 
   console.log("response genearted Successfuly...");
-  resp = resp.replaceAll("```json", "");
-  resp = resp.replaceAll("```", "");
-  resp = resp.replaceAll("'", `"`);
+  // resp = resp.replaceAll("```json", "");
+  // resp = resp.replaceAll("```", "");
+  // resp = resp.replaceAll("'", `"`);
 
   // var x = response.replace("\n", "");
   // let dummy = `{"question": "Is the "None" value a data type in Python?"}`;

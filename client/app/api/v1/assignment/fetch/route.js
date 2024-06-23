@@ -5,7 +5,6 @@ import { getAssignmentById } from "@/Utils/api/Controllers/AssignmentController.
 export async function POST(req, res) {
   try {
     const body = await req.json();
-    await connectdb();
     const data = await getAssignmentById(body);
     return data;
   } catch (error) {

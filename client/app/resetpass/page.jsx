@@ -5,17 +5,17 @@ import ResetPass from "@/Components/resetpass/ResetPass";
 import React from "react";
 import { useState, useEffect } from "react";
 
-const page = () => {
+const Page = () => {
   const [otp, setOtp] = useState("");
 
   return (
     <>
-      {/* <Navbar2 />
-      <ResetPass /> */}
+      <Navbar2 />
+      <ResetPass />
      
-      <ExamDash />
+      {/* <ExamDash /> */}
     </>
   );
 };
 
-export default page;
+export default Page;

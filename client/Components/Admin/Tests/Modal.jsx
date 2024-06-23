@@ -2,12 +2,13 @@
 
 import { Button, Modal } from "flowbite-react";
 import { useState } from "react";
-const AddTest = ({ refesh, openModal, setOpenModal }) => {
+const AddTest = ({ data, refesh, setRefresh, openModal, setOpenModal }) => {
   // const [openModal, setOpenModal] = useState(false);
-  const [topics, setTopics] = useState([]);
-  const [testName, setTestName] = useState("");
-  const [description, setDescription] = useState("");
-  const [icon, setIcon] = useState("");
+  const [isEdit, setIsEdit] = useState(false);
+  const [topics, setTopics] = useState(data.topics || []);
+  const [testName, setTestName] = useState(data.name || "");
+  const [description, setDescription] = useState(data.description || "");
+  const [icon, setIcon] = useState(data.icon || "");
   const [topic, setTopic] = useState("");
 
   const handleAddTest = async () => {
@@ -17,6 +18,7 @@ const AddTest = ({ refesh, openModal, setOpenModal }) => {
       icon,
       topics,
     };
+    console.log(data);
     try {
       const res = await fetch("/api/v1/assignment", {
         method: "POST",
@@ -26,8 +28,7 @@ const AddTest = ({ refesh, openModal, setOpenModal }) => {
         body: JSON.stringify(data),
       });
       const result = await res.json();
-      console.log(result);
-      setReferesh(!refresh);
+      // setRefresh(!refresh);
     } catch (error) {
       console.log(error);
     }
@@ -45,7 +46,7 @@ const AddTest = ({ refesh, openModal, setOpenModal }) => {
         show={openModal}
         dismissible
         onClose={() => setOpenModal(false)}
-        className=" self-center   dark:bg-gray-800 rounded-lg shadow-lg p-6 sm:p-8 z-50"
+        className="self-center  dark:bg-gray-800 rounded-lg shadow-lg p-6 sm:p-8 z-50"
       >
         <Modal.Header>
           <div className="text-primary-light">Add a New Test</div>
@@ -106,7 +107,6 @@ const AddTest = ({ refesh, openModal, setOpenModal }) => {
                 onClick={() => {
                   setTopics([...topics, { name: topic }]);
                   setTopic("");
-                  console.log(topics);
                 }}
                 disabled={!topic}
               >

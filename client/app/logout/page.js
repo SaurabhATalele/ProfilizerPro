@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import Lottie from "react-lottie";
 import animationData from "./animations/logoutAnimation";
 
-const page = () => {
+const Page = () => {
   const defaultOptions = {
     loop: false,
     autoplay: true,
@@ -30,4 +30,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

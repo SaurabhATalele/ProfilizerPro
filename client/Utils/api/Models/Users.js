@@ -29,6 +29,10 @@ const User = new Schema(
       type: String,
       required: true,
     },
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
@@ -62,7 +66,8 @@ User.methods.GenerateToken = async function () {
     const userId = this._id;
     const email = this.email;
     const username = this.username;
-    const user = { userId, email, username };
+    const isAdmin = this.isAdmin;
+    const user = { userId, email, username, isAdmin };
     return await jwt.sign(user, secret);
   } catch (err) {
     console.log(err);

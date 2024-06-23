@@ -50,6 +50,7 @@ export const logout = async () => {
 export const getUser = async () => {
   const myHeaders = new Headers();
   myHeaders.append("Authorization", `Bearer ${localStorage.getItem("token")}`);
+  console.log(myHeaders, "from user.js");
 
   const requestOptions = {
     method: "GET",
@@ -58,5 +59,6 @@ export const getUser = async () => {
   };
 
   const response = await fetch(`${VERIFY_USER}`, requestOptions);
+  // console.log(await response.json(), "from user.js");
   return response;
 };
