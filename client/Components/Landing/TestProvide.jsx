@@ -1,15 +1,22 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
-// import { useState } from "react";
+import { useEffect } from "react";
+import { useState } from "react";
 
-const TestProvide = async () => {
-  // const [tests, setTests] = useState([]);
+const TestProvide = () => {
+  const [tests, setTests] = useState([]);
 
-  const res = await fetch("/api/v1/assignment", {
-    cache: "no-store",
-  });
-  const data = await res.json();
-  const tests = data.data.slice(0, 3);
+  useEffect(() => {
+    (async () => {
+      const res = await fetch(`/api/v1/assignment`, {
+        cache: "no-store",
+      });
+      const data = await res.json();
+      let t = data.data.slice(0, 3);
+      setTests(t);
+    })();
+  }, []);
   return (
     <div className="w-3/4  bg-white dark:bg-black rounded-md flex flex-col items-center px-10 py-5 gap-10">
       <div className="w-full flex justify-between items-end">
