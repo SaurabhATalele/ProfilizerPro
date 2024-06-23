@@ -6,7 +6,7 @@ const Card = ({tests}) => {
       <div className="w-full grid grid-cols-4 gap-3 justify-around items-center">
         {tests &&
           tests.map((test) => (
-            <div className="h-80 flex flex-col flex-grow-0 items-center gap-4 rounded-md shadow-md p-4">
+            <div className="h-80 flex flex-col flex-grow-0 items-center gap-4 rounded-md shadow-md p-4" key={test._id}>
               <Image
                 src={test.icon}
                 width={120}

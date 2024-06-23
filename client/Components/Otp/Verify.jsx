@@ -6,7 +6,7 @@ const Verify = ({ handleOtp }) => {
 
   return (
     <div className="relative p-3 w-80 h-96 shadow-md rounded-xl dark:shadow-none dark:backdrop-blur-md dark:bg-[#33333342] shadow-gray-400 flex flex-col text-center items-center justify-center gap-5">
-      <h1 className="font-bold  mt-5 text-2xl">You've Got Email</h1>
+      <h1 className="font-bold  mt-5 text-2xl">You&apos;ve Got Email</h1>
       <p className=" text-sm text-black font-medium ">
         We have sent the OTP verification code to your email address check your
         email and enter the code below.{" "}

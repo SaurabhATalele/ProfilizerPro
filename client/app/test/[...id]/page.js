@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import ViewTest from "@/Components/ViewTest/ViewTest";
 import Navbar from "@/Components/Navbar/Navbar";
 
-const page = () => {
+const Page = () => {
   const pathname = usePathname();
   const id = pathname.split("/").filter((x) => x);
   const test = id[id.length - 1];
@@ -16,4 +16,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

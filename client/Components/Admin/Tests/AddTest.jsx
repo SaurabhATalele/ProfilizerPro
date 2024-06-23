@@ -59,11 +59,11 @@ const AddTest = () => {
             {tests &&
               tests.map((test) => {
                 return (
-                  <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
+                  <tr key={test._id} className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
                     <td className="flex items-center px-5">
                       <div class="flex-shrink-0">
                         <img
-                          class="w-8 h-8 rounded-full"
+                          className="w-8 h-8 rounded-full"
                           src={test.icon}
                           alt="Neil image"
                         />

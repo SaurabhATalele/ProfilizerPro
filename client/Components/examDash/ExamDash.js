@@ -98,6 +98,7 @@ function ExamDash() {
                 {ques.map((ele) => {
                   return (
                     <Button
+                    key={ele.number}
                       num={ele.number}
                       setCurrent={setCurrentQuestion}
                       status={ques[ele.number - 1].status}
@@ -131,7 +132,7 @@ function ExamDash() {
                   {ques[currentQuestion]?.options &&
                     ques[currentQuestion]?.options.map((item) => {
                       return (
-                        <div class="flex items-center justify-start me-4  ">
+                        <div class="flex items-center justify-start me-4  " key={item}>
                           <input
                             id="purple-radio"
                             type="radio"

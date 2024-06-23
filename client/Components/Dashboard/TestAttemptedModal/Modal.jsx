@@ -28,6 +28,7 @@ const QuestionModal = ({ data }) => {
           {data.questions.map((question) => {
             return (
               <QuestionCard
+                key={question._id}
                 question={question.question}
                 answer={question.answer}
                 yourAnswer={question.yourAnswer}

@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getUser } from "@/Utils/Apicalls/User";
 
-const page = () => {
+const Page = () => {
   const [user, setUser] = useState({});
 
   const router = useRouter();
@@ -50,4 +50,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
