@@ -5,8 +5,7 @@ import Link from "next/link";
 const TestProvide = async () => {
   // const [tests, setTests] = useState([]);
 
-
-  const res = await fetch("http://localhost:4000/api/v1/assignment", {
+  const res = await fetch("/api/v1/assignment", {
     cache: "no-store",
   });
   const data = await res.json();
@@ -32,7 +31,10 @@ const card = (tests) => {
     <div className="w-full grid grid-cols-3 gap-3 justify-around items-center">
       {tests &&
         tests.map((test) => (
-          <div key={test._id} className="h-80 flex flex-col flex-grow-0 items-center gap-4 rounded-md shadow-md p-4 dark:shadow-gray-500 ">
+          <div
+            key={test._id}
+            className="h-80 flex flex-col flex-grow-0 items-center gap-4 rounded-md shadow-md p-4 dark:shadow-gray-500 "
+          >
             <Image
               src={test.icon}
               width={120}

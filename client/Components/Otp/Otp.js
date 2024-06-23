@@ -24,16 +24,13 @@ const Otp = () => {
   const handleSendMail = async (e, email) => {
     e.preventDefault();
     try {
-      const res = await fetch(
-        "http://localhost:4000/api/v1/users/generate-otp",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email }),
+      const res = await fetch("/api/v1/users/generate-otp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify({ email }),
+      });
       const data = await res.json();
       if (data.message === "User Not Found") {
         Toast("error", "User Not Found");

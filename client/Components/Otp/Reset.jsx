@@ -14,7 +14,7 @@ const Reset = ({ email }) => {
       return;
     }
     try {
-      const res = await fetch("http://localhost:4000/api/v1/users/reset-pass", {
+      const res = await fetch("/api/v1/users/reset-pass", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
