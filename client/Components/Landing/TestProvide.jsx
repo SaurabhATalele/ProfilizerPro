@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect } from "react";
 import { useState } from "react";
+import Skeleton from "./Skeleton";
 
 const TestProvide = () => {
   const [tests, setTests] = useState([]);
@@ -28,7 +29,8 @@ const TestProvide = () => {
           Explore More
         </Link>
       </div>
-      {card(tests)}
+      
+      {tests.length === 0 ? <Skeleton /> : card(tests)}
     </div>
   );
 };
