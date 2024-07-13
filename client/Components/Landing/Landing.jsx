@@ -47,12 +47,12 @@ const Landing = () => {
       </div>
 
       {/* benifits  */}
-      <div className="w-3/4 ">
+      <div className="w-3/4 flex flex-col gap-5 ">
         <h2 className="text-center font-bold text-[1.3rem]">
           Benifits of choosing us
         </h2>
-        <div className="flex w-full justify-between">
-          <div className="flex flex-col items-center">
+        <div className="flex flex-col xl:flex-row w-full gap-3 justify-between">
+          <div className="flex gap-4 border dark:border-gray-800 p-3 rounded-lg xl:w-1/3 items-center">
             <Image
               src={"/LandingImage/Bot.png"}
               width={129}
@@ -60,9 +60,17 @@ const Landing = () => {
               alt="bot"
               className="w-20"
             />
-            <p>AI Generated Tests</p>
+            <div className="flex flex-col gap-3">
+              <p className="font-medium">AI Generated Tests</p>
+              <p
+                className={clsx("text-sm text-justify", spaceGrotesk.className)}
+              >
+                Create customized tests using advanced AI algorithms to meet
+                your specific needs and learning goals.
+              </p>
+            </div>
           </div>
-          <div className="flex flex-col items-center">
+          <div className="flex gap-4 border dark:border-gray-800 p-3 rounded-lg xl:w-1/3 items-center">
             <Image
               src={"/LandingImage/Popular.png"}
               width={129}
@@ -70,9 +78,18 @@ const Landing = () => {
               className="w-20"
               alt="bot"
             />
-            <p>Personalized Feedback</p>
+            <div className="flex flex-col gap-3">
+              <p className="font-medium">Personalized Feedback</p>
+              <p
+                className={clsx("text-sm text-justify", spaceGrotesk.className)}
+              >
+                Receive tailored feedback that helps you understand your
+                strengths and areas for improvement, accelerating your learning
+                process.
+              </p>
+            </div>
           </div>
-          <div className="flex flex-col items-center">
+          <div className="flex gap-4 border dark:border-gray-800 p-3 rounded-lg xl:w-1/3 items-center">
             <Image
               src={"/LandingImage/Track Order.png"}
               width={129}
@@ -80,7 +97,15 @@ const Landing = () => {
               className="w-20"
               alt="bot"
             />
-            <p>RoadMap Suggestions</p>
+            <div className="flex flex-col gap-3">
+              <p className="font-medium">Roadmap Suggestions</p>
+              <p
+                className={clsx("text-sm text-justify", spaceGrotesk.className)}
+              >
+                Get guided suggestions for your learning journey, helping you
+                stay on track and achieve your goals efficiently.
+              </p>
+            </div>
           </div>
         </div>
       </div>
