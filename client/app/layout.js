@@ -7,6 +7,7 @@ import { UserProvider } from "../Utils/UserContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
+
 export const metadata = {
   title: "profilizerPro",
   description: "ProfilizerPro is an AI enabled Assessment platform.",
@@ -18,7 +19,7 @@ export default function RootLayout({ children }) {
       <ThemeProvider>
         <UserProvider>
           <TopicProvider>
-            <body className={`${inter.className} `}>{children}</body>
+            <body className={` ${inter.className} `}>{children}</body>
           </TopicProvider>
         </UserProvider>
       </ThemeProvider>

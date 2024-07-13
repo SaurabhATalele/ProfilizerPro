@@ -1,7 +1,10 @@
 import Image from "next/image";
+import { Space_Grotesk } from "next/font/google";
 import React from "react";
 import TestProvide from "./TestProvide";
+import clsx from "clsx";
 
+const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
 const Landing = () => {
   return (
     <div className="max-w-screen  flex flex-col items-center justify-center pt-24 gap-8">
@@ -10,17 +13,25 @@ const Landing = () => {
         <div className="flex flex-col w-1/2 gap-3">
           <h1 className="text-[4rem] font-bold leading-[3.5rem]">
             Take Online{" "}
-            <span className="text-primary-light dark:text-primary-dark">
-              Assessments
-            </span>
+            <span className="grad dark:text-primary-dark">Assessments</span>
           </h1>
-          <p className="text-[1.2rem] text-gray-500 dark:text-white">
+          <p
+            className={clsx(
+              "text-[1.2rem] text-gray-500 dark:text-white",
+              spaceGrotesk.className,
+            )}
+          >
             Get ready for your placements with us
           </p>
 
-          <h2 className="flex gap-1 items-center mt-5 ">
+          <h2
+            className={clsx(
+              "flex gap-1 items-center mt-5 ",
+              spaceGrotesk.className,
+            )}
+          >
             Number of active users
-            <span className="font-bold text-[2rem] text-primary-light dark:text-primary-dark">
+            <span className="font-bold text-[1.5rem] text-primary-light dark:text-primary-dark">
               200+
             </span>
           </h2>
@@ -75,7 +86,7 @@ const Landing = () => {
       </div>
 
       {/* Assessments provided  */}
-      <div className="w-3/4 h-96 bg-primary-light text-white shadow-md rounded-md flex flex-col items-center px-10 py-5 gap-10">
+      <div className="w-3/4 h-96 grad-bg text-white shadow-md  flex flex-col items-center px-10 py-5 gap-10">
         <h1 className="text-[1.5rem] font-bold">Assessments We provide</h1>
         <div className="w-full flex justify-around items-center">
           <div className="flex flex-col items-center gap-4">

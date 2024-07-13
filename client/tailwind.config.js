@@ -16,12 +16,13 @@ module.exports = {
       },
       colors: {
         primary: {
-          light: "#6246ea",
-          dark: "#9188ff",
+          light: "#986eeb",
+          salmon: "#fd9770",
+          dark: "#060606",
         },
         background: {
           light: "#ffffff",
-          dark: "#252525",
+          dark: "#060606",
         },
       },
     },

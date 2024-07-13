@@ -2,14 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+:root {
+  --color-primary-purple: #986eeb;
+  --color-primary-salmon: #fd9770;
 }
 
 body::-webkit-scrollbar {
@@ -22,6 +17,36 @@ body::-webkit-scrollbar-track {
 
 body::-webkit-scrollbar-thumb {
   background-color: #4a3aff;
+}
+
+/* custom styling  */
+
+.font-inter {
+  font-family: "Inter", sans-serif;
+}
+
+.font-space-grotesk {
+  font-family: "Space Grotesk", sans-serif;
+}
+
+.grad {
+  background: linear-gradient(
+    90deg,
+    var(--color-primary-purple),
+    var(--color-primary-salmon)
+  );
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+}
+
+.grad-bg {
+  background: var(--color-primary-purple);
+
+  background: linear-gradient(
+    153deg,
+    var(--color-primary-purple),
+    var(--color-primary-salmon)
+  );
 }
 
 @layer utilities {

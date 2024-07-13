@@ -38,21 +38,19 @@ const Navbar = () => {
     <div
       className="fixed flex justify-between bg-[#ffffff27] 
     dark:bg-[#00000027] dark:border-[#3c3c3c52] backdrop-blur-md
-     items-center px-5 w-3/4 border rounded-xl  border-[#c3c3c354] h-14"
+     items-center px-5 w-3/4 border rounded-xl  border-[#c3c3c354] h-14 bg-blend-lighten mix-blend-multiply dark:mix-blend-difference"
     >
       <div className="flex gap-1">
         <Image src={"/logo.svg"} width={15} height={15} alt="logo" />
         <Link href={"/"}>
-          <h3 className="font-bold text-primary-light dark:text-primary-dark ">
-            ProfilizePro
-          </h3>
+          <h3 className="font-bold text-primary-light">ProfilizePro</h3>
         </Link>
       </div>
       <ul className="flex gap-5 h-full items-center">
         <li>
           <Link
             href={"/"}
-            className="hover:border-b-primary-light text-primary-light dark:text-primary-dark hover:border-b-2 cursor-pointer h-1/2 active:border-b-primary-light"
+            className="hover:border-b-primary-light text-primary-light hover:border-b-2 cursor-pointer h-1/2 active:border-b-primary-light"
           >
             Home
           </Link>
@@ -60,7 +58,7 @@ const Navbar = () => {
         <li>
           <Link
             href={"/aboutus"}
-            className="hover:border-b-primary-light text-primary-light dark:text-primary-dark hover:border-b-2 cursor-pointer h-1/2 active:border-b-primary-light"
+            className="hover:border-b-primary-light text-primary-light  hover:border-b-2 cursor-pointer h-1/2 active:border-b-primary-light"
           >
             About
           </Link>
@@ -71,7 +69,7 @@ const Navbar = () => {
             <li>
               <Link
                 href={"/login"}
-                className="hover:border-b-primary-light text-primary-light dark:text-primary-dark hover:border-b-2 cursor-pointer h-1/2 active:border-b-primary-light"
+                className="hover:border-b-primary-light text-primary-light  hover:border-b-2 cursor-pointer h-1/2 active:border-b-primary-light"
               >
                 Login
               </Link>
@@ -79,7 +77,7 @@ const Navbar = () => {
             <li>
               <Link
                 href={"/register"}
-                className="hover:border-b-primary-light text-primary-light dark:text-primary-dark hover:border-b-2 cursor-pointer h-1/2 active:border-b-primary-light"
+                className="hover:border-b-primary-light text-primary-light hover:border-b-2 cursor-pointer h-1/2 active:border-b-primary-light"
               >
                 SignUp
               </Link>
@@ -89,7 +87,7 @@ const Navbar = () => {
         <li>
           <Link
             href={"/contactus"}
-            className="hover:border-b-primary-light text-primary-light dark:text-primary-dark hover:border-b-2 cursor-pointer h-1/2 active:border-b-primary-light"
+            className="hover:border-b-primary-light text-primary-light hover:border-b-2 cursor-pointer h-1/2 active:border-b-primary-light"
           >
             Contact Us
           </Link>
@@ -100,7 +98,7 @@ const Navbar = () => {
             <li>
               <Link
                 href={user.isAdmin ? "/admin" : "/dashboard"}
-                className="hover:border-b-primary-light underline text-primary-light dark:text-primary-dark hover:border-b-2 cursor-pointer h-1/2 active:border-b-primary-light"
+                className="hover:border-b-primary-light underline text-primary-light hover:border-b-2 cursor-pointer h-1/2 active:border-b-primary-light"
               >
                 Dashboard
               </Link>
