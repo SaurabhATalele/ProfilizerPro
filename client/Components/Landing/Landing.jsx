@@ -86,39 +86,60 @@ const Landing = () => {
       </div>
 
       {/* Assessments provided  */}
-      <div className="w-3/4 h-96 grad-bg text-white shadow-md  flex flex-col items-center px-10 py-5 gap-10">
-        <h1 className="text-[1.5rem] font-bold">Assessments We provide</h1>
-        <div className="w-full flex justify-around items-center">
-          <div className="flex flex-col items-center gap-4">
+      <div className="relative overflow-hidden min-w-[99vw] max-w-[100vw] h-96 bg-background-dark text-white shadow-md  flex flex-col items-center px-10 py-5 gap-14 z-0">
+        <Image
+          src={
+            "https://cdn.prod.website-files.com/65159e844f8f08a72cefa2aa/65159e844f8f08a72cefa430_Requirement%20Bg.svg"
+          }
+          fill
+          alt="bg"
+          className="absolute z-10 scale-[3]"
+        ></Image>
+        <h1
+          className={clsx("text-[2rem] font-bold z-20", spaceGrotesk.className)}
+        >
+          Assessments We provide
+        </h1>
+        <div className="w-3/4 flex justify-around items-center">
+          <div className="relative flex flex-col items-center gap-4 z-20">
+            <h1 className="absolute  text-[15rem] -left-3 -top-28 z-0 text-transparent font-bold font-outline-2 stroke-slate-100">
+              1
+            </h1>
             <Image
               src={"/LandingImage/GenAss.svg"}
               width={120}
               height={120}
               alt="General"
-              className="w-44 h-44"
+              className="w-44 h-44 z-20"
             />
-            <p>General Assessments</p>
+            <p className={spaceGrotesk.className}>General Assessments</p>
           </div>
-          <div className="flex flex-col items-center gap-4">
+          <div className="relative flex flex-col items-center gap-4 z-20">
+            <h1 className="absolute  text-[15rem] -left-3 -top-28 z-0 text-transparent font-bold font-outline-2 stroke-slate-100">
+              2
+            </h1>
             <Image
               src={"/LandingImage/tech.svg"}
               width={120}
               height={120}
               alt="Technical"
-              className="w-44 h-44"
+              className="w-44 h-44 z-20"
             />
-            <p>Technical Assessments</p>
+            <p className={spaceGrotesk.className}>Technical Assessments</p>
           </div>
 
-          <div className="flex flex-col items-center gap-4">
+          <div className="relative flex flex-col items-center gap-4 z-20">
+            <h1 className="absolute  text-[15rem] -left-3 -top-28 z-0 text-transparent font-bold font-outline-2 stroke-slate-100">
+              3
+            </h1>
             <Image
               src={"/LandingImage/Logical.svg"}
               width={120}
               height={120}
               alt="General"
-              className="w-44 h-44"
+              className="w-44 h-44 z-20"
             />
-            <p>Logical Assessments</p>
+            <p className={spaceGrotesk.className}>Logical Assessments</p>
           </div>
         </div>
       </div>

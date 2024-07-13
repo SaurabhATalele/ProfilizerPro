@@ -37,10 +37,11 @@ const Navbar = () => {
   return (
     <div
       className="fixed flex justify-between bg-[#ffffff27] 
-    dark:bg-[#00000027] dark:border-[#3c3c3c52] backdrop-blur-md
-     items-center px-5 w-3/4 border rounded-xl  border-[#c3c3c354] h-14 bg-blend-lighten mix-blend-multiply dark:mix-blend-difference"
+    dark:bg-[#00000027] dark:border-[#3c3c3c52] backdrop-blur-md z-30
+     items-center px-5 w-3/4 border rounded-xl  border-[#c3c3c354] h-14 bg-blend-lighten font-medium"
     >
       <div className="flex gap-1">
+        
         <Image src={"/logo.svg"} width={15} height={15} alt="logo" />
         <Link href={"/"}>
           <h3 className="font-bold text-primary-light">ProfilizePro</h3>
