@@ -9,7 +9,7 @@ const Landing = () => {
   return (
     <div className="max-w-screen  flex flex-col items-center justify-center pt-24 gap-8">
       {/* Landing graphics and data  */}
-      <div className=" w-3/4  flex items-center justify-between">
+      <div className=" w-3/4  flex items-center justify-center">
         <div className="flex flex-col w-1/2 gap-3">
           <h1 className="text-[4rem] font-bold leading-[3.5rem]">
             Take Online{" "}

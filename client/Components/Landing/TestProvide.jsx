@@ -42,7 +42,7 @@ const card = (tests) => {
         tests.map((test) => (
           <div
             key={test._id}
-            className="relative h-80 flex flex-col flex-grow-0 items-center gap-4 rounded-xl p-4 dark:shadow-gray-500 bg-primary-salmon dark:bg-background-dark dark:border dark:border-gray-900 bg-opacity-20"
+            className="relative h-80 flex flex-col flex-grow-0 items-center gap-4 rounded-xl p-4 dark:shadow-gray-500 bg-white shadow-lg dark:shadow-none dark:bg-background-dark dark:border dark:border-gray-900 border border-gray-200"
           >
             <Image
               src={test.icon}
@@ -56,7 +56,7 @@ const card = (tests) => {
               {test.description}
             </p>
             <Link href={`/test/${test._id}`}>
-              <button className="bg-primary-light bg-opacity-75 text-white p-2 rounded-md text-sm absolute bottom-2 left-1/2 -translate-x-1/2">
+              <button className="bg-primary-light bg-opacity-75 text-white p-2 rounded-md text-sm absolute bottom-4 left-1/2 -translate-x-1/2">
                 Attempt
               </button>
             </Link>
