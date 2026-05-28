@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <div className={`${darkMode ? "dark" : ""}`}>
       <main
-        className={` flex min-h-screen max-w-screen flex-col items-center justify-between bg-white text-black p-10 dark:bg-black dark:text-white`}
+        className={` flex min-h-screen max-w-screen flex-col items-center justify-between bg-white text-black dark:bg-black dark:text-white`}
       >
         <Navbar />
         <Landing />

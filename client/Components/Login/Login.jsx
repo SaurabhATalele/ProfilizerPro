@@ -6,9 +6,11 @@ import { ToastContainer } from "react-toastify";
 import Toast from "@/Utils/Toast";
 import { login } from "@/Utils/Apicalls/Login";
 import Image from "next/image";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -29,7 +31,7 @@ const Login = () => {
       if (res.status === 200) {
         const data = await res.json();
         console.log(data);
-        
+
         localStorage.setItem("token", data.token);
         Toast("success", "Login Success...");
         router.push("/");
@@ -46,57 +48,74 @@ const Login = () => {
   return (
     <>
       <ToastContainer />
-      <div className="w-3/4 h-screen flex justify-center items-center gap-20">
-        <div className="relative p-5 w-80 h-96 shadow-md rounded-md dark:shadow-none dark:backdrop-blur-md dark:bg-[#33333342] shadow-gray-400 flex flex-col items-center justify-around   ">
-          <h2 className="font-bold text-[1.5rem]">Lets Sign you in</h2>
-          <p className="text-center">
-            Welcome Back,
-            <br />
-            You have been missed
-          </p>
-          <form onSubmit={handleLogin}>
-            <input
-              type="email"
-              placeholder="Enter Email or Username"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="p-2 bg-transparent border rounded-md text-sm w-full my-2"
-            />
-            <input
-              type="password"
-              name="password"
-              id="passwd"
-              placeholder="******"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="p-2 bg-transparent border rounded-md text-sm w-full my-2 "
-            />
-            <Link
-              href={"/password-recovery"}
-              className="text-primary-light text-[12px]"
-            >
-              Forgot Password?
-            </Link>
-            <input
+      <div className="w-full min-h-[calc(100vh-80px)] mt-20 flex flex-col-reverse md:flex-row justify-center items-center gap-10 md:gap-20 px-5 pb-10">
+        <div className="relative p-8 w-full max-w-md bg-white/80 dark:bg-[#121212]/80 backdrop-blur-xl border border-gray-200 dark:border-gray-800 shadow-2xl rounded-2xl flex flex-col gap-6 transform transition-all hover:scale-[1.01]">
+          <div className="text-center space-y-2">
+            <h2 className="font-extrabold text-3xl text-gray-900 dark:text-white">Let's Sign You In</h2>
+            <p className="text-gray-500 dark:text-gray-400 text-sm">
+              Welcome back, <br /> you have been missed!
+            </p>
+          </div>
+          <form onSubmit={handleLogin} className="flex flex-col gap-4">
+            <div>
+              <input
+                type="email"
+                placeholder="Enter Email or Username"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all duration-300 text-sm dark:text-white"
+              />
+            </div>
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                id="passwd"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-3 pr-10 rounded-lg bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all duration-300 text-sm dark:text-white"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors focus:outline-none"
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
+            <div className="flex justify-end">
+              <Link
+                href={"/password-recovery"}
+                className="text-primary hover:text-[var(--color-primary)] text-xs font-medium transition-colors"
+              >
+                Forgot Password?
+              </Link>
+            </div>
+            <button
               type="submit"
-              value="Login"
-              className="p-2 bg-primary-light text-white rounded-md text-sm w-full my-2 "
-            />
+              className="w-full py-3 px-4 bg-[var(--color-primary)] hover:bg-opacity-90 text-white rounded-lg font-medium transition-all duration-300 shadow-lg shadow-[var(--color-primary)]/30 transform hover:-translate-y-0.5 mt-2"
+            >
+              Login
+            </button>
           </form>
 
-          <p>
+          <p className="text-center text-sm text-gray-600 dark:text-gray-400 mt-4">
             Don&apos;t have an account?{" "}
-            <Link href={"/register"} className="text-primary-light">
+            <Link href={"/register"} className="text-[var(--color-primary)] dark:text-white hover:underline font-semibold transition-colors">
               Register
             </Link>
           </p>
         </div>
-        <Image
-          src={"/LoginImages/LoginImage.png"}
-          width={300}
-          height={450}
-          alt="Login"
-        />
+        <div className="hidden md:flex justify-center items-center w-full max-w-[400px]">
+          <Image
+            src={"/LoginImages/LoginImage.png"}
+            width={400}
+            height={400}
+            alt="Login"
+            className="object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500"
+          />
+        </div>
       </div>
     </>
   );

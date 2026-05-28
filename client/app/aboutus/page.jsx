@@ -11,7 +11,7 @@ export default function Page() {
   return (
     <div className={`${darkMode ? "dark" : ""}`}>
       <main
-        className={` flex p-10 max-h-screen max-w-screen flex-col items-center justify-between bg-white text-black  dark:bg-black dark:text-white`}
+        className={` flex  max-h-screen max-w-screen flex-col items-center justify-between bg-white text-black  dark:bg-black dark:text-white`}
       >
         <Navbar />
         <AboutUs />

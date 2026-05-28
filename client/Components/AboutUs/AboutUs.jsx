@@ -5,45 +5,57 @@ import Link from "next/link";
 
 const AboutUs = () => {
   return (
-    <div className="w-3/4 min-h-screen flex flex-col md:flex-row justify-center items-center gap-20 py-12 lg:mt-12 2xl:mt-0 2xl:max-h-[100vh] mx-auto">
-      <div className="w-full md:w-1/2 lg:w-3/5 xl:w-2/5">
-        <Image
-          src="/SignupImages/aboutus.png"
-          width={900}
-          height={800}
-          alt="About Us"
-          className="rounded-md w-4/5"
-        />
+    <div className="w-full min-h-[calc(100vh-80px)] mt-20 flex flex-col lg:flex-row justify-between items-center gap-16 px-6 lg:px-16 py-12 max-w-7xl mx-auto">
+      {/* Image Section */}
+      <div className="w-full lg:w-1/2 flex justify-center lg:justify-start">
+        <div className="relative w-full max-w-lg aspect-square flex items-center justify-center">
+          <Image
+            src="/SignupImages/aboutus.png"
+            width={600}
+            height={600}
+            alt="About Us"
+            className="object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500"
+          />
+        </div>
       </div>
-      <div className="flex flex-col items-center md:items-start p-5 w-full md:w-1/2 lg:w-full">
-        <h2 className="font-bold text-[1.6rem] mb-4">About Us</h2>
-        <p className="text-center md:text-left mb-6 flex flex-col gap-4 text-gray-500">
-          <span className="font-bold text-primary-light text-[1.2rem]">
-            Unlock Your Potential with ProfilizerPro
-          </span>
-          <span className="font-bold text-[1.2rem] text-gray-800">
-            Empowering Growth:
-          </span>{" "}
-          Dive deep into personal and professional development with our
-          cutting-edge assessment tools. Discover your strengths, aptitudes, and
-          areas for improvement with ProfilizerPro.
-          <span className="font-bold text-[1.2rem] text-gray-800">
-            Tailored Insights:
-          </span>{" "}
-          Our platform provides personalized assessments and actionable
-          insights, helping individuals and organizations achieve their goals.
-          <span className="font-bold text-[1.2rem] text-gray-800">
-            Innovative & Reliable:
-          </span>{" "}
-          Backed by expert psychologists and tech innovators, we offer scalable
-          solutions for everyone from individuals to large enterprises.
-        </p>
-        <div className="mt-6">
+
+      {/* Content Section */}
+      <div className="flex flex-col items-center lg:items-start w-full lg:w-1/2 space-y-8 text-center lg:text-left">
+        <div className="space-y-3">
+          <h2 className="text-sm font-bold tracking-widest text-primary uppercase">About Us</h2>
+          <h1 className="text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white leading-tight">
+            Unlock Your Potential with <span className="text-[var(--color-primary)]">ProfilizerPro</span>
+          </h1>
+        </div>
+
+        <div className="space-y-6 text-gray-600 dark:text-gray-300 text-lg leading-relaxed">
+          <p>
+            Welcome to ProfilizerPro, the next-generation platform for online assessments. We bridge the gap between learning and achievement through intelligent, AI-driven test generation and deep analytics.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 text-left">
+            <div className="bg-gray-50 dark:bg-gray-900/50 p-6 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow">
+              <h3 className="font-bold text-gray-900 dark:text-white text-xl mb-2 flex items-center gap-2">
+                <span className="text-primary text-2xl">🚀</span> Empowering Growth
+              </h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Discover your strengths and aptitudes with curated, dynamic testing environments designed for modern challenges.</p>
+            </div>
+
+            <div className="bg-gray-50 dark:bg-gray-900/50 p-6 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow">
+              <h3 className="font-bold text-gray-900 dark:text-white text-xl mb-2 flex items-center gap-2">
+                <span className="text-primary text-2xl">🧠</span> Tailored Insights
+              </h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Receive actionable, personalized feedback powered by advanced AI to help accelerate your learning journey.</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="pt-4">
           <Link
             href="/"
-            className="px-3 py-2 text-[1.3rem] bg-primary-light text-white rounded-md text-sm "
+            className="inline-flex items-center justify-center px-8 py-3.5 text-base font-semibold bg-[var(--color-primary)] hover:bg-opacity-90 text-white rounded-lg shadow-lg shadow-[var(--color-primary)]/30 transition-all duration-300 transform hover:-translate-y-1"
           >
-            Go Back Home
+            Explore Assessments
           </Link>
         </div>
       </div>

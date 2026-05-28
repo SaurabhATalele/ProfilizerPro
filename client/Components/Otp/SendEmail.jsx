@@ -1,30 +1,48 @@
 import React, { useState } from "react";
+import { ToastContainer } from "react-toastify";
+import Toast from "@/Utils/Toast";
 
 const SendEmail = ({ handleSendMail }) => {
   const [email, setEmail] = useState("");
-  return (
-    <div className="relative p-3 w-80 h-96 shadow-md rounded-xl dark:shadow-none dark:backdrop-blur-md dark:bg-[#33333342] shadow-gray-400 flex flex-col text-center items-center justify-center gap-5">
-      <h1 className="font-bold  mt-5 text-2xl">Reset Password</h1>
-      <p className=" text-sm text-black font-medium ">
-        Enter your email address below to receive an OTP to reset password.{" "}
-      </p>
+  const [showToast, setShowToast] = useState(false);
 
-      <form onSubmit={(e)=>handleSendMail(e,email)}>
-        <input
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          type="email"
-          placeholder="Email"
-          className="p-2 bg-transparent border rounded-md text-sm w-full my-2 "
-        />
-        <button
-          className="bg-primary-light text-white p-2 rounded-md text-sm"
-          onClick={() => handleSendMail(email)}
-        >
-          Get OTP
-        </button>
-      </form>
-    </div>
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await handleSendMail(email);
+      Toast("success", "OTP sent to your email");
+    } catch (err) {
+      console.error(err);
+      Toast("error", "Failed to send OTP");
+    }
+  };
+
+  return (
+    <div className="w-1/2">
+      <ToastContainer />
+      <div className="relative w-full max-w-md mx-auto p-8 bg-white/80 dark:bg-[#121212]/80 backdrop-blur-xl rounded-2xl border border-gray-100 dark:border-gray-800 shadow-lg flex flex-col items-center gap-6 mt-12">
+        <h1 className="text-2xl font-extrabold text-gray-900 dark:text-white">Reset Password</h1>
+        <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
+          Enter your email address below to receive an OTP to reset your password.
+        </p>
+        <form onSubmit={onSubmit} className="w-full flex flex-col gap-4">
+          <input
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            type="email"
+            placeholder="Email"
+            className="w-full px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#1e1e1e] text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/50"
+            required
+          />
+          <button
+            type="submit"
+            className="w-full bg-[var(--color-primary)] hover:bg-opacity-90 text-white font-medium py-3 rounded-lg transition-all duration-300 shadow-md shadow-[var(--color-primary)]/20"
+          >
+            Get OTP
+          </button>
+        </form>
+      </div>
+    </div >
   );
 };
 

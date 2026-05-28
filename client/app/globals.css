@@ -6,14 +6,16 @@
   .font-outline-2 {
     -webkit-text-stroke: 2px #808080;
   }
+
   .font-outline-4 {
     -webkit-text-stroke: 4px black;
   }
 }
 
 :root {
-  --color-primary-purple: #986eeb;
-  --color-primary-salmon: #fd9770;
+  --color-primary: #03045e;
+  --color-secondary: #0077b6;
+  --color-backdrop-light: #eeeeee;
 }
 
 body::-webkit-scrollbar {
@@ -25,7 +27,7 @@ body::-webkit-scrollbar-track {
 }
 
 body::-webkit-scrollbar-thumb {
-  background-color: #4a3aff;
+  background-color: var(--color-primary);
 }
 
 /* custom styling  */
@@ -39,23 +41,19 @@ body::-webkit-scrollbar-thumb {
 }
 
 .grad {
-  background: linear-gradient(
-    90deg,
-    var(--color-primary-purple),
-    var(--color-primary-salmon)
-  );
+  background: linear-gradient(90deg,
+      var(--color-primary),
+      var(--color-secondary));
   -webkit-text-fill-color: transparent;
   -webkit-background-clip: text;
 }
 
 .grad-bg {
-  background: var(--color-primary-purple);
+  background: var(--color-primary);
 
-  background: linear-gradient(
-    153deg,
-    var(--color-primary-purple),
-    var(--color-primary-salmon)
-  );
+  background: linear-gradient(153deg,
+      var(--color-primary),
+      var(--color-secondary));
 }
 
 @layer utilities {

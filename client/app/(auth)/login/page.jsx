@@ -2,7 +2,7 @@
 import Login from "@/Components/Login/Login";
 import React from "react";
 import { useTheme } from "@/Utils/ThemeContext";
-import Navbar from "@/Components/Navbar/Navbar2";
+import Navbar from "@/Components/Navbar/Navbar";
 
 export default function Page() {
   const { darkMode } = useTheme();

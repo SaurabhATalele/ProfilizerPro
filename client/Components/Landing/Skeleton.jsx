@@ -1,15 +1,22 @@
 const Skeleton = () => {
   return (
-    <div className="w-full grid grid-cols-3 gap-3 justify-around items-center">
+    <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 items-stretch">
       {[1, 2, 3].map((i) => (
-        <div className="h-80 flex flex-col flex-grow-0 items-center gap-4 rounded-md shadow-md p-4 dark:shadow-gray-500 bg-gray-50  ">
-          <div className="w-24 h-24 bg-gray-200 animate-pulse"></div>
-          <p className="text-lg bg-gray-200 h-7 w-full animate-pulse"></p>
-          <p className="text-sm bg-gray-200 w-full line-clamp-3 text-justify h-3 animate-pulse"></p>
-          <p className="text-sm bg-gray-200 w-full line-clamp-3 text-justify h-3 animate-pulse"></p>
-          <p className="text-sm bg-gray-200 w-full line-clamp-3 text-justify h-3 animate-pulse"></p>
-          <div>
-            <button className="bg-gray-200 text-white p-2 rounded-md text-sm w-20 h-10 animate-pulse"></button>
+        <div
+          key={i}
+          className="relative flex flex-col gap-4 rounded-2xl p-6 bg-white dark:bg-[#121212]/80 backdrop-blur-xl border border-gray-100 dark:border-gray-800 shadow-sm"
+        >
+          <div className="flex items-center gap-4">
+            <div className="w-14 h-14 shrink-0 bg-gray-200 dark:bg-gray-800 rounded-xl animate-pulse"></div>
+            <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded-md animate-pulse flex-1"></div>
+          </div>
+          <div className="flex flex-col gap-2 flex-1 mt-2">
+            <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded-md animate-pulse w-full"></div>
+            <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded-md animate-pulse w-5/6"></div>
+            <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded-md animate-pulse w-4/6"></div>
+          </div>
+          <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800">
+            <div className="w-full h-10 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse"></div>
           </div>
         </div>
       ))}

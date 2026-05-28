@@ -2,7 +2,7 @@
 import Contactus from "@/Components/Contactus/Contactus";
 import React from "react";
 import { useTheme } from "@/Utils/ThemeContext";
-import Navbar from "@/Components/Navbar/Navbar2";
+import Navbar from "@/Components/Navbar/Navbar";
 
 export default function Page() {
   const { darkMode } = useTheme();
