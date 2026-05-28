@@ -9,6 +9,7 @@ export const getAttemptedTests = async () => {
     headers: myHeaders,
     redirect: "follow",
   };
+  console.log("sending from getAttemptedTests.js", GET_ATTEMPTED_TEST);
 
   const response = await fetch(`${GET_ATTEMPTED_TEST}`, requestOptions);
   const data = await response.json();

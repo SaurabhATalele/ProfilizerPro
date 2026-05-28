@@ -5,7 +5,7 @@ import ViewTest from "@/Components/ViewTest/ViewTest";
 import Navbar from "@/Components/Navbar/Navbar";
 import ExamDash from "@/Components/examDash/ExamDash";
 
-const page = () => {
+const Page = () => {
   const pathname = usePathname();
   const id = pathname.split("/").filter((x) => x);
   const test = id[id.length - 1];

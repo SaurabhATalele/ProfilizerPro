@@ -1,80 +1,105 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useEffect } from "react";
+import { useState } from "react";
+import Skeleton from "./Skeleton";
 
 const TestProvide = () => {
   const [tests, setTests] = useState([]);
 
-  const getTests = async () => {
-    try {
-      const res = await axios.get("/api/v1/assignment");
-      console.log(res.data.data);
-      setTests(res.data.data.slice(0, 3));
-    } catch (error) {
-      console.log(error);
-    }
-  };
   useEffect(() => {
-    getTests();
-    console.log(tests);
+    (async () => {
+      try {
+        const res = await fetch(`/api/v1/assignment`, {
+          cache: "no-store",
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.data && data.data.length > 0) {
+            setTests(data.data.slice(0, 3));
+            return;
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch tests, using sample data");
+      }
+
+      // Sample data fallback
+      setTests([
+        {
+          _id: "sample1",
+          name: "Software Engineering Aptitude",
+          description: "Evaluate your problem-solving skills, logical reasoning, and basic algorithmic thinking required for software engineering roles.",
+          icon: "/LandingImage/tech.svg"
+        },
+        {
+          _id: "sample2",
+          name: "Logical Reasoning Assessment",
+          description: "Challenge your analytical thinking with patterns, sequences, and critical reasoning scenarios. Perfect for any analytical role.",
+          icon: "/LandingImage/Logical.svg"
+        },
+        {
+          _id: "sample3",
+          name: "General Cognitive Ability",
+          description: "A comprehensive test to measure your general learning aptitude, verbal ability, and quantitative reasoning.",
+          icon: "/LandingImage/GenAss.svg"
+        }
+      ]);
+    })();
   }, []);
   return (
-    <div className="w-3/4  bg-white  rounded-md flex flex-col items-center px-10 py-5 gap-10">
+    <div className="w-[90%] lg:w-3/4 xl:w-1/2 bg-white dark:bg-black rounded-md flex flex-col items-center px-5 md:px-10 py-5 gap-10">
       <div className="w-full flex justify-between items-end">
         <h1 className="text-[1.5rem] font-bold">Tests We provide </h1>
-        <Link href={"/"} className="font-light text-primary-light text-sm">
+        <Link
+          href={"/all-tests"}
+          className="font-light text-[var(--color-primary)] text-sm"
+        >
           Explore More
         </Link>
       </div>
-      {card(tests)}
+
+      {tests.length === 0 ? <Skeleton /> : <Card tests={tests} />}
     </div>
   );
 };
 
-const card = (tests) => {
+const Card = ({ tests }) => {
   return (
-    <div className="w-full grid grid-cols-3 gap-3 justify-around items-center">
+    <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 items-stretch">
       {tests &&
         tests.map((test) => (
-          <div className="h-80 flex flex-col flex-grow-0 items-center gap-4 rounded-md shadow-md p-4">
-            <Image
-              src={test.icon}
-              width={120}
-              height={120}
-              alt="General"
-              className="w-24 h-24"
-            />
-            <p className="font-bold text-lg ">{test.name}</p>
-            <p className="text-sm text-gray-500 line-clamp-3 text-justify w-full">
+          <div
+            key={test._id}
+            className="relative flex flex-col gap-4 rounded-2xl p-6 bg-white dark:bg-[#121212]/80 backdrop-blur-xl border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1"
+          >
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 shrink-0 bg-gray-50 dark:bg-gray-800 rounded-xl flex items-center justify-center p-2">
+                <Image
+                  src={test.icon}
+                  width={60}
+                  height={60}
+                  alt={test.name}
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              <h3 className="font-bold text-lg text-gray-900 dark:text-white leading-tight">
+                {test.name}
+              </h3>
+            </div>
+            <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-3 flex-1 mt-2 leading-relaxed">
               {test.description}
             </p>
-            <Link href={`/test/${test._id}`}>
-              <button className="bg-primary-light text-white p-2 rounded-md text-sm">
-                Attempt
-              </button>
-            </Link>
+            <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800">
+              <Link href={`/test/${test._id}`} className="w-full block">
+                <button className="w-full bg-[var(--color-primary)] hover:bg-opacity-90 text-white font-medium px-4 py-2.5 rounded-lg text-sm transition-all shadow-md shadow-[var(--color-primary)]/20 hover:shadow-lg hover:shadow-[var(--color-primary)]/40 flex items-center justify-center">
+                  Take Assessment
+                </button>
+              </Link>
+            </div>
           </div>
         ))}
-      {/* <div className="flex flex-col items-center w-80 gap-4 rounded-md shadow-md p-4">
-        <Image
-          src={"https://img.icons8.com/color/240/java-coffee-cup-logo--v1.png"}
-          width={120}
-          height={120}
-          alt="General"
-          className="w-24 h-24"
-        />
-        <p className="font-bold text-lg ">Java</p>
-        <p className="text-sm text-gray-500">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sint,
-          placeat ex eos sequi debitis, odit quasi quas libero expedita illum,
-          quisquam neque quod quibusdam eius.
-        </p>
-        <button className="bg-primary-light text-white p-2 rounded-md text-sm">
-          Attempt
-        </button>
-      </div> */}
     </div>
   );
 };

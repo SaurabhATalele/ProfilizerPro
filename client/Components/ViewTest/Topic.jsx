@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const topic = ({ name, minQuestions, maxQuestions, setSelectedTopics }) => {
+const Topic = ({ name, minQuestions, maxQuestions, setSelectedTopics }) => {
   const [isSelected, setIsSelected] = useState(false);
   const [questions, setQuestions] = useState(0);
 
@@ -28,7 +28,7 @@ const topic = ({ name, minQuestions, maxQuestions, setSelectedTopics }) => {
   };
 
   return (
-    <li className="flex flex-col gap-1">
+    <li className="flex flex-col gap-1 w-full">
       <div className="flex gap-3 items-center">
         <input
           type="checkbox"
@@ -66,4 +66,4 @@ const topic = ({ name, minQuestions, maxQuestions, setSelectedTopics }) => {
   );
 };
 
-export default topic;
+export default Topic;

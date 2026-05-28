@@ -3,9 +3,9 @@
 import Signup from "@/Components/Signup/Signup";
 import React from "react";
 import { useTheme } from "@/Utils/ThemeContext";
-import Navbar from "@/Components/Navbar/Navbar2";
+import Navbar from "@/Components/Navbar/Navbar";
 
-export default function page() {
+export default function Page() {
   const { darkMode } = useTheme();
 
   return (

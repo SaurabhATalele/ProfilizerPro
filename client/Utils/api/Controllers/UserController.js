@@ -1,7 +1,8 @@
 import User from "../Models/Users.js";
 import { transporter } from "./AssignmentController.js";
 import { NextResponse } from "next/server.js";
-import { headers } from "next/headers";
+import { headers, cookies } from "next/headers";
+import bcrypt from "bcryptjs";
 
 const registerUser = async (body) => {
   try {
@@ -45,21 +46,22 @@ const loginUser = async (body) => {
       );
     }
     const token = await data.GenerateToken();
-    console.log("token", token);
+    cookies().set("token", token);
     return NextResponse.json({ token }, { status: 200 });
   } catch (error) {
     console.log(error);
   }
 };
 
-const sendEmail = async (req, res) => {
+const sendEmail = async (email) => {
   try {
-    const email = req.body?.email;
+    console.log(email);
     const data = await User.findOne({ email });
     if (!data) {
-      res.status(404).json({ message: "User Not Found" });
+      return { status: 400, message: "User Not Found" };
     }
     const otp = generateOTP();
+    console.log("otp is", otp);
     const subject = "password reset";
     const text = `We have received your password reset request. Please find Your otp here:</br> ${otp}`;
     const mailOptions = {
@@ -70,10 +72,10 @@ const sendEmail = async (req, res) => {
     };
     await transporter.sendMail(mailOptions);
 
-    res.status(200).json({
-      message: `otp is ${otp}`,
-    });
-  } catch (error) {}
+    return { status: 200, message: "Email Sent", otp: otp };
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 function generateOTP() {
@@ -87,12 +89,32 @@ function generateOTP() {
   return OTP;
 }
 
+const changePassword = async (body) => {
+  try {
+    const { email, password } = body;
+    const data = await User.findOne({
+      email,
+    });
+    if (!data) {
+      return NextResponse.json({ message: "User Not Found" }, { status: 404 });
+    }
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(this.password, salt);
+    data.password = hashedPassword;
+    await data.save();
+    return NextResponse.json({ message: "Password Changed Successfully" });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const verifyUser = async (req, res) => {
   try {
     const headersList = headers();
     console.log(headersList.get("authorization"));
     const type = headersList.get("authorization").split(" ")[0];
-    const token = headersList.get("authorization").split(" ")[1];
+    let token = headersList.get("authorization").split(" ")[1];
+
     if (type !== "Bearer") {
       return NextResponse.json({ message: "Invalid Token" }, { status: 400 });
     }
@@ -103,4 +125,10 @@ const verifyUser = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, loginUser, sendEmail, verifyUser };
+module.exports = {
+  registerUser,
+  loginUser,
+  sendEmail,
+  verifyUser,
+  changePassword,
+};
