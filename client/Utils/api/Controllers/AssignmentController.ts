@@ -13,8 +13,8 @@ export const transporter = nodeMailer.createTransport({
   port: 465,
   secure: true,
   auth: {
-    user: process.env.EMAIL_ID,
-    pass: process.env.PASS_KEY,
+    user: process.env.EMAIL_ID || "",
+    pass: process.env.PASS_KEY || "",
   },
 });
 
@@ -90,12 +90,12 @@ export const updateAssignment = async (body: UpdateBody): Promise<{ message: str
 
 export const getAttemptedAssignments = async (_req: unknown): Promise<unknown> => {
   try {
-    const headersList = headers();
+    const headersList = await headers();
     const token = headersList.get("authorization")!.split(" ")[0];
     if (!token) {
       return NextResponse.json({ message: "Access denied" }, { status: 401 });
     }
-    let user: { email: string; [key: string]: unknown };
+    let user: { email: string;[key: string]: unknown };
     try {
       user = jwt.verify(token, SECRET_KEY as string) as { email: string };
     } catch (error) {

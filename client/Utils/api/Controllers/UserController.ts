@@ -30,7 +30,7 @@ interface ChangePasswordBody {
   password: string;
 }
 
-interface UserData {
+export interface UserData {
   isAdmin?: boolean;
   [key: string]: unknown;
 }
@@ -72,6 +72,9 @@ export const loginUser = async (body: LoginBody): Promise<NextResponse> => {
     console.log("Getting here");
     const email = body?.email;
     const password = body?.password;
+    if (!email || !password) {
+      return NextResponse.json({ message: "Email and password are required" }, { status: 400 });
+    }
     const data = await User.findOne({ email });
     if (!data) {
       return NextResponse.json({ message: "User Not Found" }, { status: 404 });
@@ -84,7 +87,10 @@ export const loginUser = async (body: LoginBody): Promise<NextResponse> => {
       );
     }
     const token = await data.GenerateToken();
-    cookies().set("token", token);
+    if (!token) {
+      return NextResponse.json({ message: "Token generation failed" }, { status: 500 });
+    }
+    (await cookies()).set("token", token);
     return NextResponse.json({ token }, { status: 200 });
   } catch (error) {
     console.log(error);
@@ -138,7 +144,7 @@ export const changePassword = async (body: ChangePasswordBody): Promise<NextResp
 
 export const verifyUser = async (..._args: unknown[]): Promise<UserData> => {
   try {
-    const headersList = headers();
+    const headersList = await headers();
     console.log(headersList.get("authorization"));
     const type = headersList.get("authorization")!.split(" ")[0];
     const token = headersList.get("authorization")!.split(" ")[1];
@@ -147,7 +153,8 @@ export const verifyUser = async (..._args: unknown[]): Promise<UserData> => {
       return { message: "Invalid Token" };
     }
     const data = await User.ValidateToken(token);
-    return data;
+    
+    return data as UserData;
   } catch (error) {
     console.log(error);
     return { message: "Error" };

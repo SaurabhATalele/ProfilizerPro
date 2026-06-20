@@ -1,5 +1,5 @@
 "use client";
-import React, { FC, useState, useEffect, ChangeEvent } from "react";
+import  { FC, useState, useEffect, ChangeEvent } from "react";
 import { Bar } from "react-chartjs-2";
 import { Line } from "react-chartjs-2";
 import {
@@ -126,7 +126,7 @@ const DashBoardView: FC<DashBoardViewProps> = ({ data }) => {
   const optionstotal = {
     maintainAspectRatio: true,
     plugins: {
-      legend: false as const,
+      legend: { display: false },
     },
     scales: scalesTotal,
   };
@@ -134,7 +134,7 @@ const DashBoardView: FC<DashBoardViewProps> = ({ data }) => {
   const optionsPerf = {
     maintainAspectRatio: true,
     plugins: {
-      legend: false as const,
+      legend: { display: false },
     },
     scales: scalesPerf,
   };
@@ -228,7 +228,7 @@ const DashBoardView: FC<DashBoardViewProps> = ({ data }) => {
   };
 
   if (data?.data)
-    Object.entries(data.data).forEach(([key, value]) => {
+    Object.entries(data.data).forEach(([_key, value]) => {
       if (value.assignmentName === active)
         value.attempts.map((ele) => {
           const date = new Date(ele.date);

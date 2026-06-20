@@ -1,5 +1,5 @@
 "use client";
-import React, { FC, useEffect, useState, useContext } from "react";
+import  { FC, useEffect, useState, useContext } from "react";
 import Image from "next/image";
 import TopicContext from "../../Utils/TestContext";
 import Topic from "./Topic";
@@ -44,11 +44,11 @@ const isEmptyObject = (obj: Record<string, unknown>): boolean => {
 
 const ViewTest: FC<ViewTestProps> = ({ test }) => {
   const [topic, setTopic] = useState<TopicData | null>(null);
-  const [user, setUser] = useState<User>({});
+  const [_user, setUser] = useState<User>({});
   const [subtopics, setSubtopics] = useState<SubTopic[]>([]);
   const [selectedTopics, setSelectedTopics] = useState<Record<string, string>>({});
-  const [topicState, setTopicState] = useState<boolean>(false);
-  const { topics, setTopics } = useContext(TopicContext) as TopicContextType;
+  const [_topicState, setTopicState] = useState<boolean>(false);
+  const {  setTopics } = useContext(TopicContext) as TopicContextType;
   const router = useRouter();
 
   useEffect(() => {

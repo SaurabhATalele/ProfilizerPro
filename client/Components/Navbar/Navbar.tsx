@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useLayoutEffect, FC } from "react";
+import { useState, useLayoutEffect, FC } from "react";
 import { useTheme } from "../../Utils/ThemeContext";
 import { Sun, Moon } from "lucide-react";
 import Link from "next/link";
@@ -125,9 +125,8 @@ const Navbar: FC = () => {
             >
               {/* Sliding circle */}
               <span
-                className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition-transform duration-300 flex items-center justify-center ${
-                  darkMode ? "translate-x-6" : "translate-x-0.5"
-                }`}
+                className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition-transform duration-300 flex items-center justify-center ${darkMode ? "translate-x-6" : "translate-x-0.5"
+                  }`}
               >
                 {!darkMode && (
                   <Sun className="w-3 h-3" />

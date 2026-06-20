@@ -1,7 +1,7 @@
 "use client";
 import { FC } from "react";
 import dynamic from "next/dynamic";
-import animationData from "./animations/animationSuccess";
+import animationData from "./animations/animationSuccess.json";
 import Link from "next/link";
 
 const Lottie = dynamic(() => import("react-lottie"), {

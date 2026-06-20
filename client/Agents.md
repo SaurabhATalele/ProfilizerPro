@@ -19,7 +19,7 @@ This ensures consistency across the codebase and serves as a reliable reference 
 - **Framework:** Next.js 14.2.3 with App Router
 - **Language:** TypeScript with path aliases (tsconfig.json)
 - **Styling:** Tailwind CSS 3.3.0 with custom color extensions
-- **UI Components:** NextUI, Flowbite React, Lucide React, React Icons
+- **UI Components:** NextUI, Flowbite  Lucide  React Icons
 - **State Management:** React Context API (ThemeContext, TestContext, UserContext)
 - **Backend Integration:** Fetch API and Axios
 - **Database:** MongoDB with Mongoose
@@ -130,7 +130,7 @@ All components must include the `"use client"` directive at the top:
 
 ```javascript
 "use client";
-import React, { useState, useLayoutEffect } from "react";
+import  { useState, useLayoutEffect } from "react";
 // ... other imports
 ```
 
@@ -143,7 +143,7 @@ import React, { useState, useLayoutEffect } from "react";
 5. Custom components (if any)
 
 ```typescript
-import React, { useState, useLayoutEffect } from "react";
+import  { useState, useLayoutEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useTheme } from "../../Utils/ThemeContext";
@@ -217,7 +217,7 @@ Use `FC` (FunctionComponent) from React for proper typing:
 
 ```typescript
 "use client";
-import React, { FC, useState } from "react";
+import  { FC, useState } from "react";
 
 interface NavbarProps {
   items?: string[];
@@ -421,7 +421,7 @@ Location: `/app/api/v1/{feature}/`
 
 ```typescript
 "use client";
-import React, { createContext, useState, useContext, ReactNode } from "react";
+import  { createContext, useState, useContext, ReactNode } from "react";
 
 interface ThemeContextType {
   darkMode: boolean;

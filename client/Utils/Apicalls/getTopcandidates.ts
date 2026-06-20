@@ -1,10 +1,21 @@
 import { GET_TOP_N_CANDIDATES } from "../constants";
 
 interface TestDetails {
-  [key: string]: unknown;
+  n: number;
+  id: string;
 }
 
-export const getTopCandidates = async (testDetails: TestDetails): Promise<unknown> => {
+interface TopCandidateItem {
+  _id: string;
+  name: string;
+  averageScore: number;
+}
+
+interface TopCandidatesResponse {
+  data: TopCandidateItem[];
+}
+
+export const getTopCandidates = async (testDetails: TestDetails): Promise<TopCandidatesResponse> => {
   const myHeaders = new Headers();
   myHeaders.append("Authorization", `${localStorage.getItem("token")}`);
 

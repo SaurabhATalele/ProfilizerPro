@@ -1,13 +1,12 @@
 import Organization from "../Models/Organizations";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
 interface RequestWithUser extends NextRequest {
   user?: { userId: string };
   params?: { id: string };
-  body?: unknown;
 }
 
-export const createOrganization = async (req: RequestWithUser, res: unknown): Promise<void> => {
+export const createOrganization = async (req: RequestWithUser, _res: unknown): Promise<void> => {
   try {
     const body = await req.json();
     const { name } = body;
@@ -20,7 +19,7 @@ export const createOrganization = async (req: RequestWithUser, res: unknown): Pr
   }
 };
 
-export const getOrganizations = async (_req: unknown, res: unknown): Promise<unknown> => {
+export const getOrganizations = async (_req: unknown, _res: unknown): Promise<unknown> => {
   try {
     const data = await Organization.find();
     return data;
@@ -30,7 +29,7 @@ export const getOrganizations = async (_req: unknown, res: unknown): Promise<unk
   }
 };
 
-export const deleteOrganization = async (req: RequestWithUser, res: unknown): Promise<void> => {
+export const deleteOrganization = async (req: RequestWithUser, _res: unknown): Promise<void> => {
   try {
     const body = await req.json();
     const _id = body.id;
@@ -41,7 +40,7 @@ export const deleteOrganization = async (req: RequestWithUser, res: unknown): Pr
   }
 };
 
-export const renameOrganization = async (req: RequestWithUser, res: unknown): Promise<void> => {
+export const renameOrganization = async (req: RequestWithUser, _res: unknown): Promise<void> => {
   try {
     const body = await req.json();
     const _id = body.id;

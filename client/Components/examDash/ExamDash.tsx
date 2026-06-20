@@ -1,5 +1,5 @@
 "use client";
-import React, { FC, useEffect, useState, useContext, Suspense, ChangeEvent } from "react";
+import  { FC, useEffect, useState, useContext, Suspense } from "react";
 import Button from "@/Components/examDash/Button";
 import axios from "axios";
 import { useRouter, usePathname } from "next/navigation";
@@ -23,12 +23,10 @@ interface TopicContextType {
 }
 
 const ExamDash: FC = () => {
-  const [topic, setTopic] = useState<string>("Python");
-  const [questions, setQuestions] = useState<Record<string, unknown>>({});
   const [ques, setQues] = useState<Question[]>([]);
   const [currentQuestion, setCurrentQuestion] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
-  const { topics, setTopics } = useContext(TopicContext) as TopicContextType;
+  const { topics } = useContext(TopicContext) as TopicContextType;
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [score, setScore] = useState<number>(0);
   const router = useRouter();

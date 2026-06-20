@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getCandidatesByMonths } from "@/Utils/api/Controllers/AssignmentController";
-import { verifyUser } from "@/Utils/api/Controllers/UserController";
+import { UserData, verifyUser } from "@/Utils/api/Controllers/UserController";
 
-export async function GET(req: NextRequest): Promise<NextResponse> {
+
+export async function GET(_req: NextRequest): Promise<NextResponse> {
   try {
-    const user = await verifyUser();
+    const user: UserData = await verifyUser();
     if (!user.isAdmin) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }

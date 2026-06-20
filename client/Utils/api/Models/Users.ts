@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Document, Model } from "mongoose";
 const Schema = mongoose.Schema;
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -6,7 +6,25 @@ import { SECRET_KEY } from "@/Utils/constants";
 
 const secret = SECRET_KEY;
 
-const User = new Schema(
+export interface IUser {
+  username: string;
+  email: string;
+  password: string;
+  isAdmin: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface IUserDocument extends IUser, Document {
+  isValidPassword(newPassword: string): Promise<boolean>;
+  GenerateToken(): Promise<string | undefined>;
+}
+
+export interface IUserModel extends Model<IUserDocument> {
+  ValidateToken(token: string): Promise<unknown>;
+}
+
+const UserSchema = new Schema<IUserDocument>(
   {
     username: {
       type: String,
@@ -32,7 +50,7 @@ const User = new Schema(
   },
 );
 
-User.pre("save", async function (next) {
+UserSchema.pre("save", async function (next) {
   try {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(this.password, salt);
@@ -43,7 +61,7 @@ User.pre("save", async function (next) {
   }
 });
 
-User.methods.isValidPassword = async function (newPassword: string): Promise<boolean> {
+UserSchema.methods.isValidPassword = async function (newPassword: string): Promise<boolean> {
   try {
     return await bcrypt.compare(newPassword, this.password);
   } catch (err) {
@@ -52,27 +70,27 @@ User.methods.isValidPassword = async function (newPassword: string): Promise<boo
   }
 };
 
-User.methods.GenerateToken = async function (): Promise<string | undefined> {
+UserSchema.methods.GenerateToken = async function (): Promise<string | undefined> {
   try {
     const userId = this._id;
     const email = this.email;
     const username = this.username;
     const isAdmin = this.isAdmin;
     const user = { userId, email, username, isAdmin };
-    return await jwt.sign(user, secret as string);
+    return jwt.sign(user, secret as string);
   } catch (err) {
     console.log(err);
     return undefined;
   }
 };
 
-User.statics.ValidateToken = async function (token: string): Promise<unknown> {
+UserSchema.statics.ValidateToken = function (token: string): unknown {
   try {
     console.log(token);
-    return await jwt.verify(token, secret as string);
-  } catch (error) {
+    return jwt.verify(token, secret as string);
+  } catch (_error) {
     return false;
   }
 };
 
-export default mongoose.models.User || mongoose.model("User", User);
+export default (mongoose.models.User || mongoose.model<IUserDocument, IUserModel>("User", UserSchema)) as IUserModel;

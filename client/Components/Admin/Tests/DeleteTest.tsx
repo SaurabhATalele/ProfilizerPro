@@ -1,5 +1,5 @@
 "use client";
-import React, { FC, useState } from "react";
+import  { FC, useState } from "react";
 import { Button, Modal } from "flowbite-react";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import Toast from "@/Utils/Toast";

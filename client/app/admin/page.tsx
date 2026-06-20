@@ -22,7 +22,7 @@ const Page: FC = () => {
     } else {
       const getUserHandler = async () => {
         const resp = await getUser();
-        if (resp === false) {
+        if (!resp) {
           localStorage.removeItem("token");
           return;
         }

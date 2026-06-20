@@ -1,5 +1,5 @@
 "use client";
-import React, { FC, useState } from "react";
+import  { FC, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ToastContainer } from "react-toastify";
 import Toast from "@/Utils/Toast";

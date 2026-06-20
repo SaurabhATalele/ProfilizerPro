@@ -1,5 +1,5 @@
 "use client";
-import React, { FC, useEffect, useState } from "react";
+import  { FC, useEffect, useState } from "react";
 
 import { IoIosArrowBack } from "react-icons/io";
 import { CgNotes } from "react-icons/cg";
@@ -38,9 +38,9 @@ const Dashboard: FC = () => {
   }, []);
 
   const getTests = async (): Promise<void> => {
-    const data = await getAttemptedTests();
-    console.log("dashboard", data);
-    if (data?.data.length > 0) setData(data);
+    const result = await getAttemptedTests();
+    console.log("dashboard", result);
+    if (result?.data && result.data.length > 0) setData(result);
   };
 
   return (

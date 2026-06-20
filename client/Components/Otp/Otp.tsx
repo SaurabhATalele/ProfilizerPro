@@ -1,5 +1,5 @@
 "use client";
-import React, { FC, useState, FormEvent } from "react";
+import  { FC, useState } from "react";
 import Image from "next/image";
 import Verify from "./Verify";
 import SendEmail from "./SendEmail";

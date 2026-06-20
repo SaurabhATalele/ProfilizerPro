@@ -1,6 +1,24 @@
 import { GET_ATTEMPTED_TEST } from "@/Utils/constants";
 
-export const getAttemptedTests = async (): Promise<unknown> => {
+interface AttemptedTestData {
+  data: Array<{
+    assignmentName: string;
+    attempts: Array<{
+      date: string;
+      score: number;
+      correct: number;
+      total: number;
+      questions: Array<{
+        _id: string;
+        question: string;
+        answer: string;
+        yourAnswer: string;
+      }>;
+    }>;
+  }>;
+}
+
+export const getAttemptedTests = async (): Promise<AttemptedTestData> => {
   const myHeaders = new Headers();
   myHeaders.append("Authorization", `${localStorage.getItem("token")}`);
 

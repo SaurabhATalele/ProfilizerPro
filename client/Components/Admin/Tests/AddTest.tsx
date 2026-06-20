@@ -1,5 +1,5 @@
 "use client";
-import React, { FC, useEffect, useState } from "react";
+import  { FC, useEffect, useState } from "react";
 import Modal from "./Modal";
 import DeleteTest from "./DeleteTest";
 import { ToastContainer } from "react-toastify";
@@ -20,7 +20,7 @@ const AddTest: FC = () => {
   const [tests, setTests] = useState<Test[]>([]);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [refresh, setRefresh] = useState<boolean>(false);
-  const [modalData, setModalData] = useState<Partial<Test>>({});
+  const [modalData, _setModalData] = useState<Partial<Test>>({});
 
   useEffect(() => {
     const getTests = async (): Promise<void> => {

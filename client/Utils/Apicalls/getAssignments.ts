@@ -1,6 +1,16 @@
 import { GET_ASSIGNMENTS } from "@/Utils/constants";
 
-export const getAssignments = async (): Promise<unknown> => {
+interface Assignment {
+  _id: string;
+  id: string;
+  name: string;
+}
+
+interface AssignmentsResponse {
+  data: Assignment[];
+}
+
+export const getAssignments = async (): Promise<AssignmentsResponse> => {
   const myHeaders = new Headers();
   myHeaders.append("Authorization", `${localStorage.getItem("token")}`);
 

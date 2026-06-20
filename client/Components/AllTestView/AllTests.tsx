@@ -1,5 +1,5 @@
 "use client";
-import React, { FC, useState, useEffect } from "react";
+import  { FC, useState, useEffect } from "react";
 import Card from "./Card";
 import axios from "axios";
 import Skeleton from "../Landing/Skeleton";

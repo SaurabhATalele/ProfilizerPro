@@ -1,5 +1,5 @@
 "use client";
-import React, { FC, useState, FormEvent } from "react";
+import  { FC, useState, FormEvent } from "react";
 import { ToastContainer } from "react-toastify";
 import Toast from "@/Utils/Toast";
 

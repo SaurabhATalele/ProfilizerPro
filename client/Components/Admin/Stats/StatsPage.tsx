@@ -1,5 +1,5 @@
 "use client";
-import React, { FC, useEffect, useState, ChangeEvent } from "react";
+import  { FC, useEffect, useState, ChangeEvent } from "react";
 import { getTopCandidates } from "@/Utils/Apicalls/getTopcandidates";
 import { getAssignments } from "@/Utils/Apicalls/getAssignments";
 import { getCandidatesAdmin } from "@/Utils/Apicalls/getCandidatesAdmin";
@@ -190,7 +190,7 @@ const StatsPage: FC = () => {
     });
 
     setPieData({
-      labels: [...new Set(data.message.map((item: CandidateDataItem) => item._id.test))],
+      labels: [...new Set(data.message.map((item: CandidateDataItem) => item._id.test))] as string[],
       datasets: [
         {
           label: "No of Candidates",

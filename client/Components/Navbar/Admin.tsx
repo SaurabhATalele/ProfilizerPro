@@ -8,7 +8,7 @@ import Image from "next/image";
 
 const AdminNavbar: FC = () => {
   const { darkMode, toggleDarkMode } = useTheme();
-  const [isLogin, setIsLogin] = useState<boolean>(false);
+  const [_isLogin, setIsLogin] = useState<boolean>(false);
 
   useEffect(() => {
     const cookie = getCookie("autToken");

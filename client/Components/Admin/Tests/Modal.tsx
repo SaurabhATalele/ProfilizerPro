@@ -1,5 +1,5 @@
 "use client";
-import React, { FC, useState } from "react";
+import  { FC, useState } from "react";
 import { Button, Modal } from "flowbite-react";
 
 interface Topic {
@@ -22,7 +22,7 @@ interface AddTestModalProps {
   setOpenModal: (value: boolean) => void;
 }
 
-const AddTest: FC<AddTestModalProps> = ({ data, setRefresh, openModal, setOpenModal }) => {
+const AddTest: FC<AddTestModalProps> = ({ data, openModal, setOpenModal }) => {
   const [topics, setTopics] = useState<Topic[]>(data.topics || []);
   const [testName, setTestName] = useState<string>(data.name || "");
   const [description, setDescription] = useState<string>(data.description || "");
