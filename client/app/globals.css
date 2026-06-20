@@ -16,6 +16,7 @@
   --color-primary: #03045e;
   --color-secondary: #0077b6;
   --color-backdrop-light: #eeeeee;
+  --color-dark-bg: #0C0C0C;
 }
 
 body::-webkit-scrollbar {
@@ -60,4 +61,20 @@ body::-webkit-scrollbar-thumb {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+
+/* View Transition for theme switching */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 9999;
 }
