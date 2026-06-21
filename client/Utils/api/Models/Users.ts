@@ -8,6 +8,7 @@ const secret = SECRET_KEY;
 
 export interface IUser {
   username: string;
+  name:string;
   email: string;
   password: string;
   isAdmin: boolean;
@@ -28,8 +29,11 @@ const UserSchema = new Schema<IUserDocument>(
   {
     username: {
       type: String,
-      required: true,
-      unique: true,
+      required: true
+    },
+    name:{
+      type:String,
+      required: false
     },
     email: {
       type: String,
@@ -52,6 +56,9 @@ const UserSchema = new Schema<IUserDocument>(
 
 UserSchema.pre("save", async function (next) {
   try {
+    if (!this.isModified("password")) {
+      return next();
+    }
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(this.password, salt);
     this.password = hashedPassword;

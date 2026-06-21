@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Space_Grotesk } from "next/font/google";
 import TestProvide from "./TestProvide";
 import clsx from "clsx";
-import { Brain, Lightbulb, MessageSquareMore } from "lucide-react";
+import { Brain, Lightbulb, MessageSquareMore, GraduationCap } from "lucide-react";
 
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
 
@@ -16,7 +16,7 @@ interface BenifitTileProps {
 
 const BenifitTile: FC<BenifitTileProps> = ({ Logo, testType, description }) => {
   return (
-    <div className="flex gap-4 border dark:border-gray-800 p-3 px-6 rounded-lg xl:w-1/3">
+    <div className="flex gap-4 border dark:border-gray-800 p-3 px-6 rounded-lg">
       <div className="flex flex-col gap-3">
         <p className="font-semibold flex gap-4 items-center">
           <div className="text-[var(--color-secondary)] font-light">
@@ -56,7 +56,7 @@ const Landing: FC = () => {
 
       <div className="w-[90%] lg:w-3/4 xl:w-1/2 flex flex-col gap-5">
         <h2 className="text-center font-bold text-[1.3rem]">Benifits of choosing us</h2>
-        <div className="flex flex-col xl:flex-row w-full gap-3 justify-between">
+        <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-3">
           <BenifitTile
             Logo=<Brain/>
             testType="AI Generated Tests"
@@ -71,6 +71,11 @@ const Landing: FC = () => {
             Logo= <Lightbulb/>
             testType="Roadmap Suggestions"
             description="Get guided suggestions for your learning journey, helping you stay on track and achieve your goals efficiently."
+          />
+          <BenifitTile
+            Logo= <GraduationCap/>
+            testType="Interview Preparation"
+            description="Prepare thoroughly for interviews with curated topic-wise questions, mock assessments, and performance tracking to boost your confidence."
           />
         </div>
       </div>

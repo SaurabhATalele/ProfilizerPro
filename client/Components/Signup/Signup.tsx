@@ -9,7 +9,8 @@ import { ToastContainer } from "react-toastify";
 import Toast from "@/Utils/Toast";
 
 interface UserForm {
-  username?: string;
+  username: string;
+  name:string;
   email: string;
   password: string;
   confirmPassword: string;
@@ -17,6 +18,8 @@ interface UserForm {
 
 const Signup: FC = () => {
   const [user, setUser] = useState<UserForm>({
+    username: "",
+    name:"",
     email: "",
     password: "",
     confirmPassword: "",
@@ -27,6 +30,10 @@ const Signup: FC = () => {
 
   const handleSignup = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
+    if (!user.username.trim()) {
+      Toast("error", "Username is required");
+      return;
+    }
     if (user.password.length < 8) {
       Toast("error", "Password should be atleast 8 characters long");
       return;
@@ -67,8 +74,19 @@ const Signup: FC = () => {
             <div>
               <input
                 type="text"
-                placeholder="Enter Name"
-                name="text"
+                placeholder="Name"
+                name="name"
+                value={user.name}
+                onChange={(e) => setUser({ ...user, name: e.target.value })}
+                className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all duration-300 text-sm dark:text-white"
+                required
+              />
+            </div>
+            <div>
+              <input
+                type="text"
+                placeholder="Enter Username"
+                name="UserName"
                 onChange={(e) => setUser({ ...user, username: e.target.value })}
                 className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all duration-300 text-sm dark:text-white"
               />

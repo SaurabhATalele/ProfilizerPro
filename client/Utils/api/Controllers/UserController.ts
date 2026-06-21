@@ -1,8 +1,8 @@
 import User from "../Models/Users";
 import { NextResponse } from "next/server";
 import { headers, cookies } from "next/headers";
-import bcrypt from "bcryptjs";
 import nodeMailer from "nodemailer";
+import { nameSchema, usernameSchema } from "@/Utils/validation/profileSchemas";
 
 const transporter = nodeMailer.createTransport({
   host: "smtp.gmail.com",
@@ -16,6 +16,7 @@ const transporter = nodeMailer.createTransport({
 
 interface RegisterBody {
   email: string;
+  name:string;
   password: string;
   username: string;
 }
@@ -46,7 +47,7 @@ function generateOTP(): string {
 
 export const registerUser = async (body: RegisterBody): Promise<NextResponse> => {
   try {
-    const { email, password, username } = body;
+    const { email, password, username, name } = body;
     const isuser = await User.findOne({ email });
     if (isuser) {
       return NextResponse.json(
@@ -54,7 +55,7 @@ export const registerUser = async (body: RegisterBody): Promise<NextResponse> =>
         { status: 400 },
       );
     }
-    const user = new User({ email, password, username });
+    const user = new User({ email, password, username, name });
     await user.save();
     return NextResponse.json(
       { message: "User Registered Successfully" },
@@ -131,14 +132,54 @@ export const changePassword = async (body: ChangePasswordBody): Promise<NextResp
     if (!data) {
       return NextResponse.json({ message: "User Not Found" }, { status: 404 });
     }
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-    data.password = hashedPassword;
+    data.password = password;
     await data.save();
     return NextResponse.json({ message: "Password Changed Successfully" });
   } catch (error) {
     console.log(error);
     return NextResponse.json({ message: "Error" }, { status: 500 });
+  }
+};
+
+export const changeUserPassword = async (
+  userId: string,
+  oldPassword: string,
+  newPassword: string
+): Promise<NextResponse> => {
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return NextResponse.json({ message: "User Not Found" }, { status: 404 });
+    }
+
+    const isValid = await user.isValidPassword(oldPassword);
+    if (!isValid) {
+      return NextResponse.json(
+        { message: "Old password is incorrect" },
+        { status: 403 }
+      );
+    }
+
+    if (newPassword === oldPassword) {
+      return NextResponse.json(
+        { message: "New password must be different from current password" },
+        { status: 400 }
+      );
+    }
+
+    user.password = newPassword;
+    await user.save();
+
+    return NextResponse.json(
+      { message: "Password changed successfully" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json(
+      { message: "An error occurred. Please try again." },
+      { status: 500 }
+    );
   }
 };
 
@@ -158,5 +199,60 @@ export const verifyUser = async (..._args: unknown[]): Promise<UserData> => {
   } catch (error) {
     console.log(error);
     return { message: "Error" };
+  }
+};
+
+export const updateUserProfile = async (
+  userId: string,
+  updates: { name?: string; username?: string }
+): Promise<NextResponse> => {
+  try {
+    const updateObj: Record<string, string> = {};
+
+    if (updates.name !== undefined) {
+      const nameResult = nameSchema.safeParse(updates.name);
+      if (!nameResult.success) {
+        return NextResponse.json(
+          { message: nameResult.error.errors[0].message, field: "name" },
+          { status: 400 }
+        );
+      }
+      updateObj.name = nameResult.data;
+    }
+
+    if (updates.username !== undefined) {
+      const usernameResult = usernameSchema.safeParse(updates.username);
+      if (!usernameResult.success) {
+        return NextResponse.json(
+          { message: usernameResult.error.errors[0].message, field: "username" },
+          { status: 400 }
+        );
+      }
+      const trimmedUsername = usernameResult.data;
+
+      const existing = await User.findOne({
+        username: { $regex: new RegExp(`^${trimmedUsername}$`, "i") },
+        _id: { $ne: userId },
+      });
+      if (existing) {
+        return NextResponse.json(
+          { message: "Username is already taken" },
+          { status: 409 }
+        );
+      }
+      updateObj.username = trimmedUsername;
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(userId, updateObj, { new: true }).select("-password");
+    return NextResponse.json(
+      { message: "Profile updated successfully", user: updatedUser },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json(
+      { message: "An error occurred. Please try again." },
+      { status: 500 }
+    );
   }
 };

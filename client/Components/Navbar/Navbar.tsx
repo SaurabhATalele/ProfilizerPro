@@ -54,7 +54,7 @@ const Navbar: FC = () => {
         </div>
 
         <ul
-          className={`${isMenuOpen ? "flex" : "hidden"} md:flex flex-col md:flex-row gap-6 h-auto md:h-full items-center absolute md:relative top-20 md:top-0 left-0 w-full md:w-auto bg-white/98 dark:bg-[#121212]/98 md:bg-transparent md:dark:bg-transparent py-6 md:py-0 border-b md:border-none border-[#00000010] dark:border-[#ffffff10]`}
+          className={`${isMenuOpen ? "flex" : "hidden"} md:flex flex-col md:flex-row gap-6 h-auto md:h-full items-center absolute md:relative top-16 md:top-0 left-0 w-full md:w-auto bg-white dark:bg-[#121212] md:bg-transparent md:dark:bg-transparent py-6 md:py-0 border-b md:border-none border-[#00000010] dark:border-[#ffffff10] shadow-lg md:shadow-none z-40`}
         >
           <li>
             <Link href={"/"} className={linkStyle}>
@@ -150,7 +150,7 @@ const Navbar: FC = () => {
                       Dashboard
                     </Link>
                     <Link
-                      href="/dashboard"
+                      href="/profile"
                       onClick={() => setProfileOpen(false)}
                       className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                     >
