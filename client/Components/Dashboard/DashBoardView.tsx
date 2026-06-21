@@ -241,7 +241,7 @@ const DashBoardView: FC<DashBoardViewProps> = ({ data }) => {
   return (
     <div className=" w-5/6 p-5 flex flex-col h-screen">
       <h1 className="text-xl font-bold">Welcome to ProfilizerPro Dashboard</h1>
-      <p>Here you can see your performance in the tests you have attempted</p>
+      <p className="text-sm">Here you can see your performance in the tests you have attempted</p>
       <div className=" flex gap-3 my-10">
         <select
           name="testname"

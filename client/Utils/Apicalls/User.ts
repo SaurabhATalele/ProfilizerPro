@@ -1,3 +1,4 @@
+import { getCookie } from "cookies-next";
 import { LOGIN_API, REGISTER_API, VERIFY_USER } from "../constants";
 
 interface LoginData {
@@ -54,8 +55,7 @@ export const logout = async (): Promise<void> => {
 
 export const getUser = async (): Promise<Response> => {
   const myHeaders = new Headers();
-  myHeaders.append("Authorization", `Bearer ${localStorage.getItem("token")}`);
-  console.log(myHeaders, "from user.ts");
+  myHeaders.append("Authorization", `Bearer ${getCookie("token")}`);
 
   const requestOptions: RequestInit = {
     method: "GET",

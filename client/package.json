@@ -13,11 +13,13 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@ai-sdk/google": "^1.0.0",
     "@nextui-org/react": "^2.2.9",
     "@tailwindcss/line-clamp": "^0.4.4",
     "@types/bcryptjs": "^3.0.0",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/nodemailer": "^8.0.1",
+    "ai": "^4.0.0",
     "axios": "^1.6.7",
     "bcryptjs": "^2.4.3",
     "chart.js": "^4.4.2",
@@ -37,7 +39,8 @@
     "react-loader-spinner": "^6.1.6",
     "react-lottie": "^1.2.4",
     "react-otp-input": "^3.1.1",
-    "react-toastify": "^10.0.4"
+    "react-toastify": "^10.0.4",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/node": "^26.0.0",

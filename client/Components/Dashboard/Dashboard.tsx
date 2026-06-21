@@ -1,12 +1,15 @@
 "use client";
-import  { FC, useEffect, useState } from "react";
-
-import { IoIosArrowBack } from "react-icons/io";
-import { CgNotes } from "react-icons/cg";
-import { RxDashboard } from "react-icons/rx";
-import { MdOutlineBallot } from "react-icons/md";
-import { IoIosLogOut } from "react-icons/io";
+import { FC, useEffect, useState } from "react";
 import Link from "next/link";
+import {
+  LayoutDashboard,
+  ClipboardList,
+  Compass,
+  ListChecks,
+  Home,
+  LogOut,
+} from "lucide-react";
+import { useTheme } from "@/Utils/ThemeContext";
 import { getAttemptedTests } from "@/Utils/Apicalls/GetAttemptedTests";
 import DashBoardView from "./DashBoardView";
 import TestsAttempted from "./TestsAttempted";
@@ -30,6 +33,7 @@ interface AttemptedTestData {
 }
 
 const Dashboard: FC = () => {
+  const { darkMode } = useTheme();
   const [active, setActive] = useState<number>(0);
   const [data, setData] = useState<AttemptedTestData | null>(null);
 
@@ -39,56 +43,87 @@ const Dashboard: FC = () => {
 
   const getTests = async (): Promise<void> => {
     const result = await getAttemptedTests();
-    console.log("dashboard", result);
     if (result?.data && result.data.length > 0) setData(result);
   };
 
+  const itemBase =
+    "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer w-full";
+  const itemInactive = darkMode
+    ? "text-gray-400 hover:text-white hover:bg-gray-800/60"
+    : "text-gray-600 hover:text-gray-900 hover:bg-gray-100";
+  const itemActive = darkMode
+    ? "bg-[var(--color-secondary)]/15 text-[var(--color-secondary)]"
+    : "bg-[var(--color-primary)]/10 text-[var(--color-primary)]";
+
+  const sectionLabel = `px-3 pt-5 pb-2 text-[11px] font-semibold uppercase tracking-wider ${
+    darkMode ? "text-gray-500" : "text-gray-400"
+  }`;
+  const divider = darkMode ? "border-gray-800" : "border-gray-200";
+
   return (
-    <>
-      <div className="min-w-screen max-w-screen h-screen flex flex-row justify-end">
-        {/* the sidebar of the dashboard page  */}
-        <div className=" w-1/6 bg-primary-light min-h-screen fixed left-0">
-          <Link href={"/"} className="flex items-center mx-5 h-24 text-white">
-            <IoIosArrowBack className="text-white text-xl " />
-            <span className="font-normal text-md">Home</span>
+    <div className="min-w-screen max-w-screen  flex flex-row justify-end">
+      {/* Sidebar */}
+      <aside
+        className={`w-64 min-h-screen fixed left-0 top-0 pt-16 flex flex-col border-r ${
+          darkMode
+            ? "bg-[#0c0c0c] border-gray-800"
+            : "bg-white border-gray-200"
+        }`}
+      >
+
+        {/* Navigation */}
+        <nav className="flex-1 overflow-y-auto px-3 py-3">
+          {/* Quick links */}
+          <Link href="/" className={`${itemBase} ${itemInactive}`}>
+            <Home className="w-4 h-4 shrink-0" />
+            Home
           </Link>
 
-          <ul className=" flex flex-col gap-5">
-            <li
-              onClick={() => setActive(0)}
-              className={` px-3 py-2  text-md flex gap-2 items-center ${active === 0 ? "bg-white text-primary-light" : "text-white"}`}
-            >
-              <RxDashboard className="2xl:text-xl" /> <span>Dashboard</span>
-            </li>
-            <li
-              onClick={() => setActive(1)}
-              className={` px-3 py-2  text-md flex gap-2 items-center ${active === 1 ? "bg-white text-primary-light" : "text-white"}`}
-            >
-              <CgNotes className="text-xl" /> <span>Tests Attempted</span>
-            </li>
-            <li
-              onClick={() => setActive(2)}
-              className={` px-3 py-2  text-md flex gap-2 items-center ${active === 2 ? "bg-white text-primary-light" : "text-white"}`}
-            >
-              <Link href={"/all-tests"} className="flex gap-2 items-center">
-                <MdOutlineBallot className="text-xl" /> <span>All Tests </span>
-              </Link>
-            </li>
-          </ul>
+          {/* Overview section */}
+          <p className={sectionLabel}>Overview</p>
+          <button onClick={() => setActive(0)} className={`${itemBase} ${active === 0 ? itemActive : itemInactive}`}>
+            <LayoutDashboard className="w-4 h-4 shrink-0" />
+            Dashboard
+          </button>
+          <button onClick={() => setActive(1)} className={`${itemBase} ${active === 1 ? itemActive : itemInactive}`}>
+            <ClipboardList className="w-4 h-4 shrink-0" />
+            Tests Attempted
+          </button>
 
+          {/* Assessments section */}
+          <p className={sectionLabel}>Assessments</p>
+          <Link href="/all-tests" className={`${itemBase} ${itemInactive}`}>
+            <ListChecks className="w-4 h-4 shrink-0" />
+            All Tests
+          </Link>
+          <Link href="/explore" className={`${itemBase} ${itemInactive}`}>
+            <Compass className="w-4 h-4 shrink-0" />
+            Explore
+          </Link>
+        </nav>
+
+        {/* Footer / Logout */}
+        <div className={`px-3 py-4 border-t ${divider}`}>
           <Link
-            href={"/logout"}
-            className="text-white flex gap-2 mx-5 items-center absolute bottom-5"
+            href="/logout"
+            className={`${itemBase} ${
+              darkMode
+                ? "text-gray-400 hover:text-red-400 hover:bg-red-500/10"
+                : "text-gray-600 hover:text-red-600 hover:bg-red-50"
+            }`}
           >
-            <IoIosLogOut className="text-2xl" /> Logout
+            <LogOut className="w-4 h-4 shrink-0" />
+            Logout
           </Link>
         </div>
+      </aside>
 
-        {/* main content of the dashboard page  */}
+      {/* Main content */}
+      <main className="pt-20 flex-1 ml-64  bg-white text-black dark:bg-black dark:text-white">
         {active === 0 && <DashBoardView data={data} />}
         {active === 1 && <TestsAttempted data={data} />}
-      </div>
-    </>
+      </main>
+    </div>
   );
 };
 

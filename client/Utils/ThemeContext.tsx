@@ -24,6 +24,9 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
 
   useEffect(() => {
     localStorage.setItem("theme", darkMode ? "dark" : "light");
+    // Keep the <html> element's class in sync so the theme applies globally
+    // and survives refreshes (works together with the blocking script in layout).
+    document.documentElement.classList.toggle("dark", darkMode);
   }, [darkMode]);
 
   const toggleDarkMode = (event?: React.MouseEvent) => {

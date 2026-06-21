@@ -3,6 +3,7 @@ import  { FC, useState } from "react";
 import { Button, Modal } from "flowbite-react";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import Toast from "@/Utils/Toast";
+import { Trash } from "lucide-react";
 
 interface DeleteTestProps {
   id: string;
@@ -31,12 +32,7 @@ const DeleteTest: FC<DeleteTestProps> = ({ id, refresh, setRefresh }) => {
     <>
       <div className=" relative flex  justify-center  items-center">
         <Button onClick={() => setOpenDeleteBox(true)}>
-          <img
-            width="24"
-            height="24"
-            src="https://img.icons8.com/fluency-systems-regular/48/ff0000/filled-trash.png"
-            alt="filled-trash"
-          />
+          <Trash className="text-red-600 h-4"/>
         </Button>
         <Modal
           show={openDeleteBox}

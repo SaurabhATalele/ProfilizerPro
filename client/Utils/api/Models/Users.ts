@@ -86,7 +86,6 @@ UserSchema.methods.GenerateToken = async function (): Promise<string | undefined
 
 UserSchema.statics.ValidateToken = function (token: string): unknown {
   try {
-    console.log(token);
     return jwt.verify(token, secret as string);
   } catch (_error) {
     return false;

@@ -240,7 +240,7 @@ const StatsPage: FC = () => {
 
   return (
     <div className=" flex flex-col gap-10 w-3/4">
-      <h1 className="text-xl text-center font-medium">Admin Dashboard</h1>
+      <h1 className="text-xl text-center font-medium dark:text-white">Admin Dashboard</h1>
       <div className="flex max-h-96 items-center">
         <div className="flex flex-col w-1/2 gap-3">
           <div className="flex flex-col gap-2">

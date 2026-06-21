@@ -4,6 +4,8 @@ import { FC, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import animationData from "./animations/logoutAnimation.json";
+import { deleteCookie } from "cookies-next";
+import { useUser } from "@/Utils/UserContext";
 
 const Lottie = dynamic(() => import("react-lottie"), {
   ssr: false,
@@ -12,6 +14,7 @@ const Lottie = dynamic(() => import("react-lottie"), {
 const Page: FC = () => {
   const router = useRouter();
   const [mounted, setMounted] = useState<boolean>(false);
+  const { logoutUser } = useUser();
 
   const defaultOptions = {
     loop: false,
@@ -23,13 +26,15 @@ const Page: FC = () => {
   };
 
   useEffect(() => {
+    deleteCookie("token");
     localStorage.removeItem("token");
+    logoutUser();
     setMounted(true);
     const timer = setTimeout(() => {
       router.push("/login");
     }, 1200);
     return () => clearTimeout(timer);
-  }, [router]);
+  }, [router, logoutUser]);
 
   return (
     <div className="w-screen min-h-screen flex flex-col items-center justify-center bg-white/80 dark:bg-[#121212]/80 backdrop-blur-xl">

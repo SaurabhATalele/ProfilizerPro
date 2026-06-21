@@ -1,10 +1,11 @@
 "use client";
-import  { FC, useEffect, useState, useContext } from "react";
+import { FC, useEffect, useState, useContext } from "react";
 import Image from "next/image";
 import TopicContext from "../../Utils/TestContext";
 import Topic from "./Topic";
 import { useRouter } from "next/navigation";
 import { getUser } from "@/Utils/Apicalls/User";
+import { ListChecks, ArrowRight } from "lucide-react";
 
 interface SubTopic {
   _id: string;
@@ -97,38 +98,51 @@ const ViewTest: FC<ViewTestProps> = ({ test }) => {
       alert("Please select at least one topic");
     else {
       setTopics({ topic: topic?.name || "", subtopics: selectedTopics });
-      console.log("ebsdbksdf");
       router.push(`/test/attempt/${test}`);
     }
   };
 
-  return (
-    <div className="pt-24 w-3/4 flex justify-center flex-col">
-      {topic && (
-        <div className="flex justify-center gap-5">
-          <div className="w-full h-fit gap-5 p-5 max-w-lg bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-            <div className="flex flex-col items-center pb-10">
-              <Image
-                width={150}
-                height={150}
-                alt="Technology Icon"
-                className="w-24 h-24 mb-3 rounded-full shadow-lg"
-                src={topic.icon}
-              />
+  const hasSelection = Object.keys(selectedTopics).length > 0;
 
-              <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">
+  return (
+    <div className="w-full min-h-[calc(100vh-80px)] mt-20 flex justify-center px-5 py-10">
+      {topic && (
+        <div className="w-full max-w-2xl">
+          <div className="bg-white dark:bg-[#121212]/80 backdrop-blur-xl border border-gray-200 dark:border-gray-800 rounded-2xl shadow-xl overflow-hidden">
+            {/* Header banner */}
+            <div className="relative px-8 pt-10 pb-8 text-center border-b border-gray-100 dark:border-gray-800 bg-gradient-to-b from-[var(--color-primary)]/5 to-transparent dark:from-[var(--color-secondary)]/10">
+              <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-white dark:bg-gray-800 shadow-md ring-1 ring-gray-100 dark:ring-gray-700 mb-4 p-3">
+                <Image
+                  width={80}
+                  height={80}
+                  alt={topic.name}
+                  className="w-full h-full object-contain"
+                  src={topic.icon}
+                />
+              </div>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
                 {topic.name}
-              </h5>
-              <span className="text-sm text-gray-500 dark:text-gray-400">
+              </h1>
+              <p className="mt-2 text-sm text-gray-500 dark:text-gray-400 max-w-md mx-auto leading-relaxed">
                 {topic.description}
-              </span>
+              </p>
             </div>
 
-            <div className="m-3 overflow-y-auto flex flex-col gap-3 relative overflow-auto">
-              <h2 className="text-xl font-semibold">
-                Select topics of your choice
-              </h2>
-              <ul className="flex flex-col gap-5">
+            {/* Topic selection */}
+            <div className="px-8 py-6">
+              <div className="flex items-center gap-2 mb-5">
+                <ListChecks className="w-5 h-5 text-[var(--color-primary)] dark:text-[var(--color-secondary)]" />
+                <h2 className="text-base font-semibold text-gray-900 dark:text-white">
+                  Select your topics
+                </h2>
+                {hasSelection && (
+                  <span className="ml-auto text-xs font-medium px-2.5 py-1 rounded-full bg-[var(--color-primary)]/10 dark:bg-[var(--color-secondary)]/15 text-[var(--color-primary)] dark:text-[var(--color-secondary)]">
+                    {Object.keys(selectedTopics).length} selected
+                  </span>
+                )}
+              </div>
+
+              <ul className="flex flex-col gap-3 max-h-[40vh] overflow-y-auto pr-1">
                 {subtopics &&
                   subtopics.map((topicItem) => (
                     <Topic
@@ -141,12 +155,23 @@ const ViewTest: FC<ViewTestProps> = ({ test }) => {
                   ))}
               </ul>
             </div>
-            <button
-              className="my-5 bg-primary-light w-fit px-4 py-2 mx-auto text-white text-sm p-2 rounded-md  disabled:bg-gray-400"
-              onClick={() => handleButtonClick()}
-            >
-              Start Test
-            </button>
+
+            {/* Footer action */}
+            <div className="px-8 py-5 border-t border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/30 flex items-center justify-between">
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                {hasSelection
+                  ? "You're ready to begin."
+                  : "Select at least one topic to start."}
+              </p>
+              <button
+                onClick={handleButtonClick}
+                disabled={!hasSelection}
+                className="inline-flex items-center gap-2 bg-[var(--color-primary)] dark:bg-[var(--color-secondary)] text-white font-medium text-sm px-5 py-2.5 rounded-lg shadow-md shadow-[var(--color-primary)]/20 dark:shadow-[var(--color-secondary)]/20 transition-all duration-200 hover:opacity-90 hover:-translate-y-0.5 disabled:opacity-40 disabled:cursor-not-allowed disabled:translate-y-0"
+              >
+                Start Test
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
       )}

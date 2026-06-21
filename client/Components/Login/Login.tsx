@@ -7,29 +7,35 @@ import Toast from "@/Utils/Toast";
 import { login } from "@/Utils/Apicalls/Login";
 import Image from "next/image";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { getCookie } from "cookies-next";
+import { useUser } from "@/Utils/UserContext";
 
 const Login: FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const router = useRouter();
+  const { refreshUser } = useUser();
 
   useEffect(() => {
-    if (localStorage.getItem("token")) {
+    const token = getCookie("token");
+    if (token) {
       router.push("/");
     }
   }, [router]);
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-
+    console.log(email,password)
     try {
       const res = await login({ email, password });
+      console.log(res)
 
       if (res.status === 200) {
         const data = await res.json();
         console.log(data);
         localStorage.setItem("token", data.token);
+        await refreshUser();
         Toast("success", "Login Success...");
         router.push("/");
       } else if (res.status === 404) {

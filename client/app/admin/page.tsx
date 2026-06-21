@@ -4,6 +4,7 @@ import AdminNavbar from "@/Components/Navbar/Admin";
 import AdminDashboard from "@/Components/Admin/DashBoard";
 import { useRouter } from "next/navigation";
 import { getUser } from "@/Utils/Apicalls/User";
+import { useTheme } from "@/Utils/ThemeContext";
 
 interface UserData {
   username?: string;
@@ -12,12 +13,13 @@ interface UserData {
 }
 
 const Page: FC = () => {
+  const { darkMode } = useTheme();
   const [user, setUser] = useState<UserData>({});
   const router = useRouter();
 
   useEffect(() => {
-    const cookie = localStorage.getItem("token");
-    if (!cookie) {
+    const token = localStorage.getItem("token");
+    if (!token) {
       router.push("/login");
     } else {
       const getUserHandler = async () => {
@@ -42,13 +44,15 @@ const Page: FC = () => {
   }, [router]);
 
   return (
-    <div className="max-w-screen flex justify-center py-24">
-      {user.isAdmin && (
-        <>
-          <AdminNavbar />
-          <AdminDashboard />
-        </>
-      )}
+    <div className={`${darkMode ? "dark" : ""}`}>
+      <div className="max-w-screen min-h-screen flex justify-center bg-white text-black dark:bg-black dark:text-white">
+        {user.isAdmin && (
+          <>
+            <AdminNavbar />
+            <AdminDashboard />
+          </>
+        )}
+      </div>
     </div>
   );
 };

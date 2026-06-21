@@ -32,23 +32,23 @@ const TestsAttempted: FC<TestsAttemptedProps> = ({ data }) => {
   return (
     <div className={" w-5/6 p-5 flex flex-col h-screen justify-between"}>
       {data?.data ? (
-        <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-          <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <div className="relative overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-800 shadow-md">
+          <table className="w-full text-sm text-left rtl:text-right text-gray-600 dark:text-gray-300">
+            <thead className="text-xs uppercase tracking-wider bg-gray-50 text-gray-500 dark:bg-[#141414] dark:text-gray-400 border-b border-gray-200 dark:border-gray-800">
               <tr>
-                <th scope="col" className="px-6 py-3">
+                <th scope="col" className="px-6 py-4 font-semibold">
                   Test name
                 </th>
-                <th scope="col" className="px-6 py-3">
+                <th scope="col" className="px-6 py-4 font-semibold">
                   Correct
                 </th>
-                <th scope="col" className="px-6 py-3">
+                <th scope="col" className="px-6 py-4 font-semibold">
                   Total
                 </th>
-                <th scope="col" className="px-6 py-3">
+                <th scope="col" className="px-6 py-4 font-semibold">
                   Score
                 </th>
-                <th scope="col" className="px-6 py-3">
+                <th scope="col" className="px-6 py-4">
                   <span className="sr-only">Action</span>
                 </th>
               </tr>
@@ -60,7 +60,7 @@ const TestsAttempted: FC<TestsAttemptedProps> = ({ data }) => {
                     return (
                       <tr
                         key={`${test.assignmentName}-${index}`}
-                        className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                        className="bg-white border-b border-gray-200 last:border-0 hover:bg-gray-50 dark:bg-[#0C0C0C] dark:border-gray-800 dark:hover:bg-[#141414] transition-colors"
                       >
                         <th
                           scope="row"
@@ -70,7 +70,11 @@ const TestsAttempted: FC<TestsAttemptedProps> = ({ data }) => {
                         </th>
                         <td className="px-6 py-4">{item.correct}</td>
                         <td className="px-6 py-4">{item.total}</td>
-                        <td className="px-6 py-4">{item.score}%</td>
+                        <td className="px-6 py-4">
+                          <span className="font-semibold text-[var(--color-primary)]">
+                            {item.score}%
+                          </span>
+                        </td>
                         <td className="px-6 py-4 text-right">
                           <Modal data={item} />
                         </td>
@@ -82,7 +86,9 @@ const TestsAttempted: FC<TestsAttemptedProps> = ({ data }) => {
           </table>
         </div>
       ) : (
-        "No tests attempted yet!"
+        <div className="text-gray-500 dark:text-gray-400">
+          No tests attempted yet!
+        </div>
       )}
     </div>
   );

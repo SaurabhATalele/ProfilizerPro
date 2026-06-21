@@ -4,21 +4,24 @@ import Image from "next/image";
 import { Space_Grotesk } from "next/font/google";
 import TestProvide from "./TestProvide";
 import clsx from "clsx";
+import { Brain, Lightbulb, MessageSquareMore } from "lucide-react";
 
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
 
 interface BenifitTileProps {
-  ImageSource: string;
+  Logo: React.ReactElement;
   testType: string;
   description: string;
 }
 
-const BenifitTile: FC<BenifitTileProps> = ({ ImageSource, testType, description }) => {
+const BenifitTile: FC<BenifitTileProps> = ({ Logo, testType, description }) => {
   return (
     <div className="flex gap-4 border dark:border-gray-800 p-3 px-6 rounded-lg xl:w-1/3">
       <div className="flex flex-col gap-3">
         <p className="font-semibold flex gap-4 items-center">
-          <Image src={ImageSource} width={80} height={80} alt="bot" className="w-10 h-10" />
+          <div className="text-[var(--color-secondary)] font-light">
+          {Logo}
+          </ div>
           {testType}
         </p>
         <p className={clsx("text-sm text-justify", spaceGrotesk.className)}>
@@ -36,7 +39,7 @@ const Landing: FC = () => {
         <div className="flex flex-col w-full md:w-3/4 lg:w-1/2 gap-3 text-center lg:text-left items-center lg:items-start">
           <h1 className="text-[2.5rem] lg:text-[4rem] font-bold leading-[3rem] lg:leading-[3.5rem]">
             Take Online{" "}
-            <span className="grad dark:text-primary-dark">Assessments</span>
+            <span className="text-[var(--color-secondary)]">Assessments</span>
           </h1>
           <p className={clsx("text-[1.2rem] text-gray-500 dark:text-white", spaceGrotesk.className)}>
             Get ready for your placements with us
@@ -55,17 +58,17 @@ const Landing: FC = () => {
         <h2 className="text-center font-bold text-[1.3rem]">Benifits of choosing us</h2>
         <div className="flex flex-col xl:flex-row w-full gap-3 justify-between">
           <BenifitTile
-            ImageSource="/LandingImage/Bot.png"
+            Logo=<Brain/>
             testType="AI Generated Tests"
             description="Create customized tests using advanced AI algorithms to meet your specific needs and learning goals."
           />
           <BenifitTile
-            ImageSource="/LandingImage/Popular.png"
+            Logo= <MessageSquareMore/>
             testType="Personalized Feedback"
             description="Receive tailored feedback that helps you understand your strengths and areas for improvement, accelerating your learning process."
           />
           <BenifitTile
-            ImageSource="/LandingImage/Track Order.png"
+            Logo= <Lightbulb/>
             testType="Roadmap Suggestions"
             description="Get guided suggestions for your learning journey, helping you stay on track and achieve your goals efficiently."
           />

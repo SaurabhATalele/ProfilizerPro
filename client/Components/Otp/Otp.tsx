@@ -7,8 +7,10 @@ import Reset from "./Reset";
 import { ToastContainer } from "react-toastify";
 import Toast from "@/Utils/Toast";
 import Navbar from "../Navbar/Navbar";
+import { useTheme } from "@/Utils/ThemeContext";
 
 const Otp: FC = () => {
+  const { darkMode } = useTheme();
   const [otp, setOtp] = useState<string | false>(false);
   const [email, setEmail] = useState<string>("");
   const [Verified, setVerified] = useState<boolean>(false);
@@ -46,27 +48,29 @@ const Otp: FC = () => {
   };
 
   return (
-    <>
+    <div className={darkMode ? "dark" : ""}>
       <ToastContainer />
-      <div className={"absolute w-screen mt-5 flex justify-center"}>
-        <Navbar />
-      </div>
-      <div className="w-screen h-screen flex justify-center items-center gap-20">
-        {!otp ? (
-          <SendEmail handleSendMail={handleSendMail} />
-        ) : (
-          !Verified && <Verify handleOtp={handleOtp} />
-        )}
-        {Verified && <Reset email={email} />}
+      <div className="w-screen min-h-screen bg-white dark:bg-[#0c0c0c] text-black dark:text-white">
+        <div className={"absolute w-screen mt-5 flex justify-center"}>
+          <Navbar />
+        </div>
+        <div className="w-screen min-h-screen flex justify-center items-center gap-20">
+          {!otp ? (
+            <SendEmail handleSendMail={handleSendMail} />
+          ) : (
+            !Verified && <Verify handleOtp={handleOtp} />
+          )}
+          {Verified && <Reset email={email} />}
 
-        <Image
-          src={"/ResetImage/email.gif"}
-          alt="my gif"
-          width={450}
-          height={400}
-        />
+          <Image
+            src={"/ResetImage/email.gif"}
+            alt="my gif"
+            width={450}
+            height={400}
+          />
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 

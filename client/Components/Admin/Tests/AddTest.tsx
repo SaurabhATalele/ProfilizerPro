@@ -45,7 +45,7 @@ const AddTest: FC = () => {
         data={modalData}
         setOpenModal={setOpenModal}
       />
-      <h1 className="py-5 text-lg font-bold">All tests</h1>
+      <h1 className="py-5 text-lg font-bold dark:text-white">All tests</h1>
 
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-3/4">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">

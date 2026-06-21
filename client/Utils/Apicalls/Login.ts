@@ -19,8 +19,9 @@ export const login = async (data: LoginData): Promise<Response> => {
     redirect: "follow",
   };
 
-  console.log("sending from Login.ts");
+  console.log("sending from Login.ts", LOGIN_API, requestOptions);
 
   const response = await fetch(`${LOGIN_API}`, requestOptions);
+  console.log(response)
   return response;
 };
