@@ -1,6 +1,7 @@
 import  { FC } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { DesignTestTile } from "../Admin/Tests/DesignTestTile";
 
 interface Test {
   _id: string;
@@ -48,6 +49,7 @@ const Card: FC<CardProps> = ({ tests }) => {
             </div>
           </div>
         ))}
+        <DesignTestTile/>
     </div>
   );
 };

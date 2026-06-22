@@ -1,8 +1,10 @@
 "use client";
-import  { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import Modal from "./Modal";
+import EditModal from "./EditModal";
 import DeleteTest from "./DeleteTest";
 import { ToastContainer } from "react-toastify";
+import { Pencil } from "lucide-react";
 
 interface Topic {
   name: string;
@@ -19,8 +21,10 @@ interface Test {
 const AddTest: FC = () => {
   const [tests, setTests] = useState<Test[]>([]);
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [openEditModal, setOpenEditModal] = useState<boolean>(false);
   const [refresh, setRefresh] = useState<boolean>(false);
   const [modalData, _setModalData] = useState<Partial<Test>>({});
+  const [editData, setEditData] = useState<Test>({ _id: "", name: "", icon: "", description: "", topics: [] });
 
   useEffect(() => {
     const getTests = async (): Promise<void> => {
@@ -35,6 +39,11 @@ const AddTest: FC = () => {
     getTests();
   }, [refresh]);
 
+  const handleEdit = (test: Test): void => {
+    setEditData(test);
+    setOpenEditModal(true);
+  };
+
   return (
     <div className="w-full xl:w-3/4">
       <ToastContainer />
@@ -44,6 +53,13 @@ const AddTest: FC = () => {
         openModal={openModal}
         data={modalData}
         setOpenModal={setOpenModal}
+      />
+      <EditModal
+        data={editData}
+        openModal={openEditModal}
+        setOpenModal={setOpenEditModal}
+        refresh={refresh}
+        setRefresh={setRefresh}
       />
       <h1 className="py-5 text-lg font-bold dark:text-white">All tests</h1>
 
@@ -86,8 +102,15 @@ const AddTest: FC = () => {
                       {test.name}
                     </th>
 
-                    <td className="px-6 py-4 text-right flex justify-center">
-                      <div className="flex items-center group relative">
+                    <td className="px-6 py-4 text-right">
+                      <div className="flex items-center justify-center gap-2">
+                        <button
+                          onClick={() => handleEdit(test)}
+                          className="p-2 rounded-lg text-[var(--color-primary)] hover:bg-[var(--color-primary)]/10 transition-colors"
+                          aria-label={`Edit ${test.name}`}
+                        >
+                          <Pencil className="w-4 h-4" />
+                        </button>
                         <DeleteTest
                           id={test._id}
                           refresh={refresh}

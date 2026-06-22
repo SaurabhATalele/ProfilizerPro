@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useState, useContext, useLayoutEffect, ReactNode } from "react";
+import { createContext, useState, useContext, useLayoutEffect, useCallback, ReactNode } from "react";
 import { getUser } from "@/Utils/Apicalls/User";
 
 export interface User {
@@ -29,7 +29,7 @@ export function UserProvider({ children }: UserProviderProps) {
   const [user, setUser] = useState<User>({});
   const [isLogin, setIsLogin] = useState<boolean>(false);
 
-  const refreshUser = async (): Promise<void> => {
+  const refreshUser = useCallback(async (): Promise<void> => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
@@ -53,17 +53,17 @@ export function UserProvider({ children }: UserProviderProps) {
       setIsLogin(false);
       setUser({});
     }
-  };
+  }, []);
 
-  const loginUser = (userData: User): void => {
+  const loginUser = useCallback((userData: User): void => {
     setUser(userData);
     setIsLogin(true);
-  };
+  }, []);
 
-  const logoutUser = (): void => {
+  const logoutUser = useCallback((): void => {
     setUser({});
     setIsLogin(false);
-  };
+  }, []);
 
   useLayoutEffect(() => {
     refreshUser();

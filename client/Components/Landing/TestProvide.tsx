@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Skeleton from "./Skeleton";
 import { ArrowRight } from "lucide-react";
+import { DesignTestTile } from "../Admin/Tests/DesignTestTile";
 
 interface TestData {
   _id: string;
@@ -19,10 +20,12 @@ interface CardProps {
 const Card: FC<CardProps> = ({ tests }) => {
   return (
     <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 items-stretch">
-      {tests.map((test) => (
+      {tests.map((test, index) => (
         <div
           key={test._id}
-          className="relative flex flex-col gap-4 rounded-2xl p-6 bg-white dark:bg-[#121212]/80 backdrop-blur-xl border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1"
+          className={`relative flex flex-col gap-4 rounded-2xl p-6 bg-white dark:bg-[#121212]/80 backdrop-blur-xl border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 ${
+            index >= 2 ? "xl:hidden" : ""
+          } ${index >= 3 ? "hidden" : ""}`}
         >
           <div className="flex items-center gap-4">
             <div className="w-14 h-14 shrink-0 bg-gray-50 dark:bg-gray-800 rounded-xl flex items-center justify-center p-2">
@@ -50,6 +53,9 @@ const Card: FC<CardProps> = ({ tests }) => {
           </div>
         </div>
       ))}
+
+      {/* Design Your Own Test tile */}
+      <DesignTestTile/>
     </div>
   );
 };
