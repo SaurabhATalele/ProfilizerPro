@@ -67,7 +67,7 @@ const schema = new Schema({
               },
               yourAnswer: {
                 type: String,
-                required: true,
+                required: false,
               },
             },
           ],
@@ -81,6 +81,29 @@ const schema = new Schema({
     ],
     required: false,
   },
+  isCustom: { type: Boolean, required: false, default: false },
+  owner: { type: String, required: false, default: "" },
+  topic: { type: String, required: false, default: "" },
+  difficulty: {
+    type: String,
+    enum: ["easy", "medium", "hard"],
+    required: false,
+    default: "medium",
+  },
+  customSubtopics: [
+    {
+      name: { type: String, required: true },
+      questionCount: { type: Number, required: true, default: 1 },
+    },
+  ],
 });
 
-export default mongoose.models.Assignment || model("Assignment", schema);
+// In Next.js dev, the model is cached on the mongoose connection across hot
+// reloads. If the schema changes, the stale cached model would silently strip
+// the new fields (mongoose strict mode). Delete the cached model so the current
+// schema always applies.
+if (mongoose.models.Assignment) {
+  delete mongoose.models.Assignment;
+}
+
+export default model("Assignment", schema);

@@ -1,6 +1,7 @@
 "use client";
 import  { FC, useState, useEffect } from "react";
 import Card from "./Card";
+import CustomTests from "./CustomTests";
 import axios from "axios";
 import Skeleton from "../Landing/Skeleton";
 
@@ -41,6 +42,8 @@ const AllTests: FC = () => {
       </div>
 
       {loading ? <Skeleton /> : <Card tests={tests} />}
+
+      <CustomTests />
     </div>
   );
 };

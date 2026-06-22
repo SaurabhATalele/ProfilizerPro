@@ -4,6 +4,8 @@ import  { createContext, useState, ReactNode } from "react";
 export interface Topic {
   topic: string;
   subtopics: Record<string, any>;
+  difficulty?: "easy" | "medium" | "hard";
+  customAssignmentId?: string;
   [key: string]: any;
 }
 

@@ -2,11 +2,15 @@ import Assignment from "../Models/Assignment";
 import User from "../Models/Users";
 import mongoose from "mongoose";
 import nodeMailer from "nodemailer";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { SECRET_KEY } from "../../constants";
 import { headers } from "next/headers";
 import connectDB from "../db/connectDB";
+import {
+  buildCustomAssignmentRecord,
+  decidePersistence,
+} from "@/Utils/builder/customAssignment";
 
 export const transporter = nodeMailer.createTransport({
   host: "smtp.gmail.com",
@@ -48,12 +52,29 @@ interface TopCandidatesBody {
   n: number;
 }
 
+interface CustomSubmitBody {
+  customAssignmentId?: string;
+  topic: string;
+  difficulty?: string;
+  subtopics: { name: string; questionCount: number }[];
+  attempt: {
+    score: number;
+    correct: number;
+    total: number;
+    questions: Array<{ question: string; answer: string; yourAnswer: string }>;
+  };
+}
+
 export const updateScore = async (body: ScoreBody): Promise<NextResponse> => {
   try {
     const { id, email, score, total, questions } = body;
-    const assignment = await Assignment.findById(id);
+    const assignment: any = await Assignment.findById(id);
+    if (!assignment) {
+      return NextResponse.json({ message: "Assignment not found" }, { status: 404 });
+    }
     const correct = score;
     const myScore = (score / total) * 100;
+    assignment.attemptedBy = assignment.attemptedBy || [];
     assignment.attemptedBy.push({
       email,
       score: myScore,
@@ -109,9 +130,9 @@ export const getAttemptedAssignments = async (_req: unknown): Promise<unknown> =
         },
       },
     });
-    const resp = assignments.map((assignment: { name: string; attemptedBy: Array<{ email: string }> }) => {
+    const resp = assignments.map((assignment: any) => {
       const attempts = assignment.attemptedBy.filter(
-        (attempt) => attempt.email === user.email,
+        (attempt: { email: string }) => attempt.email === user.email,
       );
       const assignmentName = assignment.name;
       return { assignmentName, attempts };
@@ -138,8 +159,14 @@ export const getAssignmentById = async (body: AssignmentIdBody): Promise<NextRes
 
 export const getAssignments = async (): Promise<NextResponse> => {
   try {
-    connectDB();
-    const assignments = await Assignment.find();
+    await connectDB();
+    // Only return non-custom assignments. A test is "custom" if it is flagged
+    // isCustom OR has a non-empty owner; exclude both so custom tests never
+    // appear in the general listing (home page / all-tests grid).
+    const assignments = await Assignment.find({
+      isCustom: { $ne: true },
+      $or: [{ owner: { $exists: false } }, { owner: "" }, { owner: null }],
+    });
     return NextResponse.json({ data: assignments }, { status: 200 });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : "Unknown error";
@@ -237,5 +264,202 @@ export const getCandidatesByMonths = async (): Promise<unknown> => {
   } catch (error) {
     console.log(error);
     return [];
+  }
+};
+
+const DEFAULT_CUSTOM_ICON = "/LandingImage/GenAss.svg";
+
+/**
+ * Resolve the owner email from the JWT carried in the Authorization header.
+ * Mirrors the getAttemptedAssignments convention: the client sends the raw
+ * token (no "Bearer " prefix), but we also accept a "Bearer <token>" form by
+ * taking the last space-separated segment. Returns null on a missing/invalid
+ * token.
+ */
+async function resolveOwnerEmail(): Promise<string | null> {
+  try {
+    const headersList = await headers();
+    const authHeader = headersList.get("authorization");
+    if (!authHeader) {
+      return null;
+    }
+    const parts = authHeader.split(" ");
+    const token = parts[parts.length - 1];
+    if (!token) {
+      return null;
+    }
+    const decoded = jwt.verify(token, SECRET_KEY as string) as {
+      email: string;
+    };
+    return decoded.email ?? null;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+/**
+ * Create a new Custom_Assignment, or append the attempt to an existing one.
+ * - owner resolved from JWT (Req 13.2)
+ * - decidePersistence(customAssignmentId): "append" | "create" (Req 15.3)
+ * - append path verifies record.owner === owner (Req 15.4), else 403/404
+ * - create path builds the record via buildCustomAssignmentRecord and saves
+ * - on any failure -> 500 with descriptive message (Req 13.4)
+ */
+export const createOrUpdateCustomAssignment = async (
+  req: NextRequest,
+): Promise<NextResponse> => {
+  try {
+    await connectDB();
+
+    const owner = await resolveOwnerEmail();
+    if (!owner) {
+      return NextResponse.json({ message: "Access denied" }, { status: 401 });
+    }
+
+    const body = (await req.json()) as CustomSubmitBody;
+
+    // Sanitize questions: the schema requires non-empty question/answer/yourAnswer.
+    // Unanswered questions arrive with an undefined yourAnswer, which would fail
+    // validation and silently abort the whole save — default them instead.
+    const sanitizedQuestions = (body.attempt?.questions || []).map((q) => ({
+      question: q.question || "Question",
+      answer: q.answer || "—",
+      yourAnswer: q.yourAnswer || "Not answered",
+    }));
+
+    const attempt = {
+      email: owner,
+      score: body.attempt.score,
+      correct: body.attempt.correct,
+      total: body.attempt.total,
+      questions: sanitizedQuestions,
+      date: new Date(),
+    };
+
+    const mode = decidePersistence(body.customAssignmentId);
+
+    if (mode === "append") {
+      const doc: any = await Assignment.findById(body.customAssignmentId);
+      if (!doc) {
+        return NextResponse.json(
+          { message: "Custom assessment not found" },
+          { status: 404 },
+        );
+      }
+      if (doc.owner !== owner) {
+        return NextResponse.json(
+          { message: "Insufficient permissions" },
+          { status: 403 },
+        );
+      }
+      doc.attemptedBy = doc.attemptedBy || [];
+      doc.attemptedBy.push(attempt);
+      await doc.save();
+      return NextResponse.json(
+        { message: "Attempt recorded", id: doc._id },
+        { status: 200 },
+      );
+    }
+
+    const record = buildCustomAssignmentRecord({
+      owner,
+      topic: body.topic,
+      subtopics: body.subtopics.map((s) => ({
+        name: s.name,
+        selected: true,
+        questionCount: s.questionCount,
+        source: "custom",
+      })),
+      difficulty: body.difficulty,
+      attempt,
+    });
+
+    // The schema requires name minLength 3; pad short topics defensively.
+    const safeName = record.name.length >= 3 ? record.name : `${record.name} Test`;
+
+    const newDoc = new Assignment({
+      ...record,
+      name: safeName,
+      isCustom: true,
+      owner,
+      icon: DEFAULT_CUSTOM_ICON,
+    });
+    await newDoc.save();
+    return NextResponse.json(
+      { message: "Custom assessment saved", id: newDoc._id },
+      { status: 201 },
+    );
+  } catch (error: unknown) {
+    console.log(error);
+    const message = error instanceof Error ? error.message : "Unknown error";
+    return NextResponse.json({ message }, { status: 500 });
+  }
+};
+
+/**
+ * Owner-checked fetch of a single custom assignment for prefill (Req 15.1, 15.4).
+ */
+export const getCustomAssignmentById = async (
+  req: NextRequest,
+): Promise<NextResponse> => {
+  try {
+    await connectDB();
+
+    const owner = await resolveOwnerEmail();
+    if (!owner) {
+      return NextResponse.json({ message: "Access denied" }, { status: 401 });
+    }
+
+    const id = req.nextUrl.searchParams.get("id");
+    if (!id) {
+      return NextResponse.json({ message: "Missing 'id'" }, { status: 400 });
+    }
+
+    const doc = await Assignment.findById(id);
+    if (!doc) {
+      return NextResponse.json(
+        { message: "Custom assessment not found" },
+        { status: 404 },
+      );
+    }
+    if (!doc.isCustom || doc.owner !== owner) {
+      return NextResponse.json(
+        { message: "Insufficient permissions" },
+        { status: 403 },
+      );
+    }
+
+    return NextResponse.json({ data: doc }, { status: 200 });
+  } catch (error: unknown) {
+    console.log(error);
+    const message = error instanceof Error ? error.message : "Unknown error";
+    return NextResponse.json({ message }, { status: 500 });
+  }
+};
+
+/**
+ * List all custom assignments owned by the caller (Req 14.2 "my custom tests").
+ */
+export const getCustomAssignments = async (
+  _req: NextRequest,
+): Promise<NextResponse> => {
+  try {
+    await connectDB();
+
+    const owner = await resolveOwnerEmail();
+    if (!owner) {
+      return NextResponse.json({ message: "Access denied" }, { status: 401 });
+    }
+
+    // Most recent first (ObjectId is time-ordered), capped at 10.
+    const data = await Assignment.find({ isCustom: true, owner })
+      .sort({ _id: -1 })
+      .limit(10);
+    return NextResponse.json({ data }, { status: 200 });
+  } catch (error: unknown) {
+    console.log(error);
+    const message = error instanceof Error ? error.message : "Unknown error";
+    return NextResponse.json({ message }, { status: 500 });
   }
 };

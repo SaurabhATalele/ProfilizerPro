@@ -1,6 +1,7 @@
 import { google } from "@ai-sdk/google";
 import { generateText } from "ai";
 import { z } from "zod";
+import { normalizeDifficulty } from "@/Utils/builder/difficulty";
 
 // Shape of a single generated MCQ question.
 const questionSchema = z.object({
@@ -16,6 +17,8 @@ export interface GenerateTestPrompt {
   topic: string;
   // JSON-stringified Record<string, string|number> mapping subtopic -> question count
   questions: string;
+  // easy | medium | hard; normalized internally (defaults to "medium")
+  difficulty?: string;
 }
 
 export type GeneratedQuestion = z.infer<typeof questionSchema>;
@@ -30,6 +33,9 @@ export const generateTest = async (
   prompt: GenerateTestPrompt,
 ): Promise<GeneratedResponse> => {
   const { topic, questions } = prompt;
+
+  // Always a valid enum ("easy" | "medium" | "hard"); invalid/missing -> "medium".
+  const difficulty = normalizeDifficulty(prompt.difficulty);
 
   // Parse the requested subtopics and their question counts.
   let subtopics: Record<string, number>;
@@ -55,6 +61,8 @@ export const generateTest = async (
     prompt: `Give me an array of JSON of questions, options and answers on the topics for the subject "${topic}".
             The requested subtopics and their question counts are:
             ${breakdown}
+
+            All questions MUST be written at "${difficulty}" difficulty level (easy = basic recall, medium = applied understanding, hard = deep analysis/edge cases).
 
             Return the answer only in this format (one key per subtopic):
             {
