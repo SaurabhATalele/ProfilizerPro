@@ -37,11 +37,11 @@ const Card: FC<CardProps> = ({ tests }) => {
                 className="w-full h-full object-contain"
               />
             </div>
-            <h3 className="font-bold text-lg text-gray-900 dark:text-white leading-tight">
+            <h3 className="font-bold text-lg text-gray-900 dark:text-white leading-tight break-words min-w-0">
               {test.name}
             </h3>
           </div>
-          <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-3 flex-1 mt-2 leading-relaxed">
+          <p className="text-sm text-gray-500 dark:text-gray-400 flex-1 mt-2 leading-relaxed break-words overflow-hidden [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3]">
             {test.description}
           </p>
           <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800">
@@ -102,7 +102,7 @@ const TestProvide: FC = () => {
   }, []);
 
   return (
-    <div className="w-[90%] lg:w-3/4 xl:w-1/2 rounded-md flex flex-col items-center px-5 md:px-10 py-5 gap-10">
+    <div className="w-[90%] lg:w-3/4 w-1/2 rounded-md flex flex-col items-center px-5 md:px-10 py-5 gap-10">
       <div className="w-full flex justify-between items-end">
         <h1 className="text-[1.5rem] font-bold">Tests We provide</h1>
         <Link href="/all-tests" className="flex gap-2 items-center font-light text-[var(--color-primary)] dark:text-white hover:text-[var(--color-secondary)]  text-sm">

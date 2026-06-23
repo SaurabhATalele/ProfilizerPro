@@ -35,7 +35,7 @@ const BenifitTile: FC<BenifitTileProps> = ({ Logo, testType, description }) => {
 const Landing: FC = () => {
   return (
     <div className="max-w-screen flex flex-col items-center justify-center pt-24 gap-8">
-      <div className="w-[90%] lg:w-3/4 xl:w-1/2 flex items-center justify-center">
+      <div className="w-[90%] lg:w-3/4 flex items-center justify-center">
         <div className="flex flex-col w-full md:w-3/4 lg:w-1/2 gap-3 text-center lg:text-left items-center lg:items-start">
           <h1 className="text-[2.5rem] lg:text-[4rem] font-bold leading-[3rem] lg:leading-[3.5rem]">
             Take Online{" "}
@@ -54,9 +54,9 @@ const Landing: FC = () => {
         </div>
       </div>
 
-      <div className="w-[90%] lg:w-3/4 xl:w-1/2 flex flex-col gap-5">
+      <div className="w-[90%] lg:w-3/4 flex flex-col gap-5">
         <h2 className="text-center font-bold text-[1.3rem]">Benifits of choosing us</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-4 w-full gap-3">
           <BenifitTile
             Logo=<Brain/>
             testType="AI Generated Tests"
@@ -91,7 +91,7 @@ const Landing: FC = () => {
           Assessments We provide
         </h1>
 
-        <div className="w-full md:w-[90%] lg:w-3/4 xl:w-1/2 flex flex-col lg:flex-row justify-around items-center gap-16 lg:gap-0 pb-10 lg:pb-0">
+        <div className="w-full md:w-[90%] lg:w-3/4  flex flex-col lg:flex-row justify-around items-center gap-16 lg:gap-0 pb-10 lg:pb-0">
           <div className="relative flex flex-col items-center gap-4 z-20">
             <h1 className="absolute text-[15rem] -left-3 -top-28 z-0 text-transparent font-bold font-outline-2 stroke-slate-100">1</h1>
             <Image src="/LandingImage/GenAss.svg" width={120} height={120} alt="General" className="w-44 h-44 z-20" />

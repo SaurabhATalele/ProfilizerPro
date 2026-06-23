@@ -88,7 +88,7 @@ const CustomTests: FC = () => {
                 )}
               </div>
             </div>
-            <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-2 flex-1 mt-2 leading-relaxed">
+            <p className="text-sm text-gray-500 dark:text-gray-400 flex-1 mt-2 leading-relaxed break-words overflow-hidden [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]">
               {test.customSubtopics && test.customSubtopics.length > 0
                 ? test.customSubtopics.map((s) => s.name).join(", ")
                 : "Custom assessment"}
