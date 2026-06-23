@@ -19,6 +19,8 @@ interface TopicContextType {
   topics: {
     topic: string;
     subtopics: Record<string, string>;
+    difficulty?: "easy" | "medium" | "hard";
+    customAssignmentId?: string;
   };
   setTopics: (value: { topic: string; subtopics: Record<string, string> }) => void;
 }
@@ -29,11 +31,13 @@ const ExamDash: FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const { topics } = useContext(TopicContext) as TopicContextType;
   const [answers, setAnswers] = useState<Record<number, string>>({});
+  const [result, setResult] = useState<{ score: number; total: number } | null>(null);
   const router = useRouter();
   const pathname = usePathname();
 
   const path = pathname.split("/");
   const testId = path[3];
+  const isCustom = testId === "custom";
 
   let count = 1;
 
@@ -43,7 +47,7 @@ const ExamDash: FC = () => {
         setLoading(true);
         const subtopics = JSON.stringify(topics.subtopics);
         const res = await axios.post("/api/v1/generate-test", {
-          prompt: { topic: topics.topic, questions: subtopics },
+          prompt: { topic: topics.topic, questions: subtopics, difficulty: topics.difficulty },
         });
         console.log(res.data);
         const valuesArray: Question[] = Object.values(
@@ -92,6 +96,38 @@ const ExamDash: FC = () => {
       }
     }
 
+    // Custom (owner-built) assessment: show score locally, then persist
+    // owner-scoped via the custom endpoint (create-or-append).
+    if (isCustom) {
+      setResult({ score: calculatedScore, total: ques.length });
+
+      const selectedSubtopics = Object.entries(topics.subtopics).map(
+        ([name, count]) => ({ name, questionCount: Number(count) || 1 }),
+      );
+
+      try {
+        await axios.post(
+          "/api/v1/assignment/custom",
+          {
+            customAssignmentId: topics.customAssignmentId,
+            topic: topics.topic,
+            difficulty: topics.difficulty,
+            subtopics: selectedSubtopics,
+            attempt: {
+              score: Math.round((calculatedScore / ques.length) * 100),
+              correct: calculatedScore,
+              total: ques.length,
+              questions: questionsAndAnswers,
+            },
+          },
+          { headers: { Authorization: localStorage.getItem("token") ?? "" } },
+        );
+      } catch (error) {
+        console.error("Error persisting custom assessment:", error);
+      }
+      return;
+    }
+
     let email = "";
     try {
       const resp = await getUser();
@@ -120,6 +156,40 @@ const ExamDash: FC = () => {
       <Suspense fallback={<Loader />}>
         {loading ? (
           <Loader />
+        ) : result ? (
+          <div className="flex items-center justify-center w-full min-h-[calc(100vh-10rem)] px-4 bg-white text-black dark:bg-[#0c0c0c] dark:text-white">
+            <div className="w-full max-w-md text-center rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#0c0c0c] shadow-lg p-8 lg:p-10">
+              <h2 className="text-2xl font-semibold mb-2">Assessment Complete</h2>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-8">
+                Here&apos;s how you did on your custom assessment.
+              </p>
+
+              <div className="text-5xl font-bold text-[var(--color-primary)] dark:text-[var(--color-secondary)] mb-2">
+                {result.score} / {result.total}
+              </div>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-8">
+                {result.total > 0
+                  ? Math.round((result.score / result.total) * 100)
+                  : 0}
+                % correct
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-3">
+                <button
+                  onClick={() => router.push("/")}
+                  className="w-full py-3 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-medium transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+                >
+                  Back Home
+                </button>
+                <button
+                  onClick={() => router.push("/explore")}
+                  className="w-full py-3 rounded-lg bg-[var(--color-primary)] dark:bg-[var(--color-secondary)] text-white font-medium shadow-md transition-all duration-200 hover:opacity-90"
+                >
+                  Build Another
+                </button>
+              </div>
+            </div>
+          </div>
         ) : (
           <div className="flex flex-col lg:flex-row w-full min-h-[calc(100vh-10rem)] bg-white text-black dark:bg-[#0c0c0c] dark:text-white">
             {/* Sidebar: question navigator */}

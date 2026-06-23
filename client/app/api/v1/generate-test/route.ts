@@ -5,6 +5,8 @@ interface GenerateBody {
   prompt: {
     topic: string;
     questions: string;
+    // easy | medium | hard; normalized in the controller (defaults to "medium")
+    difficulty?: string;
   };
 }
 
