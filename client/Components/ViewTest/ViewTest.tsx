@@ -4,28 +4,8 @@ import Image from "next/image";
 import TopicContext from "../../Utils/TestContext";
 import Topic from "./Topic";
 import { useRouter } from "next/navigation";
-import { getUser } from "@/Utils/Apicalls/User";
 import { ListChecks, ArrowRight } from "lucide-react";
-
-interface SubTopic {
-  _id: string;
-  name: string;
-  minQuestions: number;
-  maxQuestions: number;
-}
-
-interface TopicData {
-  name: string;
-  icon: string;
-  description: string;
-  topics: SubTopic[];
-}
-
-interface User {
-  username?: string;
-  isAdmin?: boolean;
-  [key: string]: unknown;
-}
+import { SubTopic, TopicData } from "@/app/test/[...id]/page";
 
 interface TopicContextType {
   topics: {
@@ -36,57 +16,22 @@ interface TopicContextType {
 }
 
 interface ViewTestProps {
-  test: string;
+  test:string;
+  topic:TopicData;
+  subtopics:SubTopic[];
 }
 
 const isEmptyObject = (obj: Record<string, unknown>): boolean => {
   return Object.keys(obj).length === 0;
 };
 
-const ViewTest: FC<ViewTestProps> = ({ test }) => {
-  const [topic, setTopic] = useState<TopicData | null>(null);
-  const [_user, setUser] = useState<User>({});
-  const [subtopics, setSubtopics] = useState<SubTopic[]>([]);
+const ViewTest: FC<ViewTestProps> = ({ test,topic,subtopics }) => {
   const [selectedTopics, setSelectedTopics] = useState<Record<string, string>>({});
   const [_topicState, setTopicState] = useState<boolean>(false);
-  const {  setTopics } = useContext(TopicContext) as TopicContextType;
+  const { setTopics } = useContext(TopicContext) as TopicContextType;
   const router = useRouter();
 
-  useEffect(() => {
-    const fetchTopics = async (): Promise<void> => {
-      const res = await fetch(`/api/v1/assignment/fetch`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id: test }),
-      });
-      const data = await res.json();
-      setTopic(data.data);
-      setSubtopics(data.data.topics);
-    };
-
-    const getUserHandler = async (): Promise<void> => {
-      const resp = await getUser();
-      const userData = await resp.json();
-      console.log(userData);
-      if (userData === false) {
-        localStorage.removeItem("token");
-        return;
-      }
-      if (userData.username) {
-        setUser(userData);
-      }
-    };
-
-    const cookie = localStorage.getItem("token");
-    if (cookie) {
-      getUserHandler();
-    } else {
-      router.push("/login");
-    }
-    fetchTopics();
-  }, []);
+  
 
   useEffect(() => {
     console.log(selectedTopics);

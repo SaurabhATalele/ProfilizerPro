@@ -152,7 +152,12 @@ export const getAssignmentById = async (body: AssignmentIdBody): Promise<NextRes
   const { id } = body;
   try {
     const assignment = await Assignment.findById(id);
-    return NextResponse.json({ data: assignment }, { status: 200 });
+    return NextResponse.json({ data: {
+      name:assignment?.name,
+      id:assignment?._id,
+      icon:assignment?.icon,
+      topics:assignment?.topics
+    } }, { status: 200 });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : "Unknown error";
     return NextResponse.json({ message }, { status: 404 });
