@@ -49,6 +49,14 @@ export const register = async (data: RegisterData): Promise<Response> => {
   return response;
 };
 
+export const sendRegistrationOtp = async (email: string): Promise<Response> => {
+  return fetch("/api/v1/users/send-registration-otp", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email }),
+  });
+};
+
 export const logout = async (): Promise<void> => {
   localStorage.removeItem("token");
 };

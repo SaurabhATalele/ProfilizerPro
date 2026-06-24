@@ -1,6 +1,9 @@
 import User from "../Models/Users";
 import { NextResponse } from "next/server";
 import { headers, cookies } from "next/headers";
+import jwt from "jsonwebtoken";
+import crypto from "crypto";
+import { SECRET_KEY } from "@/Utils/constants";
 import { sendEmail as deliverEmail } from "@/Utils/api/email";
 import { EmailTemplate } from "@/Components/Otp/EmailTemplate";
 import { nameSchema, usernameSchema } from "@/Utils/validation/profileSchemas";
@@ -10,6 +13,7 @@ interface RegisterBody {
   name:string;
   password: string;
   username: string;
+  otp?: string;
 }
 
 interface LoginBody {
@@ -36,9 +40,72 @@ function generateOTP(): string {
   return OTP;
 }
 
+const hashOtp = (otp: string): string =>
+  crypto.createHash("sha256").update(otp).digest("hex");
+
+// Email a verification code for a NEW registration. Stores only the OTP hash in
+// a short-lived HttpOnly cookie (signed JWT) — no DB row, no plaintext to client.
+export const sendRegistrationOtp = async (
+  email: string,
+): Promise<{ status: number; message: string }> => {
+  if (!email) {
+    return { status: 400, message: "Email is required" };
+  }
+  const exists = await User.findOne({ email });
+  if (exists) {
+    return { status: 400, message: "User Already Exists" };
+  }
+  const otp = generateOTP();
+  const token = jwt.sign(
+    { email, otpHash: hashOtp(otp) },
+    SECRET_KEY as string,
+    { expiresIn: "10m" },
+  );
+  (await cookies()).set("reg_otp", token, {
+    httpOnly: true,
+    sameSite: "lax",
+    path: "/",
+    maxAge: 600,
+  });
+  const result = await deliverEmail({
+    to: email,
+    subject: "Verify your ProfilizePro email",
+    react: EmailTemplate({ firstName: email.split("@")[0], otp }),
+  });
+  if (!result.success) {
+    return { status: 500, message: result.error || "Failed to send email" };
+  }
+  return { status: 200, message: "Verification code sent" };
+};
+
 export const registerUser = async (body: RegisterBody): Promise<NextResponse> => {
   try {
-    const { email, password, username, name } = body;
+    const { email, password, username, name, otp } = body;
+
+    // Verify the email via the OTP issued in the reg_otp cookie.
+    const token = (await cookies()).get("reg_otp")?.value;
+    if (!token || !otp) {
+      return NextResponse.json(
+        { message: "Email not verified. Request a verification code." },
+        { status: 400 },
+      );
+    }
+    let payload: { email?: string; otpHash?: string };
+    try {
+      payload = jwt.verify(token, SECRET_KEY as string) as typeof payload;
+    } catch {
+      return NextResponse.json(
+        { message: "Verification code expired. Request a new one." },
+        { status: 400 },
+      );
+    }
+    if (payload.email !== email || payload.otpHash !== hashOtp(otp)) {
+      return NextResponse.json(
+        { message: "Invalid verification code" },
+        { status: 400 },
+      );
+    }
+
     const isuser = await User.findOne({ email });
     if (isuser) {
       return NextResponse.json(
@@ -48,6 +115,7 @@ export const registerUser = async (body: RegisterBody): Promise<NextResponse> =>
     }
     const user = new User({ email, password, username, name });
     await user.save();
+    (await cookies()).delete("reg_otp");
     return NextResponse.json(
       { message: "User Registered Successfully" },
       { status: 201 },
