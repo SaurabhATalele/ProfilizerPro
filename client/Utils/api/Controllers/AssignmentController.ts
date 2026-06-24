@@ -57,6 +57,19 @@ interface CustomSubmitBody {
 export const updateScore = async (body: ScoreBody): Promise<NextResponse> => {
   try {
     const { id, email, score, total, questions } = body;
+    // Validate inputs (the owner email is injected server-side from the JWT).
+    if (typeof id !== "string" || typeof email !== "string") {
+      return NextResponse.json({ message: "Invalid request" }, { status: 400 });
+    }
+    if (
+      !Number.isFinite(score) ||
+      !Number.isFinite(total) ||
+      total <= 0 ||
+      score < 0 ||
+      score > total
+    ) {
+      return NextResponse.json({ message: "Invalid score" }, { status: 400 });
+    }
     const assignment: any = await Assignment.findById(id);
     if (!assignment) {
       return NextResponse.json({ message: "Assignment not found" }, { status: 404 });
@@ -156,7 +169,14 @@ export const getAssignments = async (): Promise<NextResponse> => {
       isCustom: { $ne: true },
       $or: [{ owner: { $exists: false } }, { owner: "" }, { owner: null }],
     });
-    return NextResponse.json({ data: assignments }, { status: 200 });
+
+    const response = assignments.map((assignment) =>{return {
+      _id: assignment._id,
+      name: assignment.name,
+      description: assignment.description,
+      icon:assignment.icon
+    }})
+    return NextResponse.json({ data: response }, { status: 200 });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : "Unknown error";
     return NextResponse.json({ message }, { status: 404 });

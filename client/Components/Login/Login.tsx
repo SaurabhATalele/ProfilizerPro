@@ -7,7 +7,6 @@ import Toast from "@/Utils/Toast";
 import { login } from "@/Utils/Apicalls/Login";
 import Image from "next/image";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { getCookie } from "cookies-next";
 import { useUser } from "@/Utils/UserContext";
 
 const Login: FC = () => {
@@ -18,8 +17,7 @@ const Login: FC = () => {
   const { refreshUser } = useUser();
 
   useEffect(() => {
-    const token = getCookie("token");
-    if (token) {
+    if (typeof window !== "undefined" && localStorage.getItem("token")) {
       router.push("/");
     }
   }, [router]);

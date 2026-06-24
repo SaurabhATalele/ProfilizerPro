@@ -10,17 +10,19 @@ import { useTheme } from "@/Utils/ThemeContext";
 
 const Otp: FC = () => {
   const { darkMode } = useTheme();
-  const [otp, setOtp] = useState<string | false>(false);
+  const [emailSent, setEmailSent] = useState<boolean>(false);
+  const [enteredOtp, setEnteredOtp] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [Verified, setVerified] = useState<boolean>(false);
 
+  // The OTP is verified server-side at reset time (never sent to the client).
   const handleOtp = (userOtp: string): void => {
-    if (userOtp === otp) {
-      Toast("success", "OTP Verified");
-      setVerified(!Verified);
-    } else {
-      Toast("error", "Incorrect OTP");
+    if (userOtp.length < 4) {
+      Toast("error", "Enter the 4-digit code");
+      return;
     }
+    setEnteredOtp(userOtp);
+    setVerified(true);
   };
 
   const handleSendMail = async (emailValue: string): Promise<void> => {
@@ -38,15 +40,12 @@ const Otp: FC = () => {
         return;
       }
       if (data.status !== 200) {
-        Toast("error", "Something went wrong")
+        Toast("error", "Something went wrong");
         return;
       }
-
-      if (data.status === 200) {
-        setOtp(data.otp);
-        setEmail(emailValue);
-        Toast("success", "OTP Sent to your Email");
-      }
+      setEmail(emailValue);
+      setEmailSent(true);
+      Toast("success", "OTP Sent to your Email");
     } catch (e) {
       console.log(e);
     }
@@ -57,12 +56,12 @@ const Otp: FC = () => {
       <ToastContainer />
       <div className="w-screen min-h-screen bg-white dark:bg-[#0c0c0c] text-black dark:text-white">
         <div className="w-screen min-h-screen flex justify-center items-center gap-20">
-          {!otp ? (
+          {!emailSent ? (
             <SendEmail handleSendMail={handleSendMail} />
           ) : (
             !Verified && <Verify handleOtp={handleOtp} />
           )}
-          {Verified && <Reset email={email} />}
+          {Verified && <Reset email={email} otp={enteredOtp} />}
 
           <Image
             src={"/ResetImage/email.svg"}

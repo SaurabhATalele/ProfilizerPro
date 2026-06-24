@@ -84,7 +84,7 @@ UserSchema.methods.GenerateToken = async function (): Promise<string | undefined
     const username = this.username;
     const isAdmin = this.isAdmin;
     const user = { userId, email, username, isAdmin };
-    return jwt.sign(user, secret as string);
+    return jwt.sign(user, secret as string, { expiresIn: "7d" });
   } catch (err) {
     console.log(err);
     return undefined;

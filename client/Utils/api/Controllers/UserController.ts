@@ -24,6 +24,7 @@ interface LoginBody {
 interface ChangePasswordBody {
   email: string;
   password: string;
+  otp?: string;
 }
 
 export interface UserData {
@@ -32,12 +33,9 @@ export interface UserData {
 }
 
 function generateOTP(): string {
-  const digits = "0123456789";
-  let OTP = "";
-  for (let i = 0; i < 4; i++) {
-    OTP += digits[Math.floor(Math.random() * 10)];
-  }
-  return OTP;
+  // ponytail: 4-digit kept to match existing OTP inputs (numInputs={4}); 6-digit
+  // would be stronger but changes the UI. Crypto-random instead of Math.random.
+  return crypto.randomInt(0, 10000).toString().padStart(4, "0");
 }
 
 const hashOtp = (otp: string): string =>
@@ -129,10 +127,9 @@ export const registerUser = async (body: RegisterBody): Promise<NextResponse> =>
 
 export const loginUser = async (body: LoginBody): Promise<NextResponse> => {
   try {
-    console.log("Getting here");
     const email = body?.email;
     const password = body?.password;
-    if (!email || !password) {
+    if (typeof email !== "string" || typeof password !== "string" || !email || !password) {
       return NextResponse.json({ message: "Email and password are required" }, { status: 400 });
     }
     const data = await User.findOne({ email });
@@ -150,7 +147,13 @@ export const loginUser = async (body: LoginBody): Promise<NextResponse> => {
     if (!token) {
       return NextResponse.json({ message: "Token generation failed" }, { status: 500 });
     }
-    (await cookies()).set("token", token);
+    (await cookies()).set("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 7,
+    });
     return NextResponse.json({ token }, { status: 200 });
   } catch (error) {
     console.log(error);
@@ -158,15 +161,29 @@ export const loginUser = async (body: LoginBody): Promise<NextResponse> => {
   }
 };
 
-export const sendEmail = async (email: string): Promise<{ status: number; message: string; otp?: string }> => {
+export const sendEmail = async (email: string): Promise<{ status: number; message: string }> => {
   try {
-    console.log(email);
+    if (typeof email !== "string" || !email) {
+      return { status: 400, message: "Email is required" };
+    }
     const data = await User.findOne({ email });
     if (!data) {
       return { status: 400, message: "User Not Found" };
     }
     const otp = generateOTP();
-    console.log("otp is", otp);
+    // Store only the OTP hash in a short-lived HttpOnly cookie — never sent to the client.
+    const token = jwt.sign(
+      { email, otpHash: hashOtp(otp), purpose: "reset" },
+      SECRET_KEY as string,
+      { expiresIn: "10m" },
+    );
+    (await cookies()).set("reset_otp", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 600,
+    });
     const subject = "Reset your ProfilizePro password";
     const result = await deliverEmail({
       to: email,
@@ -176,8 +193,7 @@ export const sendEmail = async (email: string): Promise<{ status: number; messag
     if (!result.success) {
       return { status: 500, message: result.error || "Failed to send email" };
     }
-
-    return { status: 200, message: "Email Sent", otp };
+    return { status: 200, message: "Email Sent" };
   } catch (error) {
     console.log(error);
     return { status: 500, message: "Something went wrong" };
@@ -186,13 +202,49 @@ export const sendEmail = async (email: string): Promise<{ status: number; messag
 
 export const changePassword = async (body: ChangePasswordBody): Promise<NextResponse> => {
   try {
-    const { email, password } = body;
+    const { email, password, otp } = body;
+    if (typeof email !== "string" || typeof password !== "string") {
+      return NextResponse.json({ message: "Invalid request" }, { status: 400 });
+    }
+    if (password.length < 8) {
+      return NextResponse.json(
+        { message: "Password must be at least 8 characters" },
+        { status: 400 },
+      );
+    }
+
+    // Verify the reset OTP issued in the reset_otp cookie.
+    const token = (await cookies()).get("reset_otp")?.value;
+    if (!token || !otp) {
+      return NextResponse.json(
+        { message: "Verification required. Request a new code." },
+        { status: 400 },
+      );
+    }
+    let payload: { email?: string; otpHash?: string; purpose?: string };
+    try {
+      payload = jwt.verify(token, SECRET_KEY as string) as typeof payload;
+    } catch {
+      return NextResponse.json(
+        { message: "Verification code expired. Request a new one." },
+        { status: 400 },
+      );
+    }
+    if (
+      payload.purpose !== "reset" ||
+      payload.email !== email ||
+      payload.otpHash !== hashOtp(otp)
+    ) {
+      return NextResponse.json({ message: "Invalid verification code" }, { status: 400 });
+    }
+
     const data = await User.findOne({ email });
     if (!data) {
       return NextResponse.json({ message: "User Not Found" }, { status: 404 });
     }
     data.password = password;
     await data.save();
+    (await cookies()).delete("reset_otp");
     return NextResponse.json({ message: "Password Changed Successfully" });
   } catch (error) {
     console.log(error);
@@ -245,15 +297,18 @@ export const changeUserPassword = async (
 export const verifyUser = async (..._args: unknown[]): Promise<UserData> => {
   try {
     const headersList = await headers();
-    console.log(headersList.get("authorization"));
-    const type = headersList.get("authorization")!.split(" ")[0];
-    const token = headersList.get("authorization")!.split(" ")[1];
+    const authHeader = headersList.get("authorization");
+    if (!authHeader) {
+      return { message: "Invalid Token" };
+    }
+    const type = authHeader.split(" ")[0];
+    const token = authHeader.split(" ")[1];
 
     if (type !== "Bearer") {
       return { message: "Invalid Token" };
     }
     const data = await User.ValidateToken(token);
-    
+
     return data as UserData;
   } catch (error) {
     console.log(error);
