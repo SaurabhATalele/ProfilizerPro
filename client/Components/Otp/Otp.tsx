@@ -1,12 +1,11 @@
 "use client";
-import  { FC, useState } from "react";
+import { FC, useState } from "react";
 import Image from "next/image";
 import Verify from "./Verify";
 import SendEmail from "./SendEmail";
 import Reset from "./Reset";
 import { ToastContainer } from "react-toastify";
 import Toast from "@/Utils/Toast";
-import Navbar from "../Navbar/Navbar";
 import { useTheme } from "@/Utils/ThemeContext";
 
 const Otp: FC = () => {
@@ -38,10 +37,16 @@ const Otp: FC = () => {
         Toast("error", "User Not Found");
         return;
       }
+      if (data.status !== 200) {
+        Toast("error", "Something went wrong")
+        return;
+      }
 
-      setOtp(data.otp);
-      setEmail(emailValue);
-      Toast("success", "OTP Sent to your Email");
+      if (data.status === 200) {
+        setOtp(data.otp);
+        setEmail(emailValue);
+        Toast("success", "OTP Sent to your Email");
+      }
     } catch (e) {
       console.log(e);
     }
@@ -51,9 +56,6 @@ const Otp: FC = () => {
     <div className={darkMode ? "dark" : ""}>
       <ToastContainer />
       <div className="w-screen min-h-screen bg-white dark:bg-[#0c0c0c] text-black dark:text-white">
-        <div className={"absolute w-screen mt-5 flex justify-center"}>
-          <Navbar />
-        </div>
         <div className="w-screen min-h-screen flex justify-center items-center gap-20">
           {!otp ? (
             <SendEmail handleSendMail={handleSendMail} />
@@ -63,8 +65,8 @@ const Otp: FC = () => {
           {Verified && <Reset email={email} />}
 
           <Image
-            src={"/ResetImage/email.gif"}
-            alt="my gif"
+            src={"/ResetImage/email.svg"}
+            alt="One-time passcode sent to your email"
             width={450}
             height={400}
           />

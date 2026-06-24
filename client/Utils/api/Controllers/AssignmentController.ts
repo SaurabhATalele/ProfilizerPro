@@ -1,7 +1,6 @@
 import Assignment from "../Models/Assignment";
 import User from "../Models/Users";
 import mongoose from "mongoose";
-import nodeMailer from "nodemailer";
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { SECRET_KEY } from "../../constants";
@@ -11,16 +10,6 @@ import {
   buildCustomAssignmentRecord,
   decidePersistence,
 } from "@/Utils/builder/customAssignment";
-
-export const transporter = nodeMailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
-  auth: {
-    user: process.env.EMAIL_ID || "",
-    pass: process.env.PASS_KEY || "",
-  },
-});
 
 interface ScoreBody {
   id: string;

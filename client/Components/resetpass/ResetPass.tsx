@@ -30,10 +30,10 @@ const ResetPass: FC = () => {
           </form>
         </div>
         <Image
-          src={"/ResetImage/Gmail.png"}
+          src={"/ResetImage/Gmail.svg"}
           width={350}
           height={490}
-          alt="Login"
+          alt="Password reset email"
         />
       </div>
     </>

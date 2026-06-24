@@ -57,7 +57,7 @@ const Signup: FC = () => {
       <div className="w-full min-h-[calc(100vh-80px)] mt-20 flex flex-col md:flex-row justify-center items-center gap-10 md:gap-20 px-5 pb-10">
         <div className="hidden md:flex justify-center items-center w-full max-w-[400px]">
           <Image
-            src="/SignupImages/Signup.png"
+            src="/SignupImages/Signup.svg"
             width={400}
             height={400}
             alt="Signup"

@@ -49,8 +49,8 @@ const Landing: FC = () => {
             <span className="font-bold text-[1.5rem] text-primary dark:text-secondary">200+</span>
           </h2>
         </div>
-        <div className="flex items-center justify-center w-1/4 hidden lg:block">
-          <Image src="/homeImageBoy.svg" width={400} height={400} alt="Boy Studying" />
+        <div className="flex items-center justify-center w-[30%] hidden lg:block">
+          <Image src="/assessmentHero.svg" width={800} height={800} alt="AI-powered online assessment with multiple-choice questions and a score" />
         </div>
       </div>
 
@@ -92,19 +92,19 @@ const Landing: FC = () => {
         </h1>
 
         <div className="w-full md:w-[90%] lg:w-3/4  flex flex-col lg:flex-row justify-around items-center gap-16 lg:gap-0 pb-10 lg:pb-0">
-          <div className="relative flex flex-col items-center gap-4 z-20">
-            <h1 className="absolute text-[15rem] -left-3 -top-28 z-0 text-transparent font-bold font-outline-2 stroke-slate-100">1</h1>
-            <Image src="/LandingImage/GenAss.svg" width={120} height={120} alt="General" className="w-44 h-44 z-20" />
+          <div className="relative flex flex-col items-center gap-3 z-20">
+            {/* <h1 className="absolute text-[15rem] -left-3 -top-28 z-0 text-transparent font-bold font-outline-2 stroke-slate-100">1</h1>/ */}
+            <Image src="/LandingImage/GenAss.svg" width={120} height={120} alt="General" className="w-48 h-48 z-20" />
             <p className={spaceGrotesk.className}>General Assessments</p>
           </div>
-          <div className="relative flex flex-col items-center gap-4 z-20">
-            <h1 className="absolute text-[15rem] -left-3 -top-28 z-0 text-transparent font-bold font-outline-2 stroke-slate-100">2</h1>
-            <Image src="/LandingImage/tech.svg" width={120} height={120} alt="Technical" className="w-44 h-44 z-20" />
+          <div className="relative flex flex-col items-center gap-3 z-20">
+            {/* <h1 className="absolute text-[15rem] -left-3 -top-28 z-0 text-transparent font-bold font-outline-2 stroke-slate-100">2</h1> */}
+            <Image src="/LandingImage/tech.svg" width={120} height={120} alt="Technical" className="w-48 h-48 z-20" />
             <p className={spaceGrotesk.className}>Technical Assessments</p>
           </div>
-          <div className="relative flex flex-col items-center gap-4 z-20">
-            <h1 className="absolute text-[15rem] -left-3 -top-28 z-0 text-transparent font-bold font-outline-2 stroke-slate-100">3</h1>
-            <Image src="/LandingImage/Logical.svg" width={120} height={120} alt="Logical" className="w-44 h-44 z-20" />
+          <div className="relative flex flex-col items-center gap-3 z-20">
+            {/* <h1 className="absolute text-[15rem] -left-3 -top-28 z-0 text-transparent font-bold font-outline-2 stroke-slate-100">3</h1> */}
+            <Image src="/LandingImage/Logical.svg" width={120} height={120} alt="Logical" className="w-48 h-48 z-20" />
             <p className={spaceGrotesk.className}>Logical Assessments</p>
           </div>
         </div>

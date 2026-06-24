@@ -1,18 +1,9 @@
 import User from "../Models/Users";
 import { NextResponse } from "next/server";
 import { headers, cookies } from "next/headers";
-import nodeMailer from "nodemailer";
+import { sendEmail as deliverEmail } from "@/Utils/api/email";
+import { EmailTemplate } from "@/Components/Otp/EmailTemplate";
 import { nameSchema, usernameSchema } from "@/Utils/validation/profileSchemas";
-
-const transporter = nodeMailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
-  auth: {
-    user: process.env.EMAIL_ID,
-    pass: process.env.PASS_KEY,
-  },
-});
 
 interface RegisterBody {
   email: string;
@@ -108,15 +99,15 @@ export const sendEmail = async (email: string): Promise<{ status: number; messag
     }
     const otp = generateOTP();
     console.log("otp is", otp);
-    const subject = "password reset";
-    const text = `We have received your password reset request. Please find Your otp here:</br> ${otp}`;
-    const mailOptions = {
-      from: "saurabhatalele@gmail.com",
+    const subject = "Reset your ProfilizePro password";
+    const result = await deliverEmail({
       to: email,
-      subject: subject,
-      html: text,
-    };
-    await transporter.sendMail(mailOptions);
+      subject,
+      react: EmailTemplate({ firstName: data.username, otp }),
+    });
+    if (!result.success) {
+      return { status: 500, message: result.error || "Failed to send email" };
+    }
 
     return { status: 200, message: "Email Sent", otp };
   } catch (error) {
