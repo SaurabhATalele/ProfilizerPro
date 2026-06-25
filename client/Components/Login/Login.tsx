@@ -7,7 +7,6 @@ import Toast from "@/Utils/Toast";
 import { login } from "@/Utils/Apicalls/Login";
 import Image from "next/image";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { getCookie } from "cookies-next";
 import { useUser } from "@/Utils/UserContext";
 
 const Login: FC = () => {
@@ -18,8 +17,7 @@ const Login: FC = () => {
   const { refreshUser } = useUser();
 
   useEffect(() => {
-    const token = getCookie("token");
-    if (token) {
+    if (typeof window !== "undefined" && localStorage.getItem("token")) {
       router.push("/");
     }
   }, [router]);
@@ -114,11 +112,11 @@ const Login: FC = () => {
         </div>
         <div className="hidden md:flex justify-center items-center w-full max-w-[400px]">
           <Image
-            src="/LoginImages/LoginImage.png"
+            src="/LoginImages/LoginImage.svg"
             width={400}
             height={400}
-            alt="Login"
-            className="object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500"
+            alt="Secure sign in"
+            className="object-contain hover:scale-105 transition-transform duration-500"
           />
         </div>
       </div>

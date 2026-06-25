@@ -3,8 +3,9 @@ import { FC, useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import OtpInput from "react-otp-input";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { register } from "@/Utils/Apicalls/User";
+import { register, sendRegistrationOtp } from "@/Utils/Apicalls/User";
 import { ToastContainer } from "react-toastify";
 import Toast from "@/Utils/Toast";
 
@@ -26,6 +27,9 @@ const Signup: FC = () => {
   });
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+  const [step, setStep] = useState<"form" | "otp">("form");
+  const [otp, setOtp] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
 
   const handleSignup = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
@@ -42,12 +46,32 @@ const Signup: FC = () => {
       Toast("error", "Passwords do not match");
       return;
     }
-    const response = await register(user);
+    setLoading(true);
+    const res = await sendRegistrationOtp(user.email);
+    const data = await res.json();
+    setLoading(false);
+    if (res.status === 200) {
+      Toast("success", "Verification code sent to your email");
+      setStep("otp");
+    } else {
+      Toast("error", data.message || "Could not send verification code");
+    }
+  };
+
+  const handleVerify = async (): Promise<void> => {
+    if (otp.length < 4) {
+      Toast("error", "Enter the 4-digit code");
+      return;
+    }
+    setLoading(true);
+    const response = await register({ ...user, otp });
+    const data = await response.json();
+    setLoading(false);
     if (response.status === 201) {
-      Toast("success", "Signup Successfull");
+      Toast("success", "Signup Successful");
       router.push("/login");
     } else {
-      Toast("error", "User Already Exists");
+      Toast("error", data.message || "Registration failed");
     }
   };
 
@@ -57,7 +81,7 @@ const Signup: FC = () => {
       <div className="w-full min-h-[calc(100vh-80px)] mt-20 flex flex-col md:flex-row justify-center items-center gap-10 md:gap-20 px-5 pb-10">
         <div className="hidden md:flex justify-center items-center w-full max-w-[400px]">
           <Image
-            src="/SignupImages/Signup.png"
+            src="/SignupImages/Signup.svg"
             width={400}
             height={400}
             alt="Signup"
@@ -67,9 +91,47 @@ const Signup: FC = () => {
 
         <div className="relative p-8 w-full max-w-md bg-white/80 dark:bg-[#121212]/80 backdrop-blur-xl border border-gray-200 dark:border-gray-800 shadow-2xl rounded-2xl flex flex-col gap-6 transform transition-all hover:scale-[1.01]">
           <div className="text-center space-y-2">
-            <h2 className="font-extrabold text-3xl text-gray-900 dark:text-white">Let&apos;s Sign You Up</h2>
-            <p className="text-gray-500 dark:text-gray-400 text-sm">Welcome to ProfilizePro</p>
+            <h2 className="font-extrabold text-3xl text-gray-900 dark:text-white">
+              {step === "form" ? "Let's Sign You Up" : "Verify your email"}
+            </h2>
+            <p className="text-gray-500 dark:text-gray-400 text-sm">
+              {step === "form"
+                ? "Welcome to ProfilizePro"
+                : `Enter the 4-digit code sent to ${user.email}`}
+            </p>
           </div>
+
+          {step === "otp" ? (
+            <div className="flex flex-col items-center gap-6">
+              <OtpInput
+                value={otp}
+                onChange={setOtp}
+                numInputs={4}
+                renderSeparator={<span className="w-3"> </span>}
+                renderInput={(props) => <input {...props} />}
+                inputType="number"
+                inputStyle={
+                  "border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#1e1e1e] text-gray-900 dark:text-gray-100 w-10 text-center p-2 text-xl rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/50"
+                }
+                skipDefaultStyles
+              />
+              <button
+                type="button"
+                onClick={handleVerify}
+                disabled={loading}
+                className="w-full py-3 px-4 bg-[var(--color-primary)] hover:bg-opacity-90 text-white rounded-lg font-medium transition-all duration-300 shadow-lg shadow-[var(--color-primary)]/30 disabled:opacity-50"
+              >
+                {loading ? "Verifying..." : "Verify & Create Account"}
+              </button>
+              <button
+                type="button"
+                onClick={() => setStep("form")}
+                className="text-sm text-gray-500 dark:text-gray-400 hover:underline"
+              >
+                Back
+              </button>
+            </div>
+          ) : (
           <form onSubmit={handleSignup} className="flex flex-col gap-4">
             <div>
               <input
@@ -136,11 +198,13 @@ const Signup: FC = () => {
             </div>
             <button
               type="submit"
-              className="w-full py-3 px-4 bg-[var(--color-primary)] hover:bg-opacity-90 text-white rounded-lg font-medium transition-all duration-300 shadow-lg shadow-[var(--color-primary)]/30 transform hover:-translate-y-0.5 mt-2"
+              disabled={loading}
+              className="w-full py-3 px-4 bg-[var(--color-primary)] hover:bg-opacity-90 text-white rounded-lg font-medium transition-all duration-300 shadow-lg shadow-[var(--color-primary)]/30 transform hover:-translate-y-0.5 mt-2 disabled:opacity-50"
             >
-              Signup
+              {loading ? "Sending..." : "Send Verification Code"}
             </button>
           </form>
+          )}
 
           <p className="text-center text-sm text-gray-600 dark:text-gray-400 mt-4">
             Already have an account?{" "}

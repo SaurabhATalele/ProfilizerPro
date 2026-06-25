@@ -5,6 +5,7 @@ import Link from "next/link";
 import Skeleton from "./Skeleton";
 import { ArrowRight } from "lucide-react";
 import { DesignTestTile } from "../Admin/Tests/DesignTestTile";
+import JDGeneratorTile from "../JDGenerator/JDGeneratorTile";
 
 interface TestData {
   _id: string;
@@ -56,6 +57,9 @@ const Card: FC<CardProps> = ({ tests }) => {
 
       {/* Design Your Own Test tile */}
       <DesignTestTile/>
+
+      {/* JD Question Generator tile */}
+      <JDGeneratorTile/>
     </div>
   );
 };

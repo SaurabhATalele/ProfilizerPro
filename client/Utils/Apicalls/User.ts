@@ -1,4 +1,3 @@
-import { getCookie } from "cookies-next";
 import { LOGIN_API, REGISTER_API, VERIFY_USER } from "../constants";
 
 interface LoginData {
@@ -49,13 +48,23 @@ export const register = async (data: RegisterData): Promise<Response> => {
   return response;
 };
 
+export const sendRegistrationOtp = async (email: string): Promise<Response> => {
+  return fetch("/api/v1/users/send-registration-otp", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email }),
+  });
+};
+
 export const logout = async (): Promise<void> => {
   localStorage.removeItem("token");
 };
 
 export const getUser = async (): Promise<Response> => {
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
   const myHeaders = new Headers();
-  myHeaders.append("Authorization", `Bearer ${getCookie("token")}`);
+  myHeaders.append("Authorization", `Bearer ${token ?? ""}`);
 
   const requestOptions: RequestInit = {
     method: "GET",

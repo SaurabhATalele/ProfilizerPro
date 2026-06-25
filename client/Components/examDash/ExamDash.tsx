@@ -5,12 +5,10 @@ import axios from "axios";
 import { useRouter, usePathname } from "next/navigation";
 import Loader from "@/Components/Loader/Loader";
 import TopicContext from "@/Utils/TestContext";
-import { getUser } from "@/Utils/Apicalls/User";
 
 interface Question {
   question: string;
   options: string[];
-  answer: string;
   number: number;
   status: "unattempted" | "attempted" | "marked";
 }
@@ -31,6 +29,7 @@ const ExamDash: FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const { topics } = useContext(TopicContext) as TopicContextType;
   const [answers, setAnswers] = useState<Record<number, string>>({});
+  const [sessionId, setSessionId] = useState<string>("");
   const [result, setResult] = useState<{ score: number; total: number } | null>(null);
   const router = useRouter();
   const pathname = usePathname();
@@ -45,21 +44,41 @@ const ExamDash: FC = () => {
     const getQuestions = async (): Promise<void> => {
       try {
         setLoading(true);
+        const token = localStorage.getItem("token") ?? "";
         const subtopics = JSON.stringify(topics.subtopics);
-        const res = await axios.post("/api/v1/generate-test", {
-          prompt: { topic: topics.topic, questions: subtopics, difficulty: topics.difficulty },
-        });
-        console.log(res.data);
-        const valuesArray: Question[] = Object.values(
-          res.data.response as Record<string, Array<{ question: string; options: string[]; answer: string }>>,
-        ).flatMap((category) => category.map((question) => question)) as Question[];
+        const context = isCustom
+          ? {
+              mode: "custom" as const,
+              customAssignmentId: topics.customAssignmentId,
+              topic: topics.topic,
+              difficulty: topics.difficulty,
+              subtopics: Object.entries(topics.subtopics).map(([name, c]) => ({
+                name,
+                questionCount: Number(c) || 1,
+              })),
+            }
+          : { mode: "assignment" as const, assignmentId: testId };
 
-        for (let i = 0; i < valuesArray.length; i++) {
-          valuesArray[i].number = i + 1;
-          valuesArray[i].status = "unattempted";
-        }
+        const res = await axios.post(
+          "/api/v1/generate-test",
+          {
+            prompt: { topic: topics.topic, questions: subtopics, difficulty: topics.difficulty },
+            context,
+          },
+          { headers: { Authorization: token } },
+        );
 
-        console.log(valuesArray);
+        // Server returns { id, questions:[{question, options}] } — no answers.
+        setSessionId(res.data.id);
+        const valuesArray: Question[] = (res.data.questions as Array<{
+          question: string;
+          options: string[];
+        }>).map((q, i) => ({
+          question: q.question,
+          options: q.options,
+          number: i + 1,
+          status: "unattempted",
+        }));
         setQues(valuesArray);
       } catch (error) {
         console.log(error);
@@ -79,76 +98,22 @@ const ExamDash: FC = () => {
   }, []);
 
   const submitTest = async (): Promise<void> => {
-    const questionsAndAnswers: Array<{
-      question: string;
-      answer: string;
-      yourAnswer: string;
-    }> = [];
-    let calculatedScore = 0;
-    for (let i = 0; i < ques.length; i++) {
-      questionsAndAnswers.push({
-        question: ques[i].question,
-        answer: ques[i].answer,
-        yourAnswer: answers[i],
-      });
-      if (answers[i] === ques[i].answer) {
-        calculatedScore++;
-      }
-    }
-
-    // Custom (owner-built) assessment: show score locally, then persist
-    // owner-scoped via the custom endpoint (create-or-append).
-    if (isCustom) {
-      setResult({ score: calculatedScore, total: ques.length });
-
-      const selectedSubtopics = Object.entries(topics.subtopics).map(
-        ([name, count]) => ({ name, questionCount: Number(count) || 1 }),
-      );
-
-      try {
-        await axios.post(
-          "/api/v1/assignment/custom",
-          {
-            customAssignmentId: topics.customAssignmentId,
-            topic: topics.topic,
-            difficulty: topics.difficulty,
-            subtopics: selectedSubtopics,
-            attempt: {
-              score: Math.round((calculatedScore / ques.length) * 100),
-              correct: calculatedScore,
-              total: ques.length,
-              questions: questionsAndAnswers,
-            },
-          },
-          { headers: { Authorization: localStorage.getItem("token") ?? "" } },
-        );
-      } catch (error) {
-        console.error("Error persisting custom assessment:", error);
-      }
-      return;
-    }
-
-    let email = "";
     try {
-      const resp = await getUser();
-      const userData = await resp.json();
-      if (userData && userData.email) {
-        email = userData.email;
+      const token = localStorage.getItem("token") ?? "";
+      const res = await axios.post(
+        "/api/v1/submit-test",
+        { sessionId, answers },
+        { headers: { Authorization: token } },
+      );
+      const { score, total } = res.data;
+      if (isCustom) {
+        setResult({ score, total });
+      } else {
+        router.push("/success");
       }
     } catch (error) {
-      console.error("Error fetching user:", error);
+      console.error("Error submitting test:", error);
     }
-
-    console.log(questionsAndAnswers, testId);
-    const res = await axios.put("/api/v1/assignment", {
-      questions: questionsAndAnswers,
-      id: testId,
-      total: ques.length,
-      score: calculatedScore,
-      email,
-    });
-    console.log(res.data);
-    router.push("/success");
   };
 
   return (

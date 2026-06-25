@@ -23,7 +23,7 @@ const Contactus: FC = () => {
       <div className="w-full min-h-[calc(100vh-80px)] mt-20 flex flex-col lg:flex-row justify-center items-center gap-10 lg:gap-16 px-5 pb-10">
         <div className="hidden lg:flex justify-center items-center w-full max-w-[350px]">
           <Image
-            src="/ContactImage/ContactusLeft.png"
+            src="/ContactImage/ContactusLeft.svg"
             width={350}
             height={450}
             alt="Contactus"
@@ -87,7 +87,7 @@ const Contactus: FC = () => {
 
         <div className="hidden md:flex justify-center items-center w-full max-w-[350px]">
           <Image
-            src="/ContactImage/ContactusRight.png"
+            src="/ContactImage/ContactusRight.svg"
             width={350}
             height={450}
             alt="ContactusRight"

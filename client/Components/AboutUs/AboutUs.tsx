@@ -2,6 +2,7 @@
 import { FC } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Rocket, Brain } from "lucide-react";
 
 const AboutUs: FC = () => {
   return (
@@ -9,7 +10,7 @@ const AboutUs: FC = () => {
       <div className="w-full lg:w-1/2 flex justify-center lg:justify-start">
         <div className="relative w-full max-w-lg aspect-square flex items-center justify-center">
           <Image
-            src="/SignupImages/aboutus.png"
+            src="/SignupImages/aboutus.svg"
             width={600}
             height={600}
             alt="About Us"
@@ -34,14 +35,14 @@ const AboutUs: FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 text-left">
             <div className="bg-gray-50 dark:bg-gray-900/50 p-6 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow">
               <h3 className="font-bold text-gray-900 dark:text-white text-xl mb-2 flex items-center gap-2">
-                <span className="text-primary text-2xl">🚀</span> Empowering Growth
+                <Rocket className="w-6 h-6 text-[var(--color-primary)]" /> Empowering Growth
               </h3>
               <p className="text-sm text-gray-500 dark:text-gray-400">Discover your strengths and aptitudes with curated, dynamic testing environments designed for modern challenges.</p>
             </div>
 
             <div className="bg-gray-50 dark:bg-gray-900/50 p-6 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow">
               <h3 className="font-bold text-gray-900 dark:text-white text-xl mb-2 flex items-center gap-2">
-                <span className="text-primary text-2xl">🧠</span> Tailored Insights
+                <Brain className="w-6 h-6 text-[var(--color-primary)]" /> Tailored Insights
               </h3>
               <p className="text-sm text-gray-500 dark:text-gray-400">Receive actionable, personalized feedback powered by advanced AI to help accelerate your learning journey.</p>
             </div>

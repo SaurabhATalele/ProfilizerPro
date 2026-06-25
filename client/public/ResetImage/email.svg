@@ -1,0 +1,44 @@
+<svg width="450" height="400" viewBox="0 0 360 320" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="One-time passcode email illustration">
+  <defs>
+    <linearGradient id="ot-o" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FF8A3D"/><stop offset="1" stop-color="#FF6500"/>
+    </linearGradient>
+    <filter id="ot-sh" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#FF6500" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+
+  <circle cx="180" cy="160" r="128" fill="#FF6500" opacity="0.10"/>
+  <circle cx="180" cy="160" r="128" fill="none" stroke="#FF6500" stroke-opacity="0.18" stroke-width="1.5" stroke-dasharray="3 9"/>
+
+  <!-- Envelope back -->
+  <g filter="url(#ot-sh)">
+    <rect x="84" y="118" width="192" height="132" rx="16" fill="#FFFFFF" stroke="#E7EBF1" stroke-width="1.5"/>
+  </g>
+
+  <!-- OTP code chips -->
+  <g>
+    <rect x="104" y="150" width="34" height="44" rx="8" fill="#FFF1E7" stroke="#FF6500" stroke-width="1.6"/>
+    <rect x="144" y="150" width="34" height="44" rx="8" fill="#FFF1E7" stroke="#FF6500" stroke-width="1.6"/>
+    <rect x="184" y="150" width="34" height="44" rx="8" fill="#F4F6FA" stroke="#E7EBF1" stroke-width="1.6"/>
+    <rect x="224" y="150" width="34" height="44" rx="8" fill="#F4F6FA" stroke="#E7EBF1" stroke-width="1.6"/>
+    <text x="121" y="180" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700" fill="#FF6500">4</text>
+    <text x="161" y="180" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700" fill="#FF6500">2</text>
+    <circle cx="201" cy="172" r="4" fill="#C7CFDC"/>
+    <circle cx="241" cy="172" r="4" fill="#C7CFDC"/>
+  </g>
+  <rect x="104" y="210" width="120" height="9" rx="4.5" fill="#D3DAE5"/>
+  <rect x="104" y="226" width="80" height="9" rx="4.5" fill="#E7EBF1"/>
+
+  <!-- Envelope flap (open) -->
+  <path d="M84 134a16 16 0 0 1 16-16h160a16 16 0 0 1 16 16l-96 50-96-50z" fill="#FFF1E7"/>
+  <path d="M84 134l96 50 96-50" fill="none" stroke="#FFB98C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Paper-plane / sent badge -->
+  <g filter="url(#ot-sh)">
+    <circle cx="270" cy="112" r="30" fill="url(#ot-o)"/>
+  </g>
+  <path d="M257 113l27-11-11 27-4-11-12-5z" fill="#FFFFFF"/>
+
+  <path d="M86 90c1.8 8.5 4.2 11 13 13-8.8 2-11.2 4.5-13 13-1.8-8.5-4.2-11-13-13 8.8-2 11.2-4.5 13-13z" fill="url(#ot-o)" opacity="0.85"/>
+</svg>

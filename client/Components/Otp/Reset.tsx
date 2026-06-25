@@ -6,9 +6,10 @@ import Toast from "@/Utils/Toast";
 
 interface ResetProps {
   email: string;
+  otp: string;
 }
 
-const Reset: FC<ResetProps> = ({ email }) => {
+const Reset: FC<ResetProps> = ({ email, otp }) => {
   const router = useRouter();
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
@@ -17,7 +18,11 @@ const Reset: FC<ResetProps> = ({ email }) => {
 
   const handleReset = async (pass: string, confirmPass: string): Promise<void> => {
     if (pass !== confirmPass) {
-      alert("Passwords do not match");
+      Toast("error", "Passwords do not match");
+      return;
+    }
+    if (pass.length < 8) {
+      Toast("error", "Password must be at least 8 characters");
       return;
     }
     try {
@@ -26,11 +31,11 @@ const Reset: FC<ResetProps> = ({ email }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password: pass }),
+        body: JSON.stringify({ email, password: pass, otp }),
       });
       const data = await res.json();
-      if (data.message === "User Not Found") {
-        Toast("error", "User Not Found");
+      if (res.status !== 200) {
+        Toast("error", data.message || "Could not reset password");
         return;
       }
       Toast("success", "Password Reset Success");

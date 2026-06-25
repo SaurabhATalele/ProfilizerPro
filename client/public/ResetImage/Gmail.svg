@@ -1,0 +1,38 @@
+<svg width="350" height="490" viewBox="0 0 280 392" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Password reset email illustration">
+  <defs>
+    <linearGradient id="rp-o" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FF8A3D"/><stop offset="1" stop-color="#FF6500"/>
+    </linearGradient>
+    <filter id="rp-sh" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#FF6500" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+
+  <circle cx="140" cy="196" r="120" fill="#FF6500" opacity="0.10"/>
+  <circle cx="140" cy="196" r="120" fill="none" stroke="#FF6500" stroke-opacity="0.18" stroke-width="1.5" stroke-dasharray="3 9"/>
+
+  <!-- Envelope -->
+  <g filter="url(#rp-sh)">
+    <rect x="54" y="150" width="172" height="124" rx="16" fill="#FFFFFF" stroke="#E7EBF1" stroke-width="1.5"/>
+  </g>
+  <path d="M58 162l82 58 82-58" fill="none" stroke="#FFB98C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M54 166a16 16 0 0 1 16-16h140a16 16 0 0 1 16 16l-86 60-86-60z" fill="#FFF1E7"/>
+
+  <!-- Lock/shield badge on top -->
+  <g filter="url(#rp-sh)">
+    <circle cx="140" cy="120" r="42" fill="url(#rp-o)"/>
+  </g>
+  <rect x="122" y="116" width="36" height="30" rx="7" fill="#FFFFFF"/>
+  <path d="M129 116v-7a11 11 0 0 1 22 0v7" fill="none" stroke="#FFFFFF" stroke-width="4"/>
+  <circle cx="140" cy="129" r="5" fill="#FF6500"/>
+  <rect x="138" y="131" width="4" height="8" rx="2" fill="#FF6500"/>
+
+  <!-- Reset arrow -->
+  <g transform="translate(196 232)">
+    <circle r="26" fill="#FFFFFF" stroke="#E7EBF1" stroke-width="1.5"/>
+    <path d="M-9 -2a10 10 0 1 1 2 9" fill="none" stroke="url(#rp-o)" stroke-width="3.4" stroke-linecap="round"/>
+    <path d="M-12 -10l3 9 9-3" fill="none" stroke="url(#rp-o)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <path d="M64 300c1.6 8 4 10.4 12 12-8 1.6-10.4 4-12 12-1.6-8-4-10.4-12-12 8-1.6 10.4-4 12-12z" fill="url(#rp-o)" opacity="0.85"/>
+</svg>
