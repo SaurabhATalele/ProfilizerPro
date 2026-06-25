@@ -10,7 +10,7 @@ import JDInputStep from "./JDInputStep";
 import ParseConfirmStep from "./ParseConfirmStep";
 
 /** Ordered wizard steps. */
-type WizardStep = "input" | "parse";
+type WizardStep = "input" | "parse";  
 
 const STEP_ORDER: WizardStep[] = ["input", "parse"];
 

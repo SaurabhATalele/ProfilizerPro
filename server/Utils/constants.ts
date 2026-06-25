@@ -1,0 +1,12 @@
+export const BASE_URL: string | undefined = process.env.NEXT_PUBLIC_BASE_URL;
+export const MONGO_URL: string | undefined = process.env.MONGO_URL;
+export const SECRET_KEY: string | undefined = process.env.SECRET_KEY;
+export const LOGIN_API: string | undefined = process.env.NEXT_PUBLIC_LOGIN_API;
+export const REGISTER_API: string | undefined = process.env.NEXT_PUBLIC_REGISTER_API;
+export const VERIFY_USER: string | undefined = process.env.NEXT_PUBLIC_VERIFY_USER;
+export const GET_ATTEMPTED_TEST: string | undefined = process.env.NEXT_PUBLIC_GET_ATTEMPTED_TEST;
+export const GET_TOP_N_CANDIDATES: string | undefined = process.env.NEXT_PUBLIC_GET_TOP_N_CANDIDATES;
+export const GET_ASSIGNMENTS: string | undefined = process.env.NEXT_PUBLIC_GET_ASSIGNMENTS;
+export const GET_CANDIDATES_ADMIN: string | undefined = process.env.NEXT_PUBLIC_GET_CANDIDATES_ADMIN;
+export const CONTACT_US: string | undefined = process.env.NEXT_PUBLIC_CONTACT_US;
+export const UPDATE_ASSIGNMENT: string | undefined = process.env.NEXT_PUBLIC_UPDATE_ASSIGNMENT;

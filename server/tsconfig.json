@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    // Environment setup & latest features
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "target": "ESNext",
+    "module": "Preserve",
+    "moduleDetection": "force",
+    "jsx": "react-jsx",
+    "allowJs": true,
+    "types": ["bun"],
+
+    // Bundler mode
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "noEmit": true,
+
+    // Mirror the client's "@/..." alias and redirect Next framework imports to
+    // local shims so the copied handlers/controllers compile and run unchanged.
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],
+      "next/server": ["./shims/next-server.ts"],
+      "next/headers": ["./shims/next-headers.ts"]
+    },
+
+    // Strictness mirrors the client tsconfig the copied code was written against.
+    "strict": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  }
+}
