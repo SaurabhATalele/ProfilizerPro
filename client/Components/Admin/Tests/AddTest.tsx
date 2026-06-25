@@ -5,6 +5,7 @@ import EditModal from "./EditModal";
 import DeleteTest from "./DeleteTest";
 import { ToastContainer } from "react-toastify";
 import { Pencil } from "lucide-react";
+import { BASE_BACKEND_URL } from "@/Utils/constants";
 
 interface Topic {
   name: string;
@@ -29,7 +30,7 @@ const AddTest: FC = () => {
   useEffect(() => {
     const getTests = async (): Promise<void> => {
       try {
-        const res = await fetch("/api/v1/assignment");
+        const res = await fetch(`${BASE_BACKEND_URL}/api/v1/assignment`);
         const data = await res.json();
         setTests(data.data);
       } catch (error) {

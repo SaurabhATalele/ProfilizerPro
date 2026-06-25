@@ -7,6 +7,7 @@ import Reset from "./Reset";
 import { ToastContainer } from "react-toastify";
 import Toast from "@/Utils/Toast";
 import { useTheme } from "@/Utils/ThemeContext";
+import { BASE_BACKEND_URL } from "@/Utils/constants";
 
 const Otp: FC = () => {
   const { darkMode } = useTheme();
@@ -27,7 +28,7 @@ const Otp: FC = () => {
 
   const handleSendMail = async (emailValue: string): Promise<void> => {
     try {
-      const res = await fetch("/api/v1/users/generate-otp", {
+      const res = await fetch(`${BASE_BACKEND_URL}/api/v1/users/generate-otp`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

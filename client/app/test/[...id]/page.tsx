@@ -5,6 +5,7 @@ import ViewTest from "@/Components/ViewTest/ViewTest";
 import { useTheme } from "@/Utils/ThemeContext";
 import { useRouter } from "next/navigation";
 import { getUser } from "@/Utils/Apicalls/User";
+import { BASE_BACKEND_URL } from "@/Utils/constants";
 
 
 export interface SubTopic {
@@ -40,43 +41,7 @@ const Page: FC = () => {
 
   useEffect(() => {
     const fetchTopics = async (): Promise<void> => {
-      const res = await fetch(`/api/v1/assignment/fetch`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id: test }),
-      });
-      const data = await res.json();
-      setTopic(data.data);
-      setSubtopics(data.data.topics);
-    };
-
-    const getUserHandler = async (): Promise<void> => {
-      const resp = await getUser();
-      const userData = await resp.json();
-      console.log(userData);
-      if (userData === false) {
-        localStorage.removeItem("token");
-        return;
-      }
-      if (userData.username) {
-        setUser(userData);
-      }
-    };
-
-    const cookie = localStorage.getItem("token");
-    if (cookie) {
-      getUserHandler();
-    } else {
-      router.push("/login");
-    }
-    fetchTopics();
-  }, []);
-
-  useEffect(() => {
-    const fetchTopics = async (): Promise<void> => {
-      const res = await fetch(`/api/v1/assignment/fetch`, {
+      const res = await fetch(`${BASE_BACKEND_URL}/api/v1/assignment/fetch`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

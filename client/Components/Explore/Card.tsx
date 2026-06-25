@@ -3,6 +3,7 @@ import  { FC, useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
 import Image from "next/image";
+import { BASE_BACKEND_URL } from "@/Utils/constants";
 
 interface Test {
   _id: string;
@@ -16,7 +17,7 @@ const Card: FC = () => {
 
   const getTests = async (): Promise<void> => {
     try {
-      const res = await axios.get("/api/v1/assignment");
+      const res = await axios.get(`${BASE_BACKEND_URL}/api/v1/assignment`);
       setTests(res.data.data);
     } catch (error) {
       console.log(error);

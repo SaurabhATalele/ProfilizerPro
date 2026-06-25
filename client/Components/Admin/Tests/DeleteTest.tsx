@@ -4,6 +4,7 @@ import { Button, Modal } from "flowbite-react";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import Toast from "@/Utils/Toast";
 import { Trash } from "lucide-react";
+import { BASE_BACKEND_URL } from "@/Utils/constants";
 
 interface DeleteTestProps {
   id: string;
@@ -16,7 +17,7 @@ const DeleteTest: FC<DeleteTestProps> = ({ id, refresh, setRefresh }) => {
 
   const handleDelete = async (testId: string): Promise<void> => {
     try {
-      const res = await fetch(`/api/v1/assignment/`, {
+      const res = await fetch(`${BASE_BACKEND_URL}/api/v1/assignment/`, {
         method: "DELETE",
         body: JSON.stringify({ id: testId }),
       });

@@ -2,6 +2,7 @@
 import { FC, useState, useEffect } from "react";
 import { useTheme } from "@/Utils/ThemeContext";
 import { X } from "lucide-react";
+import { BASE_BACKEND_URL } from "@/Utils/constants";
 
 interface Topic {
   name: string;
@@ -43,7 +44,7 @@ const AddTestModal: FC<AddTestModalProps> = ({ data, openModal, setOpenModal, se
   const handleAddTest = async (): Promise<void> => {
     const payload = { name: testName, description, icon, topics };
     try {
-      const res = await fetch("/api/v1/assignment", {
+      const res = await fetch(`${BASE_BACKEND_URL}/api/v1/assignment`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

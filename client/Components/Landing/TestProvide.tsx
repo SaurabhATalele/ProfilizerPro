@@ -6,6 +6,7 @@ import Skeleton from "./Skeleton";
 import { ArrowRight } from "lucide-react";
 import { DesignTestTile } from "../Admin/Tests/DesignTestTile";
 import JDGeneratorTile from "../JDGenerator/JDGeneratorTile";
+import { BASE_BACKEND_URL } from "@/Utils/constants";
 
 interface TestData {
   _id: string;
@@ -70,7 +71,7 @@ const TestProvide: FC = () => {
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch("/api/v1/assignment", { cache: "no-store" });
+        const res = await fetch(`${BASE_BACKEND_URL}/api/v1/assignment`, { cache: "no-store" });
         if (res.ok) {
           const data = await res.json();
           if (data.data && data.data.length > 0) {

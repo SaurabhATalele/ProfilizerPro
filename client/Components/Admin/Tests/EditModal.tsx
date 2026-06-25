@@ -3,6 +3,7 @@ import { FC, useState, useEffect } from "react";
 import { useTheme } from "@/Utils/ThemeContext";
 import { X } from "lucide-react";
 import Toast from "@/Utils/Toast";
+import { BASE_BACKEND_URL } from "@/Utils/constants";
 
 interface Topic {
   name: string;
@@ -52,7 +53,7 @@ const EditModal: FC<EditModalProps> = ({ data, openModal, setOpenModal, refresh,
     setLoading(true);
     const payload = { id: data._id, name: testName, description, icon, topics };
     try {
-      const res = await fetch("/api/v1/assignment", {
+      const res = await fetch(`${BASE_BACKEND_URL}/api/v1/assignment`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
