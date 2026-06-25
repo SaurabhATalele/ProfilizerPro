@@ -4,6 +4,7 @@ import Card from "./Card";
 import CustomTests from "./CustomTests";
 import axios from "axios";
 import Skeleton from "../Landing/Skeleton";
+import JDGeneratorTile from "../JDGenerator/JDGeneratorTile";
 
 interface Test {
   _id: string;
@@ -42,6 +43,10 @@ const AllTests: FC = () => {
       </div>
 
       {loading ? <Skeleton /> : <Card tests={tests} />}
+
+      <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 items-stretch">
+        <JDGeneratorTile />
+      </div>
 
       <CustomTests />
     </div>
