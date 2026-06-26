@@ -158,7 +158,7 @@ const ParseConfirmStep: FC<ParseConfirmStepProps> = ({
         <button
           type="button"
           onClick={handleConfirm}
-          className="rounded-lg bg-[var(--color-primary)] px-5 py-2 text-sm font-medium text-white shadow-md transition-all duration-300 hover:shadow-lg dark:bg-white dark:text-black"
+          className="rounded-lg bg-[var(--color-primary)] px-5 py-2 text-sm font-medium text-white shadow-md transition-all duration-300 hover:shadow-lg"
         >
           Confirm & Start Test
         </button>

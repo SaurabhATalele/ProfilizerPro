@@ -139,7 +139,7 @@ const JDInputStep: FC<JDInputStepProps> = ({ onParsed }) => {
           type="file"
           accept={SUPPORTED_EXTENSIONS.join(",")}
           onChange={handleFileChange}
-          className="block w-full text-sm text-gray-600 file:mr-3 file:cursor-pointer file:rounded-lg file:border-0 file:bg-[var(--color-primary)] file:px-4 file:py-2 file:text-sm file:font-medium file:text-white dark:text-gray-400 dark:file:bg-white dark:file:text-black"
+          className="block w-full text-sm text-gray-600 file:mr-3 file:cursor-pointer file:rounded-lg file:border-0 file:bg-[var(--color-primary)] file:px-4 file:py-2 file:text-sm file:font-medium file:text-white dark:text-gray-400"
         />
         {file && (
           <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
@@ -162,7 +162,7 @@ const JDInputStep: FC<JDInputStepProps> = ({ onParsed }) => {
           type="button"
           onClick={handleParse}
           disabled={loading}
-          className="inline-flex items-center gap-2 rounded-lg bg-[var(--color-primary)] px-5 py-2 text-sm font-medium text-white shadow-md transition-all duration-300 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60 dark:bg-white dark:text-black"
+          className="inline-flex items-center gap-2 rounded-lg bg-[var(--color-primary)] px-5 py-2 text-sm font-medium text-white shadow-md transition-all duration-300 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60"
         >
           {loading && (
             <span

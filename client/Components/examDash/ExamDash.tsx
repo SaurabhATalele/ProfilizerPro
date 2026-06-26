@@ -164,7 +164,7 @@ const ExamDash: FC = () => {
                 <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-4">
                   Questions
                 </h3>
-                <div className="grid grid-cols-6 lg:grid-cols-10 gap-3">
+                <div className="flex flex-wrap gap-3">
                   {ques.map((ele) => (
                     <Button
                       key={ele.number}
