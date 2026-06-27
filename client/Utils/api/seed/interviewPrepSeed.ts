@@ -37,7 +37,7 @@ const SEED: SeedSubject[] = [
   {
     key: "java",
     label: "Java",
-    icon: "Coffee",
+    icon: "☕",
     chapters: [
       {
         title: "Introduction",
@@ -287,7 +287,7 @@ long big = 1_000_000L;   // underscores improve readability
   {
     key: "javascript",
     label: "JavaScript",
-    icon: "Braces",
+    icon: "🟨",
     chapters: [
       {
         title: "Basics",
@@ -363,7 +363,7 @@ const merged = { ...a, ...b };          // shallow merge
   {
     key: "dsa",
     label: "DSA",
-    icon: "Binary",
+    icon: "🧮",
     chapters: [
       {
         title: "Arrays & Strings",
@@ -461,7 +461,7 @@ function fib(n, memo = {}) {
   {
     key: "system-design",
     label: "System Design",
-    icon: "Network",
+    icon: "🌐",
     chapters: [
       {
         title: "Fundamentals",
@@ -518,7 +518,7 @@ Common patterns:
   {
     key: "behavioral",
     label: "Behavioral",
-    icon: "Users",
+    icon: "🗣️",
     chapters: [
       {
         title: "The STAR Method",

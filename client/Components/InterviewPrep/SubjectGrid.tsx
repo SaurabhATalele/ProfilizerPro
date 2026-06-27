@@ -1,20 +1,9 @@
 "use client";
 import { FC, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { BookOpen, Braces, Binary, Coffee, Network, Users } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
 import { getNavTree } from "@/Utils/Apicalls/InterviewPrep";
 import type { NavTreeSubject } from "@/Utils/types/InterviewPrep";
-
-// Map the seeded subject icon names to lucide components; fall back to a book.
-const ICONS: Record<string, LucideIcon> = {
-  Coffee,
-  Braces,
-  Binary,
-  Network,
-  Users,
-  BookOpen,
-};
+import SubjectIcon from "./SubjectIcon";
 
 /** First published page slug in a subject, or null if it has none yet. */
 const firstPageSlug = (subject: NavTreeSubject): string | null => {
@@ -80,7 +69,6 @@ const SubjectGrid: FC = () => {
       ) : (
         <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {subjects.map((subject) => {
-            const Icon = ICONS[subject.icon ?? ""] ?? BookOpen;
             const count = pageCount(subject);
             const hasNotes = count > 0;
             return (
@@ -91,8 +79,8 @@ const SubjectGrid: FC = () => {
                 disabled={!hasNotes}
                 className="group flex flex-col items-start gap-3 rounded-2xl border border-gray-200 bg-white p-6 text-left transition-all duration-300 hover:-translate-y-1 hover:border-[var(--color-primary)] hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0 disabled:hover:border-gray-200 disabled:hover:shadow-none dark:border-gray-800 dark:bg-[#121212] dark:hover:border-[var(--color-secondary)]"
               >
-                <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--color-primary)]/10 text-[var(--color-primary)] transition-transform duration-300 group-hover:scale-110 dark:bg-[var(--color-secondary)]/10 dark:text-[var(--color-secondary)]">
-                  <Icon className="h-6 w-6" />
+                <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--color-primary)]/10 text-xl text-[var(--color-primary)] transition-transform duration-300 group-hover:scale-110 dark:bg-[var(--color-secondary)]/10 dark:text-[var(--color-secondary)]">
+                  <SubjectIcon icon={subject.icon} className="h-6 w-6" />
                 </span>
                 <div>
                   <h3 className="text-lg font-bold text-gray-900 dark:text-white">
