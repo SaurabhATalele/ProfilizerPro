@@ -180,6 +180,71 @@ export const searchPages = async (
 };
 
 // ---------------------------------------------------------------------------
+// Static rendering (ISR) helpers — published-only, no view increment, no
+// per-user state, so the result is identical for every visitor and can be
+// baked into a statically generated page.
+// ---------------------------------------------------------------------------
+
+/** Every published page slug, for `generateStaticParams`. */
+export const getPublishedSlugs = async (): Promise<string[]> => {
+  await connectdb();
+  const pages = await Page.find(
+    { status: "published" },
+    { slug: 1 },
+  ).lean<{ slug: string }[]>();
+  return pages.map((p) => p.slug);
+};
+
+/**
+ * Published page detail for static rendering: content, breadcrumb, and
+ * aggregate counts only. Returns `null` for missing/unpublished slugs. Unlike
+ * `getPageBySlug` this does NOT increment views or read user state, so it is
+ * safe to call at build/ISR time. Per-user like/progress are layered in
+ * client-side after hydration.
+ */
+export const getStaticPageBySlug = async (
+  slug: string,
+): Promise<PageDetailResponse | null> => {
+  await connectdb();
+
+  const page = await Page.findOne({ slug, status: "published" }).lean<{
+    _id: unknown;
+    title: string;
+    slug: string;
+    content: string;
+    icon?: string;
+    viewCount: number;
+    likeCount: number;
+    chapterId: unknown;
+  } | null>();
+  if (!page) return null;
+
+  const chapter = await Chapter.findById(page.chapterId).lean<{
+    title: string;
+    subjectId: unknown;
+  } | null>();
+  const subject = chapter
+    ? await Subject.findById(chapter.subjectId).lean<{ label: string } | null>()
+    : null;
+
+  return {
+    _id: String(page._id),
+    title: page.title,
+    slug: page.slug,
+    content: page.content,
+    icon: page.icon,
+    viewCount: page.viewCount,
+    likeCount: page.likeCount,
+    liked: false,
+    progressStatus: "not-started",
+    breadcrumb: {
+      subjectLabel: subject?.label ?? "",
+      chapterTitle: chapter?.title ?? "",
+    },
+  };
+};
+
+// ---------------------------------------------------------------------------
 // Admin authoring
 // ---------------------------------------------------------------------------
 
