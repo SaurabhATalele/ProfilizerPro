@@ -1,9 +1,13 @@
 "use client";
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import { useRouter } from "next/navigation";
-import { getNavTree } from "@/Utils/Apicalls/InterviewPrep";
 import type { NavTreeSubject } from "@/Utils/types/InterviewPrep";
 import SubjectIcon from "./SubjectIcon";
+
+interface SubjectGridProps {
+  /** Provided by the statically rendered (ISR) page — no client fetch needed. */
+  subjects: NavTreeSubject[];
+}
 
 /** First published page slug in a subject, or null if it has none yet. */
 const firstPageSlug = (subject: NavTreeSubject): string | null => {
@@ -18,26 +22,12 @@ const pageCount = (subject: NavTreeSubject): number =>
   subject.chapters.reduce((sum, c) => sum + c.pages.length, 0);
 
 /**
- * Interview Prep home — a tile grid of subjects (the wireframe view). Clicking
- * a subject opens its first note. Rendered under the global app Navbar.
+ * Interview Prep home — a tile grid of subjects (the wireframe view). Subjects
+ * are passed in from the statically generated page, so opening the home does
+ * not hit the database. Clicking a subject opens its first note.
  */
-const SubjectGrid: FC = () => {
+const SubjectGrid: FC<SubjectGridProps> = ({ subjects }) => {
   const router = useRouter();
-  const [subjects, setSubjects] = useState<NavTreeSubject[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    const load = async (): Promise<void> => {
-      setLoading(true);
-      const resp = await getNavTree();
-      if (resp && resp.ok) {
-        const data: { subjects: NavTreeSubject[] } = await resp.json();
-        setSubjects(data.subjects ?? []);
-      }
-      setLoading(false);
-    };
-    load();
-  }, []);
 
   const openSubject = (subject: NavTreeSubject): void => {
     const slug = firstPageSlug(subject);
@@ -53,16 +43,7 @@ const SubjectGrid: FC = () => {
         Select a subject to start studying.
       </p>
 
-      {loading ? (
-        <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div
-              key={i}
-              className="h-36 animate-pulse rounded-2xl bg-gray-100 dark:bg-gray-800"
-            />
-          ))}
-        </div>
-      ) : subjects.length === 0 ? (
+      {subjects.length === 0 ? (
         <p className="mt-8 text-sm text-gray-500 dark:text-gray-400">
           No subjects are available yet. Check back soon.
         </p>

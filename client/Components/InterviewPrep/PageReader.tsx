@@ -7,74 +7,53 @@ import PageContent from "./PageContent";
 import ProgressIndicator from "./ProgressIndicator";
 
 interface PageReaderProps {
-  slug: string;
+  /** Statically rendered (ISR) page detail — content shows with no DB fetch. */
+  initialPage: PageDetailResponse;
 }
 
 /**
- * Reader surface for a single note. Fetches the page detail by slug (which also
- * increments the view count server-side), then renders the header, progress
- * control, and markdown body. Shows a skeleton while loading and a friendly
- * not-found state for missing/unauthorized slugs.
+ * Reader for a single note. The content, title, breadcrumb, and aggregate
+ * counts come from the statically generated page (no client fetch to display).
+ * If the visitor is signed in, a background call registers a view and layers
+ * in their personal like/progress state without blocking the content.
  */
-const PageReader: FC<PageReaderProps> = ({ slug }) => {
-  const [page, setPage] = useState<PageDetailResponse | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [notFound, setNotFound] = useState<boolean>(false);
+const PageReader: FC<PageReaderProps> = ({ initialPage }) => {
+  const [page, setPage] = useState<PageDetailResponse>(initialPage);
+  // Bumped once personalization lands so the like/progress controls remount
+  // with the user's actual state instead of the static defaults.
+  const [personalizedKey, setPersonalizedKey] = useState<string>("static");
 
+  // Re-sync when navigating between notes (new static props).
   useEffect(() => {
+    setPage(initialPage);
+    setPersonalizedKey("static");
+  }, [initialPage]);
+
+  // Background personalization: increment the view count and read the user's
+  // like/progress. Skipped entirely for signed-out visitors.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (!localStorage.getItem("token")) return;
+
     let cancelled = false;
-    const load = async (): Promise<void> => {
-      setLoading(true);
-      setNotFound(false);
-      const resp = await getPageBySlug(slug);
-      if (cancelled) return;
-      if (!resp || !resp.ok) {
-        setNotFound(true);
-        setLoading(false);
-        return;
-      }
+    const personalize = async (): Promise<void> => {
+      const resp = await getPageBySlug(initialPage.slug);
+      if (cancelled || !resp || !resp.ok) return;
       const data: PageDetailResponse = await resp.json();
+      if (cancelled) return;
       setPage(data);
-      setLoading(false);
+      setPersonalizedKey(`p-${data._id}`);
     };
-    load();
+    personalize();
     return () => {
       cancelled = true;
     };
-  }, [slug]);
-
-  if (loading) {
-    return (
-      <div className="flex flex-col gap-4">
-        <div className="h-6 w-1/3 animate-pulse rounded bg-gray-100 dark:bg-gray-800" />
-        <div className="h-9 w-2/3 animate-pulse rounded bg-gray-100 dark:bg-gray-800" />
-        <div className="mt-4 flex flex-col gap-3">
-          {Array.from({ length: 8 }).map((_, i) => (
-            <div
-              key={i}
-              className="h-4 w-full animate-pulse rounded bg-gray-100 dark:bg-gray-800"
-            />
-          ))}
-        </div>
-      </div>
-    );
-  }
-
-  if (notFound || !page) {
-    return (
-      <div className="py-16 text-center">
-        <h1 className="text-xl font-semibold">Note not found</h1>
-        <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-          This note doesn&apos;t exist or isn&apos;t available. Pick another from
-          the sidebar.
-        </p>
-      </div>
-    );
-  }
+  }, [initialPage.slug]);
 
   return (
     <article>
       <PageHeader
+        key={`header-${personalizedKey}`}
         pageId={page._id}
         title={page.title}
         breadcrumb={page.breadcrumb}
@@ -83,6 +62,7 @@ const PageReader: FC<PageReaderProps> = ({ slug }) => {
         initialLikeCount={page.likeCount}
       />
       <ProgressIndicator
+        key={`progress-${personalizedKey}`}
         pageId={page._id}
         initialStatus={page.progressStatus}
       />
