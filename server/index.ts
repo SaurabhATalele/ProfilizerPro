@@ -28,6 +28,18 @@ import * as usersProfile from "@/app/api/v1/users/profile/route";
 import * as usersRegister from "@/app/api/v1/users/register/route";
 import * as usersResetPass from "@/app/api/v1/users/reset-pass/route";
 import * as usersSendRegOtp from "@/app/api/v1/users/send-registration-otp/route";
+import * as ipChapters from "@/app/api/v1/interview-prep/chapters/route";
+import * as ipChaptersReorder from "@/app/api/v1/interview-prep/chapters/reorder/route";
+import * as ipNavTree from "@/app/api/v1/interview-prep/nav-tree/route";
+import * as ipPages from "@/app/api/v1/interview-prep/pages/route";
+import * as ipPagesReorder from "@/app/api/v1/interview-prep/pages/reorder/route";
+import * as ipPagesSearch from "@/app/api/v1/interview-prep/pages/search/route";
+import * as ipPageDetail from "@/app/api/v1/interview-prep/pages/[id]/route";
+import * as ipPageLike from "@/app/api/v1/interview-prep/pages/[id]/like/route";
+import * as ipPageProgress from "@/app/api/v1/interview-prep/pages/[id]/progress/route";
+import * as ipPageStatus from "@/app/api/v1/interview-prep/pages/[id]/status/route";
+import * as ipSeed from "@/app/api/v1/interview-prep/seed/route";
+import * as ipSubjects from "@/app/api/v1/interview-prep/subjects/route";
 
 type Handler = (req: NextRequest, ctx?: unknown) => Response | Promise<Response>;
 type MethodMap = Partial<Record<string, Handler>>;
@@ -56,10 +68,38 @@ const routes: Record<string, MethodMap> = {
   "/api/v1/users/register": usersRegister as MethodMap,
   "/api/v1/users/reset-pass": usersResetPass as MethodMap,
   "/api/v1/users/send-registration-otp": usersSendRegOtp as MethodMap,
+  "/api/v1/interview-prep/chapters": ipChapters as MethodMap,
+  "/api/v1/interview-prep/chapters/reorder": ipChaptersReorder as MethodMap,
+  "/api/v1/interview-prep/nav-tree": ipNavTree as MethodMap,
+  "/api/v1/interview-prep/pages": ipPages as MethodMap,
+  "/api/v1/interview-prep/pages/reorder": ipPagesReorder as MethodMap,
+  "/api/v1/interview-prep/pages/search": ipPagesSearch as MethodMap,
+  "/api/v1/interview-prep/seed": ipSeed as MethodMap,
+  "/api/v1/interview-prep/subjects": ipSubjects as MethodMap,
 };
 
-// Only dynamic segment in the tree: jd-generator/set/[id].
-const SET_ID = /^\/api\/v1\/jd-generator\/set\/([^/]+)$/;
+// Dynamic-segment routes. Patterns are tried in order, so more specific paths
+// (…/pages/[id]/like) must precede the catch-all (…/pages/[id]). Static routes
+// above are matched first, so /pages/reorder and /pages/search never fall here.
+const DYNAMIC_ROUTES: { pattern: RegExp; mod: MethodMap }[] = [
+  { pattern: /^\/api\/v1\/jd-generator\/set\/([^/]+)$/, mod: jdSet as MethodMap },
+  {
+    pattern: /^\/api\/v1\/interview-prep\/pages\/([^/]+)\/like$/,
+    mod: ipPageLike as MethodMap,
+  },
+  {
+    pattern: /^\/api\/v1\/interview-prep\/pages\/([^/]+)\/progress$/,
+    mod: ipPageProgress as MethodMap,
+  },
+  {
+    pattern: /^\/api\/v1\/interview-prep\/pages\/([^/]+)\/status$/,
+    mod: ipPageStatus as MethodMap,
+  },
+  {
+    pattern: /^\/api\/v1\/interview-prep\/pages\/([^/]+)$/,
+    mod: ipPageDetail as MethodMap,
+  },
+];
 
 // Routes reachable without a bearer token. Everything else requires a valid
 // JWT in the Authorization header. Login, signup, and "fetch all assessments"
@@ -170,10 +210,13 @@ Bun.serve({
     if (exact) {
       handler = exact[req.method];
     } else {
-      const m = SET_ID.exec(pathname);
-      if (m) {
-        params = { id: m[1]! };
-        handler = (jdSet as MethodMap)[req.method];
+      for (const route of DYNAMIC_ROUTES) {
+        const m = route.pattern.exec(pathname);
+        if (m) {
+          params = { id: m[1]! };
+          handler = route.mod[req.method];
+          break;
+        }
       }
     }
 
