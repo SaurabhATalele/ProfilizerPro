@@ -3,6 +3,7 @@ import { FC, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Sparkles, ArrowRight } from "lucide-react";
+import { BASE_BACKEND_URL } from "@/Utils/constants";
 
 interface CustomTest {
   _id: string;
@@ -25,7 +26,7 @@ const CustomTests: FC = () => {
           setLoading(false);
           return;
         }
-        const res = await fetch("/api/v1/assignment/custom", {
+        const res = await fetch(`${BASE_BACKEND_URL}/api/v1/assignment/custom`, {
           method: "GET",
           headers: { Authorization: token },
         });

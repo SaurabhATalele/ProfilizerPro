@@ -1,4 +1,4 @@
-import { LOGIN_API, REGISTER_API, VERIFY_USER } from "../constants";
+import { LOGIN_API, REGISTER_API, VERIFY_USER, BASE_BACKEND_URL } from "../constants";
 
 interface LoginData {
   [key: string]: any;
@@ -49,7 +49,7 @@ export const register = async (data: RegisterData): Promise<Response> => {
 };
 
 export const sendRegistrationOtp = async (email: string): Promise<Response> => {
-  return fetch("/api/v1/users/send-registration-otp", {
+  return fetch(`${BASE_BACKEND_URL}/api/v1/users/send-registration-otp`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email }),

@@ -13,16 +13,17 @@ import type {
   TargetDifficulty,
   GeneratedQuestion,
 } from "@/Utils/types/JDGenerator";
+import { BASE_BACKEND_URL } from "@/Utils/constants";
 
 // ---------------------------------------------------------------------------
 // Route constants
 // ---------------------------------------------------------------------------
 
-const JD_PARSE_API = "/api/v1/jd-generator/parse";
-const JD_GENERATE_API = "/api/v1/jd-generator/generate";
-const JD_SET_API = "/api/v1/jd-generator/set"; // append `/${id}`
-const JD_REGENERATE_API = "/api/v1/jd-generator/regenerate";
-const JD_APPROVE_API = "/api/v1/jd-generator/approve";
+const JD_PARSE_API = `${BASE_BACKEND_URL}/api/v1/jd-generator/parse`;
+const JD_GENERATE_API = `${BASE_BACKEND_URL}/api/v1/jd-generator/generate`;
+const JD_SET_API = `${BASE_BACKEND_URL}/api/v1/jd-generator/set`; // append `/${id}`
+const JD_REGENERATE_API = `${BASE_BACKEND_URL}/api/v1/jd-generator/regenerate`;
+const JD_APPROVE_API = `${BASE_BACKEND_URL}/api/v1/jd-generator/approve`;
 
 // ---------------------------------------------------------------------------
 // Auth helpers

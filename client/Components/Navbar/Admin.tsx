@@ -40,6 +40,11 @@ const AdminNavbar: FC = () => {
             </Link>
           </li>
           <li>
+            <Link href={"/admin/interview-prep"} className={linkStyle}>
+              Interview Prep
+            </Link>
+          </li>
+          <li>
             <Link href={"/logout"} className={linkStyle}>
               Logout
             </Link>

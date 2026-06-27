@@ -5,6 +5,7 @@ import CustomTests from "./CustomTests";
 import axios from "axios";
 import Skeleton from "../Landing/Skeleton";
 import JDGeneratorTile from "../JDGenerator/JDGeneratorTile";
+import { BASE_BACKEND_URL } from "@/Utils/constants";
 
 interface Test {
   _id: string;
@@ -19,7 +20,7 @@ const AllTests: FC = () => {
 
   const getTests = async (): Promise<void> => {
     try {
-      const res = await axios.get("/api/v1/assignment");
+      const res = await axios.get(`${BASE_BACKEND_URL}/api/v1/assignment`);
       if (res.data && res.data.data) {
         setTests(res.data.data);
       }

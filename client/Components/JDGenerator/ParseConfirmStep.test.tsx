@@ -80,7 +80,7 @@ describe("ParseConfirmStep — editable parse form (Req 4.1)", () => {
 
     // Confirm and assert the emitted signal reflects every edit.
     await user.click(
-      screen.getByRole("button", { name: "Confirm & Continue" }),
+      screen.getByRole("button", { name: "Confirm & Start Test" }),
     );
 
     expect(onConfirm).toHaveBeenCalledTimes(1);
@@ -103,7 +103,9 @@ describe("ParseConfirmStep — editable parse form (Req 4.1)", () => {
     );
 
     fireEvent.change(screen.getByLabelText("Role"), { target: { value: "" } });
-    fireEvent.click(screen.getByRole("button", { name: "Confirm & Continue" }));
+    fireEvent.click(
+      screen.getByRole("button", { name: "Confirm & Start Test" }),
+    );
 
     expect(onConfirm).not.toHaveBeenCalled();
   });

@@ -3,6 +3,7 @@ import  { FC, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ToastContainer } from "react-toastify";
 import Toast from "@/Utils/Toast";
+import { BASE_BACKEND_URL } from "@/Utils/constants";
 
 interface ResetProps {
   email: string;
@@ -26,7 +27,7 @@ const Reset: FC<ResetProps> = ({ email, otp }) => {
       return;
     }
     try {
-      const res = await fetch("/api/v1/users/reset-pass", {
+      const res = await fetch(`${BASE_BACKEND_URL}/api/v1/users/reset-pass`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

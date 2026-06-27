@@ -61,7 +61,7 @@ const ReviewWizard: FC = () => {
       <div className="pt-12 w-full bg-white text-black dark:bg-black dark:text-white">
         <div className="mx-auto w-full max-w-4xl px-4 py-8">
           <header className="mb-8">
-            <h1 className="text-2xl font-semibold md:text-3xl">
+            <h1 className="text-2xl text-[var(--color-primary)]  font-semibold md:text-3xl">
               JD Test Generator
             </h1>
             <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
@@ -80,7 +80,7 @@ const ReviewWizard: FC = () => {
                   <span
                     className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-medium transition-all duration-300 ${
                       isActive
-                        ? "bg-[var(--color-primary)] text-white dark:bg-white dark:text-black"
+                        ? "bg-[var(--color-primary)] text-white"
                         : isComplete
                           ? "bg-green-500 text-white"
                           : "bg-gray-200 text-gray-600 dark:bg-gray-800 dark:text-gray-400"

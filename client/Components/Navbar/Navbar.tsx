@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef, useEffect, FC } from "react";
 import { useTheme } from "../../Utils/ThemeContext";
-import { Sun, Moon, User as UserIcon, LayoutDashboard, ClipboardList, Settings, LogOut, ChevronDown } from "lucide-react";
+import { Sun, Moon, User as UserIcon, LayoutDashboard, ClipboardList, Settings, LogOut, ChevronDown, BookOpen } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { MdMenu, MdClose } from "react-icons/md";
@@ -64,6 +64,11 @@ const Navbar: FC = () => {
           <li>
             <Link href={"/all-tests"} className={linkStyle}>
               Tests
+            </Link>
+          </li>
+          <li>
+            <Link href={"/interview-prep"} className={linkStyle}>
+              Interview Prep
             </Link>
           </li>
           <li>
@@ -164,6 +169,14 @@ const Navbar: FC = () => {
                     >
                       <ClipboardList className="w-4 h-4" />
                       My Tests
+                    </Link>
+                    <Link
+                      href="/interview-prep"
+                      onClick={() => setProfileOpen(false)}
+                      className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                    >
+                      <BookOpen className="w-4 h-4" />
+                      Interview Prep
                     </Link>
                     <Link
                       href="/contactus"

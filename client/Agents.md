@@ -575,6 +575,38 @@ export const useTheme = (): ThemeContextType => {
 
 ---
 
+## Feature: Interview Prep (Interview Desk)
+
+A read-heavy, admin-authored content library of interview notes, rendered as a three-zone reader. Independent from the JD Question Generator (separate models, routes, and components — do not merge them).
+
+### Data model (three-level tree)
+
+`Subject` → `Chapter` (folders) → `Page` (one markdown document per note), plus `UserPageProgress` for per-user like/progress.
+
+- `Utils/api/Models/Subject.ts`, `Chapter.ts`, `Page.ts`, `UserPageProgress.ts`
+- **Archive, never hard-delete:** Pages archive (`status: "archived"`); Subjects/Chapters delete is blocked while non-archived children exist, protecting likes/progress.
+- `Page.slug` is globally unique — routing is flat: `/interview-prep/[slug]`.
+
+### Layering
+
+- **Types:** `Utils/types/InterviewPrep.ts`
+- **Validation (Zod, admin mutations + progress):** `Utils/validation/interviewPrepSchemas.ts`
+- **Controllers:** `Utils/api/Controllers/{Subject,Chapter,Page,Progress}Controller.ts`. `getNavTree` is a single aggregation (no N+1) powering the whole sidebar.
+- **Routes:** `app/api/v1/interview-prep/*` — `nav-tree` (GET), `pages/search` (GET), `pages` (POST), `pages/reorder` (PATCH), `pages/[id]` (GET reads by **slug**, PUT updates by **id**), `pages/[id]/{like,progress,status}`, `subjects`, `chapters`, `chapters/reorder`, `seed` (admin). `requireAuth` on reads; `requireAdmin` stacked on every mutation. Draft/archived pages return 404 (not 403) to non-admins.
+- **Apicalls:** `Utils/Apicalls/InterviewPrep.ts`
+- **Seed:** `Utils/api/seed/interviewPrepSeed.ts` (idempotent real content) + `scripts/seedInterviewPrep.ts` CLI + admin `POST /seed` route.
+
+### Frontend
+
+- **Reader:** `Components/InterviewPrep/` — `SubjectGrid` (home tile view of subjects), `InterviewDeskLayout` (reader shell: sidebar tree + content, **no feature navbar** — sits under the global app `Navbar`), `NavTree` (recursive, live-filtered, active highlight), `PageHeader` (breadcrumb, views, optimistic like, copy link), `PageContent`, `ProgressIndicator`, `PageReader`. Page routes: `app/interview-prep/page.tsx` (tile grid) and `app/interview-prep/[slug]/page.tsx` (reader). The global `Navbar` carries the "Interview Prep" link; the feature does not render its own navbar.
+- **Authoring (admin):** `Components/Admin/InterviewPrepEditor/` — `InterviewPrepAdmin` (tabbed console), `SubjectManager`, `ChapterManager`, `PageEditor` (markdown + live preview reusing `PageContent`), `PageStatusControls`. Admin route: `app/admin/interview-prep/page.tsx`.
+
+### Markdown rendering
+
+Page bodies are GFM markdown rendered with `react-markdown` + `remark-gfm`. HTML is escaped by default (no `rehype-raw`) to prevent stored XSS. Fenced code routes through the shared `Components/InterviewPrep/CodeBlock.tsx`; blockquotes render as left-bordered italic callouts. Reuse `CodeBlock` for any future fenced-code rendering — do not build a second one.
+
+---
+
 ## Related Files
 
 - **Configuration:** `tailwind.config.js`, `next.config.mjs`, `tsconfig.json`
@@ -588,11 +620,12 @@ export const useTheme = (): ThemeContextType => {
 
 | Date | Version | Changes |
 |------|---------|---------|
+| 2026-06-27 | 2.1 | Added the Interview Prep feature (Interview Desk): new Models (Subject, Chapter, Page, UserPageProgress), the `app/api/v1/interview-prep/*` route group, controllers (Subject/Chapter/Page/Progress), the `Components/InterviewPrep/` reader + `Components/Admin/InterviewPrepEditor/` authoring folders, a markdown renderer (`react-markdown` + `remark-gfm`) with a shared `CodeBlock`, and a content seed (`Utils/api/seed/interviewPrepSeed.ts`). |
 | 2026-06-20 | 2.0 | Complete TypeScript migration - all files converted from JS/JSX to TS/TSX with strict mode enabled; added TypeScript standards section |
 | 2026-06-20 | 1.0 | Initial comprehensive documentation created including Navbar component updates with iOS-style toggle switch and elegant link styling |
 
 ---
 
-**Last Updated:** 2026-06-20  
+**Last Updated:** 2026-06-27  
 **Maintained By:** Development Team  
 **Status:** Active & Maintained

@@ -5,6 +5,7 @@ import axios from "axios";
 import { useRouter, usePathname } from "next/navigation";
 import Loader from "@/Components/Loader/Loader";
 import TopicContext from "@/Utils/TestContext";
+import { BASE_BACKEND_URL } from "@/Utils/constants";
 
 interface Question {
   question: string;
@@ -60,7 +61,7 @@ const ExamDash: FC = () => {
           : { mode: "assignment" as const, assignmentId: testId };
 
         const res = await axios.post(
-          "/api/v1/generate-test",
+          `${BASE_BACKEND_URL}/api/v1/generate-test`,
           {
             prompt: { topic: topics.topic, questions: subtopics, difficulty: topics.difficulty },
             context,
@@ -101,7 +102,7 @@ const ExamDash: FC = () => {
     try {
       const token = localStorage.getItem("token") ?? "";
       const res = await axios.post(
-        "/api/v1/submit-test",
+        `${BASE_BACKEND_URL}/api/v1/submit-test`,
         { sessionId, answers },
         { headers: { Authorization: token } },
       );
@@ -163,7 +164,7 @@ const ExamDash: FC = () => {
                 <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-4">
                   Questions
                 </h3>
-                <div className="grid grid-cols-6 lg:grid-cols-10 gap-3">
+                <div className="flex flex-wrap gap-3">
                   {ques.map((ele) => (
                     <Button
                       key={ele.number}

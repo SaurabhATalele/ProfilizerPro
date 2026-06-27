@@ -1,7 +1,8 @@
 import { getCookie } from "cookies-next";
 import { ProfilePatchPayload } from "@/Utils/types/Profile";
+import { BASE_BACKEND_URL } from "@/Utils/constants";
 
-const PROFILE_API = "/api/v1/users/profile";
+const PROFILE_API = `${BASE_BACKEND_URL}/api/v1/users/profile`;
 
 export const updateProfile = async (
   data: ProfilePatchPayload,

@@ -26,6 +26,7 @@ import {
   Difficulty,
 } from "@/Utils/builder/difficulty";
 import { prefillFromRecord } from "@/Utils/builder/customAssignment";
+import { BASE_BACKEND_URL } from "@/Utils/constants";
 
 interface TopicContextType {
   topics: {
@@ -73,7 +74,7 @@ const BuilderPage: FC = () => {
         }
         const token = localStorage.getItem("token");
         const resp = await fetch(
-          `/api/v1/assignment/custom?id=${encodeURIComponent(id)}`,
+          `${BASE_BACKEND_URL}/api/v1/assignment/custom?id=${encodeURIComponent(id)}`,
           {
             method: "GET",
             headers: { Authorization: token ?? "" },
@@ -135,7 +136,7 @@ const BuilderPage: FC = () => {
     setError(null);
     setLoading(true);
     try {
-      const resp = await fetch("/api/v1/suggest-subtopics", {
+      const resp = await fetch(`${BASE_BACKEND_URL}/api/v1/suggest-subtopics`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ topic: topic.trim() }),
