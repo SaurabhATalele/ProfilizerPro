@@ -1,5 +1,5 @@
 "use client";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Check, Copy } from "lucide-react";
 
 interface CodeBlockProps {
@@ -8,12 +8,33 @@ interface CodeBlockProps {
 }
 
 /**
- * The single fenced-code-block renderer for page content. Every markdown code
- * fence routes through this component (see PageContent). Shows the language
- * label and a copy-to-clipboard control; styled for both light and dark mode.
+ * Fenced-code renderer for page content. Highlights with shiki (lazy-loaded,
+ * dual light/dark theme bound to the `.dark` class via globals.css). Shows the
+ * raw code as a fallback until highlighting resolves, plus a copy control.
  */
 const CodeBlock: FC<CodeBlockProps> = ({ language, value }) => {
   const [copied, setCopied] = useState<boolean>(false);
+  const [html, setHtml] = useState<string>("");
+
+  useEffect(() => {
+    let cancelled = false;
+    import("shiki")
+      .then(({ codeToHtml }) =>
+        codeToHtml(value, {
+          lang: language || "text",
+          themes: { light: "github-light", dark: "github-dark" },
+          defaultColor: false,
+        }),
+      )
+      // Unknown language (or load failure) → keep the plain fallback.
+      .catch(() => "")
+      .then((out) => {
+        if (!cancelled && out) setHtml(out);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [value, language]);
 
   const handleCopy = async (): Promise<void> => {
     try {
@@ -21,13 +42,13 @@ const CodeBlock: FC<CodeBlockProps> = ({ language, value }) => {
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
     } catch {
-      // Clipboard may be unavailable (e.g. insecure context) — fail quietly.
+      // Clipboard may be unavailable (insecure context) — fail quietly.
     }
   };
 
   return (
-    <div className="my-4 overflow-hidden rounded-lg border border-gray-200 bg-[#f6f8fa] dark:border-gray-800 dark:bg-[#0d1117]">
-      <div className="flex items-center justify-between border-b border-gray-200 px-4 py-1.5 dark:border-gray-800">
+    <div className="my-4 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-800">
+      <div className="flex items-center justify-between border-b border-gray-200 bg-[#f6f8fa] px-4 py-1.5 dark:border-gray-800 dark:bg-[#0d1117]">
         <span className="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
           {language || "code"}
         </span>
@@ -48,11 +69,18 @@ const CodeBlock: FC<CodeBlockProps> = ({ language, value }) => {
           )}
         </button>
       </div>
-      <pre className="overflow-x-auto px-4 py-3 text-sm leading-relaxed">
-        <code className="font-mono text-gray-800 dark:text-gray-100">
-          {value}
-        </code>
-      </pre>
+      {html ? (
+        <div
+          className="shiki-block overflow-x-auto text-sm [&_pre]:m-0 [&_pre]:px-4 [&_pre]:py-3"
+          dangerouslySetInnerHTML={{ __html: html }}
+        />
+      ) : (
+        <pre className="overflow-x-auto bg-[#f6f8fa] px-4 py-3 text-sm leading-relaxed dark:bg-[#0d1117]">
+          <code className="font-mono text-gray-800 dark:text-gray-100">
+            {value}
+          </code>
+        </pre>
+      )}
     </div>
   );
 };

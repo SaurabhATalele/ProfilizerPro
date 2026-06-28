@@ -78,3 +78,15 @@ body::-webkit-scrollbar-thumb {
 ::view-transition-new(root) {
   z-index: 9999;
 }
+
+/* Shiki dual-theme: light by default, dark when the .dark class is set. */
+.shiki-block .shiki,
+.shiki-block .shiki span {
+  color: var(--shiki-light);
+  background-color: var(--shiki-light-bg);
+}
+html.dark .shiki-block .shiki,
+html.dark .shiki-block .shiki span {
+  color: var(--shiki-dark);
+  background-color: var(--shiki-dark-bg);
+}

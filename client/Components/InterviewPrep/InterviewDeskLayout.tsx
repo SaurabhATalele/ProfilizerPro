@@ -1,6 +1,7 @@
 "use client";
-import { FC, ReactNode, useState } from "react";
-import { Search } from "lucide-react";
+import { FC, ReactNode, useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { Menu, Search, X } from "lucide-react";
 import type { NavTreeSubject } from "@/Utils/types/InterviewPrep";
 import NavTree from "./NavTree";
 
@@ -23,6 +24,13 @@ const InterviewDeskLayout: FC<InterviewDeskLayoutProps> = ({
   children,
 }) => {
   const [filter, setFilter] = useState<string>("");
+  const [mobileNavOpen, setMobileNavOpen] = useState<boolean>(false);
+  const pathname = usePathname();
+
+  // Close the mobile tree after navigating to a note.
+  useEffect(() => {
+    setMobileNavOpen(false);
+  }, [pathname]);
 
   return (
     // pt-16 clears the fixed global Navbar (h-16).
@@ -57,25 +65,45 @@ const InterviewDeskLayout: FC<InterviewDeskLayoutProps> = ({
 
       {/* Content pane */}
       <div className="flex min-w-0 flex-1 flex-col">
-        {/* Mobile search (the sidebar is hidden on small screens) */}
-        <div className="px-4 py-3 md:hidden">
-          <div className="relative">
-            <Search className="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-            <input
-              type="text"
-              value={filter}
-              onChange={(e) => setFilter(e.target.value)}
-              placeholder="Search notes..."
-              aria-label="Search notes"
-              className="w-full rounded-lg border border-gray-200 bg-white py-2 pl-8 pr-3 text-sm outline-none focus:border-[var(--color-primary)] dark:border-gray-700 dark:bg-[#121212]"
-            />
-          </div>
-          {filter.trim() && (
-            <div className="mt-2 max-h-64 overflow-y-auto">
+        {/* Mobile nav toggle (the sidebar is hidden on small screens) */}
+        <div className="border-b border-gray-200 px-4 py-2 dark:border-gray-800 md:hidden">
+          <button
+            type="button"
+            onClick={() => setMobileNavOpen((o) => !o)}
+            aria-expanded={mobileNavOpen}
+            className="inline-flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-1.5 text-sm font-medium dark:border-gray-700"
+          >
+            {mobileNavOpen ? (
+              <X className="h-4 w-4" />
+            ) : (
+              <Menu className="h-4 w-4" />
+            )}
+            Browse notes
+            <span className="text-xs text-gray-400">
+              ({totalPages})
+            </span>
+          </button>
+        </div>
+
+        {/* Mobile tree drawer: search + full tree, always reachable. */}
+        {mobileNavOpen && (
+          <div className="border-b border-gray-200 px-4 py-3 dark:border-gray-800 md:hidden">
+            <div className="relative mb-2">
+              <Search className="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+                placeholder="Search notes..."
+                aria-label="Search notes"
+                className="w-full rounded-lg border border-gray-200 bg-white py-2 pl-8 pr-3 text-sm outline-none focus:border-[var(--color-primary)] dark:border-gray-700 dark:bg-[#121212]"
+              />
+            </div>
+            <div className="max-h-[60vh] overflow-y-auto">
               <NavTree subjects={subjects} filter={filter} />
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
         <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-8 md:px-8">
           {children}
